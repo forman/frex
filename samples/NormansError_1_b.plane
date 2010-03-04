@@ -1,0 +1,22 @@
+<plane name="NormansError_1_b" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="728" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError">
+    <property name="iterMax" value="750" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaMode" value="false" />
+    <property name="juliaCX" value="-0.07108937052343839" />
+    <property name="juliaCY" value="0.6621637772992967" />
+  </fractal>
+  <region centerX="1.1866101596536611" centerY="0.30604963957015663" radius="1.484002082477176E-7" />
+  <accumulator class="z.core.support.accumulators.LinearOrbitTrap2">
+    <property name="trapRadius" value="0.1" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="256" indexMin="0.19328368" indexMax="0.8502151">
+    <colorPoint pos="0.0" color="0,0,0" />
+    <colorPoint pos="0.2078651636838913" color="71,38,28" />
+    <colorPoint pos="0.6938202381134033" color="255,255,255" />
+    <colorPoint pos="1.0" color="0,0,0" />
+    <colorPoint pos="0.5" color="201,135,33" />
+  </colorizer>
+</plane>

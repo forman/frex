@@ -1,0 +1,24 @@
+<plane name="Hans Galerie 19" version="1.0">
+    <imageInfo path="z-out.tif" format="TIFF" width="2048" height="2048" usingWindowSize="false" background="0,0,0"/>
+    <fractal class="z.core.support.fractals.NormansError">
+        <property name="iterMax" value="500"/>
+        <property name="bailOut" value="100.0"/>
+        <property name="juliaMode" value="true"/>
+        <property name="juliaCX" value="-0.7782413036416984"/>
+        <property name="juliaCY" value="-0.12100495678314474"/>
+    </fractal>
+    <region centerX="0.7343815657077357" centerY="-0.08893048237077893" radius="7.010655244812369E-4"/>
+    <accumulator class="z.core.support.accumulators.RadialOrbitTrap">
+        <property name="trapRadius" value="1.0"/>
+        <property name="trapCenterX" value="0.0"/>
+        <property name="trapCenterY" value="0.0"/>
+    </accumulator>
+    <indexer class="z.core.support.indexers.AbsX"/>
+    <colorizer numColors="2048" cyclic="false" indexMin="33.855663" indexMax="200.57135">
+        <colorPoint pos="0.0" color="0,0,0"/>
+        <colorPoint pos="0.1741573065519333" color="145,82,46"/>
+        <colorPoint pos="0.6966292262077332" color="255,255,255"/>
+        <colorPoint pos="0.36235955357551575" color="227,184,56"/>
+        <colorPoint pos="1.0" color="255,255,255"/>
+    </colorizer>
+</plane>
