@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+
+    <imageInfo
+            path="test.png"
+            format="PNG"
+            width="1280"
+            height="1024"/>
+
+    <plane name="plane-1">
+        <region centerX="-0.75" centerY="0.25" radius="2"/>
+        <fractal class="z.core.support.fractals.Mandelbrot">
+            <property name="iterMax" value="1001"/>
+            <property name="juliaMode" value="true"/>
+            <property name="juliaCX" value="-0.75"/>
+            <property name="juliaCY" value="0.15"/>
+        </fractal>
+
+        <accumulator class="z.core.support.accumulators.LinearOrbitTrap"/>
+        <indexer class="z.core.support.indexers.AbsZ"/>
+
+        <colorizer class="z.core.support.colorizers.PaletteColorTable" numColors="512">
+            <tiePoint pos="0.00" color="red"/>
+            <tiePoint pos="0.25" color="orange"/>
+            <tiePoint pos="0.50" color="blue"/>
+            <tiePoint pos="0.75" color="yellow"/>
+            <tiePoint pos="1.00" color="green"/>
+        </colorizer>
+    </plane>
+
+    <plane name="plane-2">
+        <region centerX="-0.75" centerY="0.25" radius="2"/>
+        <fractal class="z.core.support.fractals.Mandelbrot">
+            <property name="iterMax" value="1002"/>
+            <property name="juliaMode" value="true"/>
+            <property name="juliaCX" value="-0.5"/>
+            <property name="juliaCY" value="0.35"/>
+        </fractal>
+        <colorizer class="z.core.support.colorizers.SineColorTable" numColors="256">
+            <redParams x1="0" x2="64" a="0.4" b="1.5"/>
+            <greenParams x1="32" x2="126" a="0.2" b="1.5"/>
+            <blueParams x1="200" x2="254" a="0.1" b="0.5"/>
+            <alphaParams x1="23" x2="53" a="0.3" b="2.5"/>
+        </colorizer>
+    </plane>
+
+    <plane name="plane-3" visible="false" linked="true">
+        <region centerX="-0.75" centerY="0.25" radius="2"/>
+        <fractal class="z.core.support.fractals.Mandelbrot"/>
+    </plane>
+</project>

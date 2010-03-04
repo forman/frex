@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: lib/jdom.jar
+Main-Class: z.frex.Frex
+SplashScreen-Image: splash.png

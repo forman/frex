@@ -1,0 +1,39 @@
+* Bugs
+    - Anpassen an fenstergröße funktioniert nur, wenn das aktuelle bild kleiner ist als das fenster
+    - Das panning tool funktioniert nicht mehr
+    - Das zoom tool läßt sich abwählen, so dass gar kein tool mehr angewählt ist
+    - "speichern unter" fragt nicht ob existierende datei überschrieben werden soll
+    - "speichern (unter)" setzt nicht den "modifiziert" status zurück
+    - Noch immer keine fortschrittsanzeige
+
+* Dialogfeld Validatoren
+
+* Paletten
+    - Skalieren mittels Bereich im Histogramm
+    - Speichern/Laden
+    - Farbauswahlfeld
+    - mit Transparenz
+
+* Fractals innen und aussen unterschiedlich einfärben:
+    - Einfarbig + Transparenz
+    - Palette
+    - Histogramm
+
+* Plane Format
+    - <name>.plane (mandatory XML, read/write)
+    - <name>.data  (optional, read/write, float32 x W x H)
+    - <name>.png   (optional, write-only)
+
+* ZPR Format
+    - mehrere Planes mit Transparenz übereinander
+    - ZIP
+
+* Fenstergröße Dialog
+    - mit Voreinstellungen für Setenverhältnis (A4, Letter, 1:1, 15:10, 16:9, 4:3) + max. Auflösung
+    - Anzeige Speciherverbrauch
+
+* API
+    - PlaneManager mit ChangeListener: plane opened, plane closed, plane state changed
+    - PlaneStack legt mehrere Ebenen (Planes) mit Transparenz übereinander
+
+
