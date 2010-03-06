@@ -54,7 +54,7 @@ public abstract class ActionFactory {
         public AboutAction(ApplicationWindow window) {
             super(ID);
             this.window = window;
-            setText("&Über...");
+            setText("&Ãœber...");
         }
 
         @Override

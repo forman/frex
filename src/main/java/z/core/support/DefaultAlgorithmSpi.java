@@ -5,8 +5,6 @@ import z.core.AlgorithmRegistry;
 import z.core.AlgorithmSpi;
 import z.core.AlgorithmSubRegistry;
 import z.core.IAlgorithm;
-import z.core.support.fractals.InvMandelbrot2;
-import z.core.support.fractals.InvMandelbrot3;
 
 public class DefaultAlgorithmSpi implements AlgorithmSpi {
     public void registerAlgorithms(AlgorithmRegistry registry) {
@@ -38,8 +36,8 @@ public class DefaultAlgorithmSpi implements AlgorithmSpi {
         register(accumulators, z.core.support.accumulators.LinearOrbitTrap2.class, "Lineare Orbitfalle #2");
         register(accumulators, z.core.support.accumulators.RadialOrbitTrap.class, "Radiale Orbitfalle #1");
         register(accumulators, z.core.support.accumulators.RadialOrbitTrap2.class, "Radiale Orbitfalle #2");
-        register(accumulators, z.core.support.accumulators.RingOrbitTrap.class, "Ringförmige Orbitfalle #1");
-        register(accumulators, z.core.support.accumulators.RingOrbitTrap2.class, "Ringförmige Orbitfalle #2");
+        register(accumulators, z.core.support.accumulators.RingOrbitTrap.class, "RingfÃ¶rmige Orbitfalle #1");
+        register(accumulators, z.core.support.accumulators.RingOrbitTrap2.class, "RingfÃ¶rmige Orbitfalle #2");
         register(accumulators, z.core.support.accumulators.SquareOrbitTrap.class, "Quadratische Orbitfalle");
         register(accumulators, z.core.support.accumulators.SineWaveOrbitTrap.class, "Sinuswellen Orbitfalle");
 

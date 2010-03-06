@@ -10,8 +10,8 @@ public class GoBackAction extends GoAction {
 
     public GoBackAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Zurück");
-        setToolTipText("Zurück");
+        setText("ZurÃ¼ck");
+        setToolTipText("ZurÃ¼ck");
         setSmallIcon(Frex.getIcon("/icons/16x16/actions/go-previous.png"));//$NON-NLS-1$
     }
 

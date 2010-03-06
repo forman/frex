@@ -103,7 +103,7 @@ public class ManageUserFractalsDialog extends Dialog {
         try {
             defs = FractalDef.loadFractals(fractalsFile);
         } catch (JDOMException e) {
-            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\nUngültiges Dateiformat.");
+            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\nUngÃ¼ltiges Dateiformat.");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\n" + e.getLocalizedMessage());
         }
@@ -114,7 +114,7 @@ public class ManageUserFractalsDialog extends Dialog {
         try {
             FractalDef.saveFractals(fractalsFile, fractalDefs);
         } catch (JDOMException e) {
-            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\nUngültiges Dateiformat.");
+            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\nUngÃ¼ltiges Dateiformat.");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\n" + e.getLocalizedMessage());
         }
@@ -139,7 +139,7 @@ public class ManageUserFractalsDialog extends Dialog {
         table.setGridColor(Color.LIGHT_GRAY);
 
         addButton = new JButton();
-        addButton.setToolTipText("Hinzufügen");
+        addButton.setToolTipText("HinzufÃ¼gen");
         addButton.setIcon(new ImageIcon(getClass().getResource("/icons/add.png")));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

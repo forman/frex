@@ -136,12 +136,12 @@ public class Property {
                     property.setValueFromText(instance, textValue);
                 } catch (IllegalAccessException e) {
                     throw new JDOMException("Eigenschaft '" + name
-                            + "' konnte für Objekt der Klasse '"
+                            + "' konnte fÃ¼r Objekt der Klasse '"
                             + instance.getClass().getName()
                             + "' nicht gesetzt werden", e); /* I18N */
                 } catch (InvocationTargetException e) {
                     throw new JDOMException("Eigenschaft '" + name
-                            + "' konnte für Objekt der Klasse '"
+                            + "' konnte fÃ¼r Objekt der Klasse '"
                             + instance.getClass().getName()
                             + "' nicht gesetzt werden", e); /* I18N */
                 }

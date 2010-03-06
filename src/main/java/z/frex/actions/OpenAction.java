@@ -35,8 +35,8 @@ public class OpenAction extends ApplicationWindowAction {
 
     public OpenAction(ApplicationWindow window) {
         super(window, ID);
-        setText("&Öffnen...");
-        setToolTipText("Öffnen");
+        setText("&Ã–ffnen...");
+        setToolTipText("Ã–ffnen");
         setSmallIcon(Frex.getIcon("/icons/folder.png"));//$NON-NLS-1$
     }
 
@@ -67,7 +67,7 @@ public class OpenAction extends ApplicationWindowAction {
 
         String lastDir = Frex.getPreferences().get("lastDir", ".");
         JFileChooser dialog = new JFileChooser(lastDir);
-        dialog.setDialogTitle("Öffnen");
+        dialog.setDialogTitle("Ã–ffnen");
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
         dialog.setAcceptAllFileFilterUsed(false);
         dialog.addChoosableFileFilter(PLANE_FILTER);
@@ -84,11 +84,11 @@ public class OpenAction extends ApplicationWindowAction {
 
     public void openError(File file, Exception e) {
         e.printStackTrace();
-        final String pattern = "Fehler beim Öffnen der Datei [{0}]."
+        final String pattern = "Fehler beim ï¿½ffnen der Datei [{0}]."
                 + "  Fehler-Typ: {1}\n" + "  Fehler-Meldung: {2}";
 
         MessageDialog.openError(getWindow().getShell(),
-                                "Öffnen",
+                                "ï¿½ffnen",
                                 MessageFormat.format(pattern,
                                                      file.getPath(),
                                                      e.getClass().getName(),
@@ -110,7 +110,7 @@ public class OpenAction extends ApplicationWindowAction {
         boolean reuseExistingWindow = true;
         boolean hasPageComponent = window.getPage().getActivePageComponent() != null;
         if (hasPageComponent) {
-            int r = MessageDialog.confirmYesNoCancel(window.getShell(), "Öffnen", "In neuem Fenster öffnen?");
+            int r = MessageDialog.confirmYesNoCancel(window.getShell(), "Ã–ffnen", "In neuem Fenster Ã¶ffnen?");
             if (r == JOptionPane.CANCEL_OPTION) {
                 return;
             }

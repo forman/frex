@@ -42,14 +42,14 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
             "\n" +
             "<html>Copyright &copy; 2008 by Norman Fomferra</html>\n" +
             "\n" +
-            "<html>Dieses Programm ist freie Software. Sie können es unter den Bedingungen der</html>\n" +
-            "<html>GNU General Public License, wie von der Free Software Foundation veröffentlicht,</html>\n" +
-            "<html>weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder</html>\n" +
-            "<html>(nach Ihrer Option) jeder späteren Version.</html>\n" +
+            "<html>Dieses Programm ist freie Software. Sie kÃ¶nnen es unter den Bedingungen der</html>\n" +
+            "<html>GNU General Public License, wie von der Free Software Foundation verÃ¶ffentlicht,</html>\n" +
+            "<html>weitergeben und/oder modifizieren, entweder gemÃ¤ÃŸ Version 3 der Lizenz oder</html>\n" +
+            "<html>(nach Ihrer Option) jeder spÃ¤teren Version.</html>\n" +
             "\n" +
-            "<html>Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen von</html>\n" +
+            "<html>Die VerÃ¶ffentlichung dieses Programms erfolgt in der Hoffnung, dass es Ihnen von</html>\n" +
             "<html>Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie</html>\n" +
-            "<html>der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK.</html></html>\n" +
+            "<html>der MARKTREIFE oder der VERWENDBARKEIT FÃœR EINEN BESTIMMTEN ZWECK.</html></html>\n" +
             "<html>Details finden Sie in der GNU General Public License.</html>\n" +
             "\n" +
             "<html>Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem</html>\n" +
@@ -85,7 +85,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         register(new PanInteraction(window));
 
         Action aboutAction = ActionFactory.ABOUT.create(window);
-        aboutAction.putValue("aboutTitle", "Über Frex");
+        aboutAction.putValue("aboutTitle", "ï¿½ber Frex");
         aboutAction.putValue("aboutMessage", ABOUT_TEXT);
         register(aboutAction);
     }
@@ -177,7 +177,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         assert SwingUtilities.isEventDispatchThread();
         String title;
         if (Application.instance().getWindowCount() > 1) {
-            title = "Schließen";
+            title = "Schlieï¿½en";
         } else {
             title = "Beenden";
         }
@@ -185,7 +185,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         for (PageComponent view : views) {
             if (view.isDirty() && view instanceof PlaneView) {
                 final PlaneView planeView = (PlaneView) view;
-                String pattern = "''{0}'' wurde verändert.\nSpeichern?";
+                String pattern = "''{0}'' wurde verï¿½ndert.\nSpeichern?";
                 int a = MessageDialog.confirmYesNoCancel(window.getShell(), title, MessageFormat.format(pattern, view.getDisplayName()));
                 if (a == JOptionPane.CANCEL_OPTION) {
                     return false;

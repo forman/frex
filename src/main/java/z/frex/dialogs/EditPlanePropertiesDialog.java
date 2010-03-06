@@ -119,13 +119,13 @@ public class EditPlanePropertiesDialog extends Dialog {
             if (data.accumulator == null) {
                 MessageDialog.openError(getShell(),
                                         "Akkumulator",
-                                        "Bitte einen Akkumulator ausw‰hlen");
+                                        "Bitte einen Akkumulator ausw√§hlen");
                 return;
             }
             if (!data.accumulator.computesIndex() && data.indexer == null) {
                 MessageDialog.openError(getShell(),
                                         "Indexer",
-                                        "Bitte einen Indexer ausw‰hlen");
+                                        "Bitte einen Indexer ausw√§hlen");
                 return;
             }
             data.trapMode = trapMode.isSelected();

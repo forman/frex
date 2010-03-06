@@ -13,8 +13,8 @@ public class EditImageSizeAction extends PlaneViewAction {
 
     public EditImageSizeAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Bildgröße...");
-        setToolTipText("Bildgröße bearbeiten");
+        setText("BildgrÃ¶ÃŸe...");
+        setToolTipText("BildgrÃ¶ÃŸe bearbeiten");
         setSmallIcon(Frex.getIcon("/icons/16x16/frex/image-size.png"));//$NON-NLS-1$
     }
 

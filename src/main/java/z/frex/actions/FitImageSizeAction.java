@@ -12,7 +12,7 @@ public class FitImageSizeAction extends PlaneViewAction {
     public FitImageSizeAction(ApplicationWindow window) {
         super(window, FitImageSizeAction.ID);
         setText("Bild anpassen");
-        setToolTipText("Bildgröße an Fenster anpassen");
+        setToolTipText("BildgrÃ¶ÃŸe an Fenster anpassen");
         setSmallIcon(Frex.getIcon("/icons/16x16/actions/view-fullscreen.png"));//$NON-NLS-1$
     }
 

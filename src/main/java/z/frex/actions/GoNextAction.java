@@ -10,8 +10,8 @@ public class GoNextAction extends GoAction {
 
     public GoNextAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Nächste");
-        setToolTipText("Nächste");
+        setText("NÃ¤chste");
+        setToolTipText("NÃ¤chste");
         setSmallIcon(Frex.getIcon("/icons/16x16/actions/go-next.png"));//$NON-NLS-1$
     }
 

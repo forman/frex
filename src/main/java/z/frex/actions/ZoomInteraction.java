@@ -18,7 +18,7 @@ public class ZoomInteraction extends Interaction {
     public ZoomInteraction(ApplicationWindow window) {
         super(window, ID);
         setText("Zoom");
-        setToolTipText("Auschnitt w‰hlen");
+        setToolTipText("Auschnitt w√§hlen");
         setSmallIcon(Frex.getIcon("/icons/zoom.png"));//$NON-NLS-1$
         setInteractor(new ZoomInteractor());
     }

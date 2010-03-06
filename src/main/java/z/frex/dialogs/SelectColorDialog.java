@@ -37,7 +37,7 @@ public class SelectColorDialog extends Dialog {
     @Override
     protected void configureShell(JDialog shell) {
         super.configureShell(shell);
-        shell.setTitle("Farbe ausw‰hlen");
+        shell.setTitle("Farbe ausw√§hlen");
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SelectColorDialog extends Dialog {
     protected void okPressed() {
         selectedColor = colorSelector.getSelectedColor();
         if (selectedColor == null) {
-            MessageDialog.openError(getShell(), "Farbe ausw‰hlen", "Keine Farbe ausgew‰hlt.");
+            MessageDialog.openError(getShell(), "Farbe ausw√§hlen", "Keine Farbe ausgew√§hlt.");
             return;
         }
         super.okPressed();

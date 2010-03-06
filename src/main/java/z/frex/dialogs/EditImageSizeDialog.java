@@ -58,7 +58,7 @@ public class EditImageSizeDialog extends Dialog {
     @Override
     protected void configureShell(JDialog shell) {
         super.configureShell(shell);
-        shell.setTitle("Bildgröße");
+        shell.setTitle("BildgrÃ¶ÃŸe");
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EditImageSizeDialog extends Dialog {
         gbc.insets.bottom = 2;
 
         usingWindowSize = new JCheckBox();
-        usingWindowSize.setText("Bildgröße an Fenster anpassen");
+        usingWindowSize.setText("BildgrÃ¶ÃŸe an Fenster anpassen");
         usingWindowSize.setSelected(data.usingWindowSize);
         usingWindowSize.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -115,7 +115,7 @@ public class EditImageSizeDialog extends Dialog {
         gbc.gridy++;
 
         JLabel heightLabel = new JLabel();
-        heightLabel.setText("Höhe: ");
+        heightLabel.setText("Hï¿½he: ");
         dialogArea.add(heightLabel, gbc);
         gbc.gridx++;
 

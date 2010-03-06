@@ -20,7 +20,7 @@ import java.awt.event.MouseEvent;
 
 public class SelectFractalDialog extends Dialog {
 
-    private static final String TITLE = "Fraktal ausw‰hlen";
+    private static final String TITLE = "Fraktal ausw√§hlen";
     private JList fractalList;
     private IFractal selectedFractal;
 
@@ -74,7 +74,7 @@ public class SelectFractalDialog extends Dialog {
                                                 "Meldung: " + e.getLocalizedMessage());
             }
         } else {
-            MessageDialog.openError(getShell(), TITLE, "Bitte ein Fraktal ausw‰hlen!");
+            MessageDialog.openError(getShell(), TITLE, "Bitte ein Fraktal ausw√§hlen!");
         }
         if (selectedFractal != null) {
             super.okPressed();

@@ -12,8 +12,8 @@ public class CloseAction extends PlaneViewAction {
 
     public CloseAction(ApplicationWindow window) {
         super(window, ID);
-        setText("&Schlieﬂen");
-        setToolTipText("Schlieﬂen");
+        setText("&Schlie√üen");
+        setToolTipText("Schlie√üen");
     }
 
     public boolean isCanceledByUser() {
@@ -46,7 +46,7 @@ public class CloseAction extends PlaneViewAction {
         return JOptionPane.showConfirmDialog(getWindow().getShell(),
                                              MessageFormat.format("{0} speichern?",
                                                                   getPlaneView().getDisplayName()),
-                                             "Schlieﬂen",
+                                             "Schlie√üen",
                                              JOptionPane.YES_NO_CANCEL_OPTION,
                                              JOptionPane.QUESTION_MESSAGE);
     }

@@ -78,7 +78,7 @@ public class ColorRegistryTest extends TestCase {
         assertEquals(3, descriptor.brightnessLevel);
 
         descriptor = registry.lookup(RGBA.WHITE);
-        assertEquals("Signalweiﬂ", descriptor.entry.name);
+        assertEquals("Signalwei√ü", descriptor.entry.name);
         assertEquals(0, descriptor.brightnessLevel);
 
         descriptor = registry.lookup(RGBA.YELLOW);
@@ -94,7 +94,7 @@ public class ColorRegistryTest extends TestCase {
         assertEquals(0, descriptor.brightnessLevel);
 
         descriptor = registry.lookup(RGBA.GREEN);
-        assertEquals("Gelbgr¸n", descriptor.entry.name);
+        assertEquals("Gelbgr√ºn", descriptor.entry.name);
         assertEquals(0, descriptor.brightnessLevel);
 
         descriptor = registry.lookup(RGBA.BLUE);
