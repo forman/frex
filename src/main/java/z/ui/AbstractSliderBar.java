@@ -35,18 +35,19 @@ public abstract class AbstractSliderBar extends Control {
         addComponentListener(new ResizeHandler());
         this.modelChangeHandler = new ModelChangeHandler();
         this.model.addChangeListener(modelChangeHandler);
-        addPropertyChangeListener("model", new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                SliderBarModel oldModel = (SliderBarModel) evt.getOldValue();
-                if (oldModel != null) {
-                    oldModel.removeChangeListener(modelChangeHandler);
-                }
-                SliderBarModel newModel = (SliderBarModel) evt.getNewValue();
-                if (newModel != null) {
-                    newModel.addChangeListener(modelChangeHandler);
-                }
-            }
-        });
+        addPropertyChangeListener("model", // NON-NLS
+                                  new PropertyChangeListener() {
+                                      public void propertyChange(PropertyChangeEvent evt) {
+                                          SliderBarModel oldModel = (SliderBarModel) evt.getOldValue();
+                                          if (oldModel != null) {
+                                              oldModel.removeChangeListener(modelChangeHandler);
+                                          }
+                                          SliderBarModel newModel = (SliderBarModel) evt.getNewValue();
+                                          if (newModel != null) {
+                                              newModel.addChangeListener(modelChangeHandler);
+                                          }
+                                      }
+                                  });
         setPreferredSize(new Dimension(320, sliderSize * 2));
     }
 
@@ -92,7 +93,7 @@ public abstract class AbstractSliderBar extends Control {
         SliderBarModel oldModel = this.model;
         if (oldModel != model) {
             this.model = model;
-            firePropertyChange("model", oldModel, this.model);
+            firePropertyChange("model", oldModel, this.model);  // NON-NLS
             repaint();
         }
     }

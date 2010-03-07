@@ -1,5 +1,6 @@
 package z.math;
 
+import z.StringLiterals;
 import z.math.term.Functor;
 import z.math.term.Real;
 import z.math.term.Ref;
@@ -82,7 +83,7 @@ public class ParserImpl2 implements Parser {
         Term term = parseExpr(false);
         int tt = nextToken();
         if (tt != TT_EOF) {
-            reportError("Incomplete expression."); /* I18N */
+            reportError(StringLiterals.getString("ex.parser.incompleteExpr"));
         }
         return term;
     }
@@ -92,6 +93,7 @@ public class ParserImpl2 implements Parser {
      * <code>parseAssign</code> method in order to signal that the assignment
      * operator '=' isSymbolDefined the highest operator precedence.
      */
+
     private Term parseExpr(boolean required) throws ParseException {
 
         // todo
@@ -112,6 +114,7 @@ public class ParserImpl2 implements Parser {
      * string <i>'"'ASCII-characters'"'</i>, a variable reference <i>identifier</i>
      * or a function call <i>identifier '(' arg1 ',' arg2 ',' arg3 ',' ...')'</i>.
      */
+
     private Term parsePrimary(boolean required) throws ParseException {
         Term x = null;
         int tt = nextToken();
@@ -134,11 +137,11 @@ public class ParserImpl2 implements Parser {
             tt = nextToken();
             if (tt != ')') {
                 pushBack();
-                reportError("Missing ')'."); /* I18N */
+                reportError(StringLiterals.getString("ex.parser.missingParen"));
             }
         } else {
             if (required) {
-                reportError("Expression expected."); /* I18N */
+                reportError(StringLiterals.getString("ex.parser.exprExpected"));
             }
             pushBack();
         }
@@ -148,6 +151,7 @@ public class ParserImpl2 implements Parser {
     /*
      * Throws a <code>ParseException</code> with the given message
      */
+
     private static void reportError(String message) throws ParseException {
         throw new ParseException(message);
     }

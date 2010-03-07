@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.IFractal;
 import z.core.Plane;
 import z.core.Region;
@@ -11,7 +12,7 @@ import z.ui.dialog.Dialog;
 import java.io.File;
 
 public class NewPlaneAction extends ApplicationWindowAction {
-    public static final String ID = "z.frex.actions.newPlane";//$NON-NLS-1$
+    public static final String ID = "z.frex.actions.newPlane";// NON-NLS
 
     private static int planeCount = 0;
 
@@ -19,9 +20,9 @@ public class NewPlaneAction extends ApplicationWindowAction {
 
     public NewPlaneAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Neu");
-        setToolTipText("Neue Ebene");
-        setSmallIcon(Frex.getIcon("/icons/application.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.newFractal"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.newFractal"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.newFractal")));
     }
 
     public boolean isCanceledByUser() {

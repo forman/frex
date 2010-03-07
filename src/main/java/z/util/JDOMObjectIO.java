@@ -5,7 +5,7 @@ import org.jdom.JDOMException;
 import z.core.AlgorithmRegistry;
 
 public class JDOMObjectIO {
-    public static final String CLASS_ATTRIBUTE_NAME = "class";
+    public static final String CLASS_ATTRIBUTE_NAME = "class"; // NON-NLS
 
     public static Object readObjectFromChild(Element element, String childName) throws JDOMException {
         return readObjectFromChild(element, childName, null);

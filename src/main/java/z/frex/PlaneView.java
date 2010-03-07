@@ -1,5 +1,6 @@
 package z.frex;
 
+import z.StringLiterals;
 import z.core.IColorizer;
 import z.core.ImageInfo;
 import z.core.Plane;
@@ -23,6 +24,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.text.MessageFormat;
 
 public class PlaneView extends AbstractPageComponent {
 
@@ -80,7 +82,7 @@ public class PlaneView extends AbstractPageComponent {
     // todo:  extract into separate GenerateImageAction
     public synchronized void generateImage(boolean adjustColors, boolean colorizeOnly) {
         if (currentJob != null) {
-            System.out.println("currentJob != null: currentJob = " + currentJob);
+            System.out.println("currentJob != null: currentJob = " + currentJob); // NON-NLS
             currentJob.cancel();
             currentJob = null;
         }
@@ -122,8 +124,8 @@ public class PlaneView extends AbstractPageComponent {
                 PlaneRaster.Statistics totalStatistics = plane.getRaster().getTotalStatistics();
                 float minRasterIndex = totalStatistics.min;
                 float maxRasterIndex = totalStatistics.max;
-                System.out.println("minRasterIndex = " + minRasterIndex);
-                System.out.println("maxRasterIndex = " + maxRasterIndex);
+                System.out.println("minRasterIndex = " + minRasterIndex); // NON-NLS
+                System.out.println("maxRasterIndex = " + maxRasterIndex); // NON-NLS
                 paletteColorTable.setIndexMin(minRasterIndex);
                 paletteColorTable.setIndexMax(maxRasterIndex);
 
@@ -232,13 +234,13 @@ public class PlaneView extends AbstractPageComponent {
     @Override
     public void doSave(ProgressMonitor monitor) {
         // todo: auto-generated method stub
-        System.out.println("PlaneView.doSave()");
+        System.out.println("PlaneView.doSave()");// NON-NLS
     }
 
     @Override
     public void doSaveAs() {
         // todo: auto-generated method stub
-        System.out.println("PlaneView.doSaveAs()");
+        System.out.println("PlaneView.doSaveAs()");// NON-NLS
     }
 
     @Override
@@ -303,9 +305,8 @@ public class PlaneView extends AbstractPageComponent {
 
         private void handleError(Throwable e) {
             e.printStackTrace();
-            MessageDialog.openError(getControl(), "Image Generator", "Interner Fehler:\n" +
-                    e.getClass().getName() + ":\n"
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(getControl(), StringLiterals.getString("gui.msg.imageGenerator"),
+                                    MessageFormat.format(StringLiterals.getString("gui.msg.internalError"), new Object[]{e.getClass().getName(), e.getLocalizedMessage()}));
         }
     }
 
@@ -331,7 +332,7 @@ public class PlaneView extends AbstractPageComponent {
 
         @Override
         public void componentActivated(PageComponent pageComponent) {
-            System.out.println("maybeGenerateImage: pageComponent = " + pageComponent);
+            System.out.println("maybeGenerateImage: pageComponent = " + pageComponent);  // NON-NLS
             if (pageComponent == PlaneView.this) {
                 if (!imageGenerated) {
                     final Rectangle clientArea = getImageCanvas().getClientArea();

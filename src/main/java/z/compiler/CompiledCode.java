@@ -1,4 +1,4 @@
 package z.compiler;
 
-public interface CompiledCode {        
+public interface CompiledCode {
 }

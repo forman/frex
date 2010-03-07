@@ -1,5 +1,7 @@
 package z.core.color;
 
+import z.StringLiterals;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +15,7 @@ import java.util.StringTokenizer;
 
 public class ColorRegistry {
 
-    private static final String DATA_RESOURCE_PATH = "ColorRegistry.data";
+    private static final String DATA_RESOURCE_PATH = "ColorRegistry.data"; // NON-NLS
     private static final int BRIGHTNESS_LEVEL_COUNT = 4;
     private static final float BRIGHTNESS_INCREMENT = 1.0f / (float) BRIGHTNESS_LEVEL_COUNT;
 
@@ -149,9 +151,9 @@ public class ColorRegistry {
             if (brightnessLevel == 0) {
                 s0 = entry.ralName;
             } else {
-                s0 = MessageFormat.format("{0}, {1}% aufgehellt", entry.ralName, brightnessLevel * 25);
+                s0 = MessageFormat.format(StringLiterals.getString("gui.color.name.brighter"), entry.ralName, brightnessLevel * 25);
             }
-            return MessageFormat.format("{0} ({1})", entry.name, s0);
+            return MessageFormat.format(StringLiterals.getString("gui.color.name"), entry.name, s0);
         }
     }
 
@@ -176,7 +178,7 @@ public class ColorRegistry {
 
         @Override
         public String toString() {
-            return getClass().getName() + "[index=" + index + ",name=" + name + ",color=" + colors[0] + "]";
+            return getClass().getName() + "[index=" + index + ",name=" + name + ",color=" + colors[0] + "]";   // NON-NLS
         }
     }
 }

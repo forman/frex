@@ -52,8 +52,10 @@ public final class Sandbox extends Fractal {
             zzy = (t2 * t3 - t1 * t4) / t6 + cy;
             xValues[iter] = zzx;
             yValues[iter] = zzy;
-            zx = zzx;
-            zy = zzy;
+            if (zy < zx) {
+                zx = zzy;
+                zy = zzx;
+            }
         }
         return iterMax;
 

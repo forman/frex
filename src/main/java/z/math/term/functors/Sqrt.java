@@ -10,7 +10,7 @@ import z.math.term.Term;
 public class Sqrt extends Functor {
 
     public Sqrt() {
-        super("sqrt", 1);
+        super("sqrt", 1); // NON-NLS
     }
 
     @Override

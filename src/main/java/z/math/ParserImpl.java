@@ -1,5 +1,6 @@
 package z.math;
 
+import z.StringLiterals;
 import z.math.term.Functor;
 import z.math.term.Real;
 import z.math.term.Ref;
@@ -8,6 +9,7 @@ import z.math.term.Term;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.text.MessageFormat;
 
 /**
  * An instance of the <code>ParserX</code> class is used to convert a text
@@ -78,7 +80,7 @@ public class ParserImpl implements Parser {
         Term term = parseExpr(false);
         int tt = nextToken();
         if (tt != StreamTokenizer.TT_EOF) {
-            reportError("Incomplete expression."); /* I18N */
+            reportError(StringLiterals.getString("ex.parser.incompleteExpr"));
         }
         return term;
     }
@@ -88,6 +90,7 @@ public class ParserImpl implements Parser {
      * <code>parseAssign</code> method in order to signal that the assignment
      * operator '=' isSymbolDefined the highest operator precedence.
      */
+
     private Term parseExpr(boolean required) throws ParseException {
         return parseAdd(required);
     }
@@ -95,6 +98,7 @@ public class ParserImpl implements Parser {
     /*
      * Parses an additive expression <i>x '+' y</i> or <i>x '-' y</i>.
      */
+
     private Term parseAdd(boolean required) throws ParseException {
         Term x1 = parseMul(required);
         while (x1 != null) {
@@ -116,6 +120,7 @@ public class ParserImpl implements Parser {
     /*
      * Parses a multiplicative expression <i>x '*' y</i>, <i>x '/' y</i>.
      */
+
     private Term parseMul(boolean required) throws ParseException {
         Term x1 = parsePow(required);
         while (x1 != null) {
@@ -137,6 +142,7 @@ public class ParserImpl implements Parser {
     /*
      * Parses a power expression <i>x '^' y</i>.
      */
+
     private Term parsePow(boolean required) throws ParseException {
         Term x1 = parseUnary(required);
         while (x1 != null) {
@@ -156,8 +162,9 @@ public class ParserImpl implements Parser {
      * Parses an unary expression <i>'+' x</i>, <i>'-' x</i>, <i>'!' x</i>,
      * <i>'sin' x</i>, ...
      */
+
     private Term parseUnary(boolean required) throws ParseException {
-        Term x1 = null;
+        Term x1;
         int tt = nextToken();
         if (tt == '+') {
             x1 = parseUnary(true);
@@ -170,22 +177,22 @@ public class ParserImpl implements Parser {
             }
         } else if (tt == StreamTokenizer.TT_WORD) {
             String name = tokenizer.sval;
-            if (name.equalsIgnoreCase("sin")) {
+            if (name.equalsIgnoreCase("sin")) {  // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.sin(x2);
-            } else if (name.equalsIgnoreCase("cos")) {
+            } else if (name.equalsIgnoreCase("cos")) { // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.cos(x2);
-            } else if (name.equalsIgnoreCase("sinh")) {
+            } else if (name.equalsIgnoreCase("sinh")) { // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.sinh(x2);
-            } else if (name.equalsIgnoreCase("cosh")) {
+            } else if (name.equalsIgnoreCase("cosh")) { // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.cosh(x2);
-            } else if (name.equalsIgnoreCase("exp")) {
+            } else if (name.equalsIgnoreCase("exp")) { // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.exp(x2);
-            } else if (name.equalsIgnoreCase("sqrt")) {
+            } else if (name.equalsIgnoreCase("sqrt")) { // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.sqrt(x2);
             } else {
@@ -205,6 +212,7 @@ public class ParserImpl implements Parser {
      * string <i>'"'ASCII-characters'"'</i>, a variable reference <i>identifier</i>
      * or a function call <i>identifier '(' arg1 ',' arg2 ',' arg3 ',' ...')'</i>.
      */
+
     private Term parsePrimary(boolean required) throws ParseException {
         Term x = null;
         int tt = nextToken();
@@ -224,6 +232,7 @@ public class ParserImpl implements Parser {
                     double value = Double.parseDouble(tokenizer.sval);
                     x = new Real(value);
                 } catch (NumberFormatException e) {
+                    // ok
                 }
             }
         } else if (tt == '(') {
@@ -231,11 +240,11 @@ public class ParserImpl implements Parser {
             tt = nextToken();
             if (tt != ')') {
                 tokenizer.pushBack();
-                reportError("Missing ')'."); /* I18N */
+                reportError(StringLiterals.getString("ex.parser.missingParen"));
             }
         } else {
             if (required) {
-                reportError("Expression expected."); /* I18N */
+                reportError(StringLiterals.getString("ex.parser.exprExpected"));
             }
             tokenizer.pushBack();
         }
@@ -245,6 +254,7 @@ public class ParserImpl implements Parser {
     /*
      * Throws a <code>ParseException</code> with the given message
      */
+
     private static void reportError(String message) throws ParseException {
         throw new ParseException(message);
     }
@@ -253,7 +263,7 @@ public class ParserImpl implements Parser {
         try {
             return tokenizer.nextToken();
         } catch (IOException e) {
-            reportError("internal squareError: " + e.getLocalizedMessage());
+            reportError(MessageFormat.format(StringLiterals.getString("ex.parser.internalError"), e.getLocalizedMessage()));
         }
         return 0;
     }

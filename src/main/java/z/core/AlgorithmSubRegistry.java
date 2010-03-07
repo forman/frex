@@ -1,7 +1,9 @@
 package z.core;
 
+import z.StringLiterals;
 import z.util.Assert;
 
+import java.text.MessageFormat;
 import java.util.LinkedList;
 
 public final class AlgorithmSubRegistry {
@@ -9,7 +11,7 @@ public final class AlgorithmSubRegistry {
     private final LinkedList<AlgorithmDescriptor> list;
 
     public AlgorithmSubRegistry(Class<? extends IAlgorithm> algorithmType) {
-        Assert.notNull(algorithmType, "algorithmType");
+        Assert.notNull(algorithmType, "algorithmType"); // NON-NLS
         this.algorithmType = algorithmType;
         list = new LinkedList<AlgorithmDescriptor>();
     }
@@ -20,7 +22,7 @@ public final class AlgorithmSubRegistry {
 
     public void register(AlgorithmDescriptor descriptor) {
         if (!algorithmType.isAssignableFrom(descriptor.getAlgorithmClass())) {
-            throw new IllegalArgumentException("illegal algorithm class: " + descriptor.getAlgorithmClass() + " is not a " + algorithmType);
+            throw new IllegalArgumentException(MessageFormat.format(StringLiterals.getString("ex.illegal.algorithm.class.0.is.not.a.1"), descriptor.getAlgorithmClass(), algorithmType));
         }
         list.add(descriptor);
     }

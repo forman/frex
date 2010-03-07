@@ -7,6 +7,7 @@
  */
 package z.math.util;
 
+import z.StringLiterals;
 import z.math.Complex;
 import z.math.Namespace;
 import z.math.Optimize;
@@ -19,6 +20,7 @@ import z.math.term.Term;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,25 +29,25 @@ public class CLI {
     public static void main(String[] args) {
 
         final Namespace parserNamespace = new Namespace();
-        final Symbol derivVar = parserNamespace.addSymbol("z");
-        final Symbol complexUnit = parserNamespace.addSymbol("i");
+        final Symbol derivVar = parserNamespace.addSymbol("z");  // NON-NLS
+        final Symbol complexUnit = parserNamespace.addSymbol("i"); // NON-NLS
         final Parser parser = createParser(parserNamespace);
 
         final Namespace complexNamespace = new Namespace();
 
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            System.out.print("\n> ");
+            System.out.print("\n> ");// NON-NLS
             System.out.flush();
 
             String line = null;
             try {
                 line = in.readLine();
             } catch (IOException e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.error.0"), e.getMessage()));
                 System.exit(-1);
             }
-            if (line.equalsIgnoreCase("exit")) {
+            if (line.equalsIgnoreCase("exit")) {  // NON-NLS
                 break;
             }
 
@@ -53,38 +55,38 @@ public class CLI {
             try {
                 term = parser.parse(line);
             } catch (ParseException e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.error.0"), e.getMessage()));
             }
 
             if (term != null) {
-                System.out.println("Input:        " + term);
-                System.out.println("Simp. input:  " + term.simplify());
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.out.input.0"), term));
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.simp.input.0"), term.simplify()));
                 final Term d = term.derivate(derivVar);
-                System.out.println("Deriv.:       " + d);
-                System.out.println("Simp.deriv.:  " + d.simplify());
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.deriv.0"), d));
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.simp.deriv.0"), d.simplify()));
                 final Complex z = term.createComplex(complexNamespace,
                                                      complexUnit);
                 Term zx = z.getX();
                 Term zy = z.getY();
-                System.out.println("Compl.X:      " + zx);
-                System.out.println("Compl.Y:      " + zy);
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.compl.x.0"), zx));
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.compl.y.0"), zy));
                 zx = zx.simplify();
                 zy = zy.simplify();
-                System.out.println("Simp.compl.X: " + zx);
-                System.out.println("Simp.compl.Y: " + zy);
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.simp.compl.x.0"), zx));
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.simp.compl.y.0"), zy));
                 zx = Optimize.expandPowByIntExp(zx);
                 zy = Optimize.expandPowByIntExp(zy);
-                System.out.println("Opt.simp.compl.X: " + zx);
-                System.out.println("Opt.simp.compl.Y: " + zy);
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.opt.simp.compl.x.0"), zx));
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.opt.simp.compl.y.0"), zy));
 
                 List<Symbol> varList = new ArrayList<Symbol>(32);
-                varList.add(Symbol.createVariable("zzx", zx));
-                varList.add(Symbol.createVariable("zzy", zy));
-                int count = Optimize.replaceTermOccurences(varList, "t");
-                System.out.println(count + " term. replacements applied:");
+                varList.add(Symbol.createVariable("zzx", zx)); // NON-NLS
+                varList.add(Symbol.createVariable("zzy", zy)); // NON-NLS
+                int count = Optimize.replaceTermOccurences(varList, "t"); // NON-NLS
+                System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.0.term.replacements.applied"), count));
                 for (Symbol var : varList) {
-                    System.out.println(var.getName() + " = " + var.getValue()
-                            + ";");
+                    System.out.println(MessageFormat.format("{0} = {1};",  // NON-NLS
+                                                            var.getName(), var.getValue()));
                 }
             }
         }

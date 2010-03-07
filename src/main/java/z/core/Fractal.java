@@ -38,7 +38,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setIterMax(int iterMax) {
         int oldValue = this.iterMax;
         this.iterMax = iterMax;
-        propertyChangeSupport.firePropertyChange("iterMax", oldValue, iterMax);
+        propertyChangeSupport.firePropertyChange("iterMax", oldValue, iterMax); // NON-NLS
     }
 
     public double getBailOut() {
@@ -49,7 +49,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
         double oldValue = this.bailOut;
         this.bailOut = bailOut;
         bailOutSqr = this.bailOut * this.bailOut;
-        propertyChangeSupport.firePropertyChange("bailOut",
+        propertyChangeSupport.firePropertyChange("bailOut", // NON-NLS
                                                  oldValue,
                                                  this.bailOut);
     }
@@ -61,7 +61,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setJuliaMode(boolean juliaMode) {
         boolean oldValue = this.juliaMode;
         this.juliaMode = juliaMode;
-        propertyChangeSupport.firePropertyChange("juliaMode",
+        propertyChangeSupport.firePropertyChange("juliaMode", // NON-NLS
                                                  oldValue,
                                                  this.juliaMode);
     }
@@ -73,7 +73,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setJuliaCX(double juliaCX) {
         double oldValue = this.juliaCX;
         this.juliaCX = juliaCX;
-        propertyChangeSupport.firePropertyChange("juliaCX",
+        propertyChangeSupport.firePropertyChange("juliaCX", // NON-NLS
                                                  oldValue,
                                                  this.juliaCX);
     }
@@ -85,7 +85,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setJuliaCY(double juliaCY) {
         double oldValue = this.juliaCY;
         this.juliaCY = juliaCY;
-        propertyChangeSupport.firePropertyChange("juliaCY",
+        propertyChangeSupport.firePropertyChange("juliaCY", // NON-NLS
                                                  oldValue,
                                                  this.juliaCY);
     }

@@ -1,5 +1,6 @@
 package z.frex.dialogs;
 
+import z.StringLiterals;
 import z.core.color.RGBA;
 import z.ui.ColorSelector;
 import z.ui.dialog.Dialog;
@@ -16,6 +17,8 @@ import java.awt.Window;
 
 public class SelectColorDialog extends Dialog {
 
+
+    private final static String TITLE = StringLiterals.getString("gui.title.selectColor");
 
     private ColorSelector colorSelector;
     private RGBA selectedColor;
@@ -37,7 +40,7 @@ public class SelectColorDialog extends Dialog {
     @Override
     protected void configureShell(JDialog shell) {
         super.configureShell(shell);
-        shell.setTitle("Farbe auswählen");
+        shell.setTitle(TITLE);
     }
 
     @Override
@@ -60,7 +63,9 @@ public class SelectColorDialog extends Dialog {
     protected void okPressed() {
         selectedColor = colorSelector.getSelectedColor();
         if (selectedColor == null) {
-            MessageDialog.openError(getShell(), "Farbe auswählen", "Keine Farbe ausgewählt.");
+            MessageDialog.openError(getShell(),
+                                    TITLE,
+                                    StringLiterals.getString("gui.msg.mustSelectColor"));
             return;
         }
         super.okPressed();

@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.AlgorithmRegistry;
 import z.core.IFractal;
 import z.core.Plane;
@@ -18,9 +19,9 @@ public class EditPlanePropertiesAction extends PlaneViewAction {
 
     public EditPlanePropertiesAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Eigenschaften...");
-        setToolTipText("Eigenschaften bearbeiten");
-        setSmallIcon(Frex.getIcon("/icons/wrench_orange.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.properties"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.properties"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.properties")));
     }
 
     @Override

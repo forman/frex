@@ -5,8 +5,10 @@ import z.math.Namespace;
 import z.math.ParseException;
 import z.math.Parser;
 import z.math.ParserImpl;
+
 import static z.math.term.Functor.*;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class TermTest extends TestCase {
     public void testToString() {
         assertEquals("2", num(2).toString());

@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.ui.application.ApplicationWindow;
 
 import javax.swing.JOptionPane;
@@ -12,8 +13,8 @@ public class CloseAction extends PlaneViewAction {
 
     public CloseAction(ApplicationWindow window) {
         super(window, ID);
-        setText("&Schließen");
-        setToolTipText("Schließen");
+        setText(StringLiterals.getString("gui.close.name"));
+        setToolTipText(StringLiterals.getString("gui.close.name"));
     }
 
     public boolean isCanceledByUser() {
@@ -44,9 +45,9 @@ public class CloseAction extends PlaneViewAction {
 
     private int promptForSave() {
         return JOptionPane.showConfirmDialog(getWindow().getShell(),
-                                             MessageFormat.format("{0} speichern?",
+                                             MessageFormat.format(StringLiterals.getString("gui.dialog.0.askSave"),
                                                                   getPlaneView().getDisplayName()),
-                                             "Schließen",
+                                             StringLiterals.getString("gui.close.name"),
                                              JOptionPane.YES_NO_CANCEL_OPTION,
                                              JOptionPane.QUESTION_MESSAGE);
     }

@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Plane;
 import z.core.Region;
 import z.frex.Frex;
@@ -7,13 +8,13 @@ import z.ui.application.ApplicationWindow;
 import z.util.RegionHistory;
 
 public class GoHomeAction extends GoAction {
-    public static final String ID = "z.frex.actions.goHome";//$NON-NLS-1$
+    public static final String ID = "z.frex.actions.goHome";// NON-NLS
 
     public GoHomeAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Anfang");
-        setToolTipText("Anfang");
-        setSmallIcon(Frex.getIcon("/icons/16x16/actions/go-home.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.home"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.home"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.home")));
     }
 
     @Override

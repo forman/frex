@@ -2,6 +2,7 @@ package z.core;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import z.StringLiterals;
 import z.util.JDOMHelper;
 
 public abstract class ColorTable extends Colorizer {
@@ -109,26 +110,26 @@ public abstract class ColorTable extends Colorizer {
 
     @Override
     public void writeExternal(Element element) throws JDOMException {
-        JDOMHelper.setAttributeInt(element, "numColors", numColors);
-        JDOMHelper.setAttributeBoolean(element, "cyclic", cyclic, true);
-        JDOMHelper.setAttributeFloat(element, "indexMin", indexMin, 0.0f);
-        JDOMHelper.setAttributeFloat(element, "indexMax", indexMax, 1.0f);
+        JDOMHelper.setAttributeInt(element, "numColors", numColors); // NON-NLS
+        JDOMHelper.setAttributeBoolean(element, "cyclic", cyclic, true); // NON-NLS
+        JDOMHelper.setAttributeFloat(element, "indexMin", indexMin, 0.0f); // NON-NLS
+        JDOMHelper.setAttributeFloat(element, "indexMax", indexMax, 1.0f); // NON-NLS
     }
 
     @Override
     public void readExternal(Element element) throws JDOMException {
-        numColors = JDOMHelper.getAttributeInt(element, "numColors", 100);
-        cyclic = JDOMHelper.getAttributeBoolean(element, "cyclic", true);
-        if (element.getAttribute("indexBias") != null || element.getAttribute("indexFactor") != null) {
-            indexMin = JDOMHelper.getAttributeFloat(element, "indexBias", 0.0f);
-            indexFactor = JDOMHelper.getAttributeFloat(element, "indexFactor", 1.0f);
+        numColors = JDOMHelper.getAttributeInt(element, "numColors", 100);// NON-NLS
+        cyclic = JDOMHelper.getAttributeBoolean(element, "cyclic", true); // NON-NLS
+        if (element.getAttribute("indexBias") != null || element.getAttribute("indexFactor") != null) { // NON-NLS
+            indexMin = JDOMHelper.getAttributeFloat(element, "indexBias", 0.0f); // NON-NLS
+            indexFactor = JDOMHelper.getAttributeFloat(element, "indexFactor", 1.0f); // NON-NLS
             indexMax = indexMin + (float) numColors / indexFactor;
             // todo: log
-            System.out.println(String.format("WARNING: %s=%f, %s=%f is deprecated, converted to %s=%f, %s=%f",
-                                             "indexBias", indexMin, "indexFactor", indexFactor, "indexMin", indexMin, "indexMax", indexMax));
+            System.out.println(String.format(StringLiterals.getString("log.warning.index.deprecated"),
+                                             "indexBias", indexMin, "indexFactor", indexFactor, "indexMin", indexMin, "indexMax", indexMax)); // NON-NLS
         } else {
-            indexMin = JDOMHelper.getAttributeFloat(element, "indexMin", 0.0f);
-            indexMax = JDOMHelper.getAttributeFloat(element, "indexMax", 1.0f);
+            indexMin = JDOMHelper.getAttributeFloat(element, "indexMin", 0.0f); // NON-NLS
+            indexMax = JDOMHelper.getAttributeFloat(element, "indexMax", 1.0f); // NON-NLS
             updateIndexFactor();
         }
     }

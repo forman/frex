@@ -10,7 +10,7 @@ import z.math.term.Term;
 public class Exp extends Functor {
 
     public Exp() {
-        super("exp", 1);
+        super("exp", 1); // NON-NLS
     }
 
     @Override

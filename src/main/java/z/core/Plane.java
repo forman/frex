@@ -179,16 +179,16 @@ public class Plane extends RenderableNode {
         super.readExternal(element);
 
         final String name = JDOMHelper.getAttributeString(element,
-                                                          "name",
+                                                          "name",   // NON-NLS
                                                           getName());
         final boolean visible = JDOMHelper.getAttributeBoolean(element,
-                                                               "visible",
+                                                               "visible",  // NON-NLS
                                                                true);
         final boolean decompositionMode = JDOMHelper.getAttributeBoolean(element,
-                                                                         "decompositionMode",
+                                                                         "decompositionMode",  // NON-NLS
                                                                          false);
         final boolean trapMode = JDOMHelper.getAttributeBoolean(element,
-                                                                "trapMode",
+                                                                "trapMode",  // NON-NLS
                                                                 false);
 
         IFractal fractal = (IFractal) JDOMObjectIO.readObjectFromChild(element,
@@ -225,14 +225,14 @@ public class Plane extends RenderableNode {
     @Override
     public void writeExternal(Element element) throws JDOMException {
 
-        JDOMHelper.setAttributeString(element, "name", getName());
-        JDOMHelper.setAttributeBoolean(element, "visible", isVisible(), true);
+        JDOMHelper.setAttributeString(element, "name", getName());  // NON-NLS
+        JDOMHelper.setAttributeBoolean(element, "visible", isVisible(), true);  // NON-NLS
         JDOMHelper.setAttributeBoolean(element,
-                                       "trapMode",
+                                       "trapMode", // NON-NLS
                                        getTrapMode(),
                                        false);
         JDOMHelper.setAttributeBoolean(element,
-                                       "decompositionMode",
+                                       "decompositionMode",   // NON-NLS
                                        getDecompositionMode(),
                                        false);
 

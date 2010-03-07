@@ -1,5 +1,6 @@
 package z.frex.dialogs;
 
+import z.StringLiterals;
 import z.core.Algorithm;
 import z.core.AlgorithmDescriptor;
 import z.core.AlgorithmRegistry;
@@ -25,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.MessageFormat;
 
 public class EditPlanePropertiesDialog extends Dialog {
 
@@ -118,14 +120,14 @@ public class EditPlanePropertiesDialog extends Dialog {
         if (orbitUsed.isSelected()) {
             if (data.accumulator == null) {
                 MessageDialog.openError(getShell(),
-                                        "Akkumulator",
-                                        "Bitte einen Akkumulator auswählen");
+                                        StringLiterals.getString("gui.title.accu"),
+                                        StringLiterals.getString("gui.errmsg.mustSelectAccu"));
                 return;
             }
             if (!data.accumulator.computesIndex() && data.indexer == null) {
                 MessageDialog.openError(getShell(),
-                                        "Indexer",
-                                        "Bitte einen Indexer auswählen");
+                                        StringLiterals.getString("gui.title.indexer"),
+                                        StringLiterals.getString("gui.errmsg.mustSelectIndexer"));
                 return;
             }
             data.trapMode = trapMode.isSelected();
@@ -145,7 +147,7 @@ public class EditPlanePropertiesDialog extends Dialog {
     @Override
     protected void configureShell(JDialog newShell) {
         super.configureShell(newShell);
-        newShell.setTitle("Ebenen-Eigenschaften");
+        newShell.setTitle(StringLiterals.getString("gui.title.layerProperties"));
     }
 
     @Override
@@ -167,7 +169,7 @@ public class EditPlanePropertiesDialog extends Dialog {
 
         gbc.gridy = 0;
         gbc.gridx = 0;
-        contentPane.add(new JLabel("Fractal:"), gbc);
+        contentPane.add(new JLabel(StringLiterals.getString("gui.label.fractal")), gbc);
 
         JTextField fractalName = new JTextField(data.fractal.getName());
         fractalName.setEditable(false);
@@ -176,7 +178,7 @@ public class EditPlanePropertiesDialog extends Dialog {
 
         gbc.gridy++;
         gbc.gridx = 0;
-        contentPane.add(new JLabel("Anzahl Iterationen:"), gbc);
+        contentPane.add(new JLabel(StringLiterals.getString("gui.label.numIters")), gbc);
 
         iterMax = new JComboBox(new String[]{"100", "250", "500", "750", "1000", "2500", "5000", "7500", "10000"});
         iterMax.setEditable(true);
@@ -187,7 +189,7 @@ public class EditPlanePropertiesDialog extends Dialog {
 
         gbc.gridy++;
         gbc.gridx = 0;
-        contentPane.add(new JLabel("Schwellwert:"), gbc);
+        contentPane.add(new JLabel(StringLiterals.getString("gui.label.bailOut")), gbc);
 
         bailOut = new JTextField(8);
         bailOut.setText(String.valueOf(data.bailOut));
@@ -195,14 +197,14 @@ public class EditPlanePropertiesDialog extends Dialog {
         gbc.gridx = 1;
         contentPane.add(bailOut, gbc);
 
-        decompositionMode = new JCheckBox("Y-Dekomposition berechnen");
+        decompositionMode = new JCheckBox(StringLiterals.getString("gui.label.useYDecomp"));
         decompositionMode.setSelected(data.decompositionMode);
         gbc.gridwidth = 2;
         gbc.gridy++;
         gbc.gridx = 0;
         contentPane.add(decompositionMode, gbc);
 
-        juliaMode = new JCheckBox("Juliamenge berechnen");
+        juliaMode = new JCheckBox(StringLiterals.getString("gui.label.useJuliaSet"));
         juliaMode.setSelected(data.juliaMode);
         juliaMode.addActionListener(actionListener);
         gbc.gridy++;
@@ -214,7 +216,7 @@ public class EditPlanePropertiesDialog extends Dialog {
         gbc.gridx = 0;
         contentPane.add(juliaPanel, gbc);
 
-        orbitUsed = new JCheckBox("Orbit-Algorithmen benutzen");
+        orbitUsed = new JCheckBox(StringLiterals.getString("gui.label.useOrbitTraps"));
         orbitUsed.setSelected(data.accumulator != null);
         orbitUsed.addActionListener(actionListener);
         gbc.gridy++;
@@ -226,7 +228,7 @@ public class EditPlanePropertiesDialog extends Dialog {
         gbc.gridx = 0;
         contentPane.add(orbitPanel, gbc);
 
-        adjustColors = new JCheckBox("Farbbereich anpassen");
+        adjustColors = new JCheckBox(StringLiterals.getString("gui.label.autoAdaptColorRange"));
         adjustColors.setSelected(data.adjustColors);
         adjustColors.addActionListener(actionListener);
         gbc.gridy++;
@@ -260,7 +262,7 @@ public class EditPlanePropertiesDialog extends Dialog {
             }
         };
         accumulator = createAlgorithmControls(orbitPanel,
-                                              gbc, "Akkumulator",
+                                              gbc, StringLiterals.getString("gui.title.accu"),
                                               AlgorithmRegistry.instance().getAccumulators().getAll(),
                                               (Algorithm) data.accumulator,
                                               accumulatorHandler);
@@ -281,12 +283,12 @@ public class EditPlanePropertiesDialog extends Dialog {
             }
         };
         indexer = createAlgorithmControls(orbitPanel,
-                                          gbc, "Indexer",
+                                          gbc, StringLiterals.getString("gui.title.indexer"),
                                           AlgorithmRegistry.instance().getIndexers().getAll(),
                                           (Algorithm) data.indexer,
                                           indexerHandler);
 
-        trapMode = new JCheckBox("Orbitfalle einsetzen");
+        trapMode = new JCheckBox(StringLiterals.getString("gui.label.orbitTraps"));
         trapMode.setSelected(data.trapMode);
         gbc.gridy++;
         gbc.gridx = 0;
@@ -308,7 +310,7 @@ public class EditPlanePropertiesDialog extends Dialog {
 
         gbc.gridy = 0;
         gbc.gridx = 0;
-        juliaPanel.add(new JLabel("Julia CX:"), gbc);
+        juliaPanel.add(new JLabel(StringLiterals.getString("gui.label.juliaCX")), gbc);
 
         juliaCX = new JTextField(20);
         juliaCX.setText(String.valueOf(data.juliaCX));
@@ -317,7 +319,7 @@ public class EditPlanePropertiesDialog extends Dialog {
 
         gbc.gridy = 1;
         gbc.gridx = 0;
-        juliaPanel.add(new JLabel("Julia CY:"), gbc);
+        juliaPanel.add(new JLabel(StringLiterals.getString("gui.label.juliaCY")), gbc);
 
         juliaCY = new JTextField(20);
         juliaCY.setText(String.valueOf(data.juliaCY));
@@ -355,8 +357,8 @@ public class EditPlanePropertiesDialog extends Dialog {
         gbc.gridx = 1;
         orbitPanel.add(combo, gbc);
 
-        JButton button = new JButton("...");
-        button.setToolTipText(labelText + " Parameter bearbeiten");
+        JButton button = new JButton(StringLiterals.getString("gui.action.text.editParams"));
+        button.setToolTipText(MessageFormat.format(StringLiterals.getString("gui.action.tooltip.editParams"), labelText));
         button.addActionListener(editSelectionListener);
         gbc.gridx = 2;
         orbitPanel.add(button, gbc);
@@ -372,9 +374,8 @@ public class EditPlanePropertiesDialog extends Dialog {
                 data.accumulator.reset();
             } catch (Exception e) {
                 MessageDialog.openError(getShell(),
-                                        "Accumulator",
-                                        "Fehlerhafter Accumulator.\nMeldung: "
-                                                + e.getLocalizedMessage());
+                                        StringLiterals.getString("gui.title.accu"),
+                                        MessageFormat.format(StringLiterals.getString("gui.errmsg.invalidAccu"), e.getLocalizedMessage()));
             }
         }
     }
@@ -388,9 +389,8 @@ public class EditPlanePropertiesDialog extends Dialog {
                 data.indexer.reset();
             } catch (Exception e) {
                 MessageDialog.openError(getShell(),
-                                        "Indexer",
-                                        "Fehlerhafter Indexer.\nMeldung: "
-                                                + e.getLocalizedMessage());
+                                        StringLiterals.getString("gui.title.indexer"),
+                                        MessageFormat.format(StringLiterals.getString("gui.errmsg.invalidIndexer"), e.getLocalizedMessage()));
             }
         }
     }

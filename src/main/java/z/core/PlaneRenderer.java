@@ -4,20 +4,23 @@
  */
 package z.core;
 
+import z.StringLiterals;
 import z.core.color.RGBA;
 import z.core.progress.ProgressMonitor;
 import z.core.progress.SubProgressMonitor;
 import z.util.Assert;
 
+import java.text.MessageFormat;
+
 public class PlaneRenderer {
 
-    private ImageInfo imageInfo;
+    private final ImageInfo imageInfo;
 
     private final boolean colorizeOnly;
 
 
     public PlaneRenderer(ImageInfo imageInfo, boolean colorizeOnly) {
-        Assert.notNull(imageInfo, "imageInfo");
+        Assert.notNull(imageInfo, "imageInfo"); // NON-NLS
         this.imageInfo = imageInfo;
         this.colorizeOnly = colorizeOnly;
     }
@@ -30,12 +33,12 @@ public class PlaneRenderer {
      * @param pm         a progress monitor
      */
     public void renderPlanes(Plane[] planes, int[][] pixelDatas, ProgressMonitor pm) {
-        Assert.notNull(planes, "planes");
-        Assert.notNull(pixelDatas, "pixelDatas");
-        Assert.notNull(pm, "pm");
+        Assert.notNull(planes, "planes"); // NON-NLS
+        Assert.notNull(pixelDatas, "pixelDatas"); // NON-NLS
+        Assert.notNull(pm, "pm"); // NON-NLS
         int background = imageInfo.getBackground().getValue();
 
-        pm.beginTask("Berechne Ebene(n)", planes.length);
+        pm.beginTask(StringLiterals.getString("gui.msg.computingLayer"), planes.length);
         try {
             for (int i = 0; i < planes.length && !pm.isCanceled(); i++) {
                 renderPlane(planes[i], pixelDatas[i], background, new SubProgressMonitor(pm, 1));
@@ -54,9 +57,9 @@ public class PlaneRenderer {
      * @param pm        a progress monitor
      */
     public void renderPlane(Plane plane, int[] pixelData, ProgressMonitor pm) {
-        Assert.notNull(plane, "plane");
-        Assert.notNull(pixelData, "pixelData");
-        Assert.notNull(pm, "pm");
+        Assert.notNull(plane, "plane");  // NON-NLS
+        Assert.notNull(pixelData, "pixelData"); // NON-NLS
+        Assert.notNull(pm, "pm"); // NON-NLS
         renderPlane(plane,
                     pixelData,
                     imageInfo.getBackground().getValue(),
@@ -71,7 +74,7 @@ public class PlaneRenderer {
 
         int imageWidth = imageInfo.getImageWidth();
         int imageHeight = imageInfo.getImageHeight();
-        pm.beginTask("Berechne Ebene " + plane.getName(), imageHeight);
+        pm.beginTask(MessageFormat.format(StringLiterals.getString("gui.msg.computingLayer0"), plane.getName()), imageHeight);
         try {
             renderPlane(plane, imageWidth, imageHeight, pixelData, pm, background);
         } finally {

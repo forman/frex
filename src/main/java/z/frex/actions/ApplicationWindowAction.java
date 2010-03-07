@@ -17,7 +17,7 @@ public abstract class ApplicationWindowAction extends Action {
 
     protected ApplicationWindowAction(ApplicationWindow window, String id) {
         super(id);
-        Assert.notNull(window, "window");
+        Assert.notNull(window, "window"); // NON-NLS
         this.window = window;
     }
 

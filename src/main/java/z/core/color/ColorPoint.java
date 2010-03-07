@@ -23,8 +23,8 @@ public class ColorPoint {
     }
 
     public void setPosition(float position) {
-        Assert.argument(position >= 0.0f, "position >= 0.0f");
-        Assert.argument(position <= 1.0f, "position <= 1.0f");
+        Assert.argument(position >= 0.0f, "position >= 0.0f"); // NON-NLS
+        Assert.argument(position <= 1.0f, "position <= 1.0f"); // NON-NLS
         this.position = position;
     }
 
@@ -33,7 +33,7 @@ public class ColorPoint {
     }
 
     public void setColor(RGBA color) {
-        Assert.notNull(color, "color");
+        Assert.notNull(color, "color"); // NON-NLS
         this.color = color;
     }
 }

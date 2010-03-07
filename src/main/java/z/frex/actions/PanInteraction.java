@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Plane;
 import z.frex.Frex;
 import z.ui.application.ApplicationWindow;
@@ -16,9 +17,9 @@ public class PanInteraction extends Interaction {
 
     public PanInteraction(ApplicationWindow window) {
         super(window, ID);
-        setText("Pan");
-        setToolTipText("Auschnitt verschieben");
-        setSmallIcon(Frex.getIcon("/icons/16x16/frex/pan.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.interaction.text.pan"));
+        setToolTipText(StringLiterals.getString("gui.interaction.tooltip.pan"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.interaction.icon.pan")));
         setInteractor(new PanInteractor());
     }
 

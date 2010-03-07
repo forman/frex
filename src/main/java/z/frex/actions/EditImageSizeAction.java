@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.ImageInfo;
 import z.core.Plane;
 import z.frex.Frex;
@@ -9,13 +10,13 @@ import z.ui.application.ApplicationWindow;
 import z.ui.dialog.Dialog;
 
 public class EditImageSizeAction extends PlaneViewAction {
-    public static final String ID = "z.frex.actions.editImageSize"; //$NON-NLS-1$
+    public static final String ID = "z.frex.actions.editImageSize"; // NON-NLS
 
     public EditImageSizeAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Bildgröße...");
-        setToolTipText("Bildgröße bearbeiten");
-        setSmallIcon(Frex.getIcon("/icons/16x16/frex/image-size.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.imageSize"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.imageSize"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.imageSize")));
     }
 
     @Override

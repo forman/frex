@@ -10,7 +10,7 @@ import z.math.term.Term;
 public class Sinh extends Functor {
 
     public Sinh() {
-        super("sinh", 1);
+        super("sinh", 1); // NON-NLS
     }
 
     @Override

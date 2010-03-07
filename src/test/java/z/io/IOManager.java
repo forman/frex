@@ -2,6 +2,7 @@ package z.io;
 
 import org.jdom.Element;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 
 public class IOManager {
@@ -28,7 +29,7 @@ public class IOManager {
 
     public <T> T read(Element element) throws Exception {
         Class<T> type;
-        String className = element.getAttributeValue("class");
+        String className = element.getAttributeValue("class"); // NON-NLS
         if (className != null) {
             type = (Class<T>) classLoader.loadClass(className);
         } else {
@@ -40,7 +41,7 @@ public class IOManager {
         final T t = type.newInstance();
         IO io = ExtensionManager.instance().getExtension(t, IO.class);
         if (io == null) {
-            throw new RuntimeException("No extension of type '" + IO.class + "' found for type '" + type + "'");
+            throw new RuntimeException(MessageFormat.format("No extension of type ''{0}'' found for type ''{1}''", IO.class, type));  // NON-NLS
         }
         io.read(this, element);
         return t;
@@ -49,7 +50,7 @@ public class IOManager {
     public <T> Element write(T t) throws Exception {
         IO io = (IO) ExtensionManager.instance().getExtension(t, IO.class);
         final Element element = new Element(io.getElementName());
-        element.setAttribute("class", t.getClass().getName());
+        element.setAttribute("class", t.getClass().getName());  // NON-NLS
         io.write(this, element);
         return element;
     }

@@ -1,12 +1,13 @@
 package z.math;
 
 import junit.framework.TestCase;
-import z.math.term.Term;
 import z.math.term.Functor;
+import z.math.term.Term;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class CodeGenTest extends TestCase {
     public void testIt() throws ParseException {
 
@@ -43,7 +44,7 @@ public class CodeGenTest extends TestCase {
             code.append("double " + var.getName() + ";\n");
         }
         for (Symbol var : varList) {
-            code.append("    "+var.getName() + " = " + var.getValue() + ";\n");
+            code.append("    " + var.getName() + " = " + var.getValue() + ";\n");
         }
         return code.toString();
     }

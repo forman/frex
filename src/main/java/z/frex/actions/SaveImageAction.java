@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.frex.Frex;
 import z.ui.FileExtensionFileFilter;
 import z.ui.application.ApplicationWindow;
@@ -10,37 +11,39 @@ import javax.swing.JFileChooser;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 public class SaveImageAction extends PlaneViewAction {
 
-    private static FileExtensionFileFilter PNG_FILTER = new FileExtensionFileFilter("png",//$NON-NLS-1$
-                                                                                    "PNG (*.png)",
-                                                                                    ".png");//$NON-NLS-1$
+    private static FileExtensionFileFilter PNG_FILTER = new FileExtensionFileFilter("png", // NON-NLS
+                                                                                    StringLiterals.getString("gui.fileTypeDescr.png"),
+                                                                                    ".png"); // NON-NLS
 
-    private static FileExtensionFileFilter JPEG_FILTER = new FileExtensionFileFilter("jpeg",//$NON-NLS-1$
-                                                                                     "JPEG (*.jpeg;*.jpg)",
-                                                                                     new String[]{".jpeg", ".jpg",});//$NON-NLS-1$
+    private static FileExtensionFileFilter JPEG_FILTER = new FileExtensionFileFilter("jpeg", // NON-NLS
+                                                                                     StringLiterals.getString("gui.fileTypeDescr.jpeg"),
+                                                                                     new String[]{".jpeg", ".jpg",}); // NON-NLS
 
-    private static FileExtensionFileFilter WBMP_FILTER = new FileExtensionFileFilter("wbmp",//$NON-NLS-1$
-                                                                                     "Wireless BitMap (*.wbmp)",
-                                                                                     ".wbmp");//$NON-NLS-1$
+    private static FileExtensionFileFilter WBMP_FILTER = new FileExtensionFileFilter("wbmp", // NON-NLS
+                                                                                     StringLiterals.getString("gui.fileTypeDescr.wbmp"),
+                                                                                     ".wbmp"); // NON-NLS
 
-    private static FileExtensionFileFilter BMP_FILTER = new FileExtensionFileFilter("bmp",//$NON-NLS-1$
-                                                                                    "Windows Bitmap Format (*.bmp)",
-                                                                                    ".bmp");//$NON-NLS-1$
+    private static FileExtensionFileFilter BMP_FILTER = new FileExtensionFileFilter("bmp", // NON-NLS
+                                                                                    StringLiterals.getString("gui.fileTypeDescr.bmp"),
+                                                                                    ".bmp"); // NON-NLS
 
-    private static FileExtensionFileFilter GIF_FILTER = new FileExtensionFileFilter("gif",//$NON-NLS-1$
-                                                                                    "GIF (*.gif)",
-                                                                                    ".gif");//$NON-NLS-1$
+    private static FileExtensionFileFilter GIF_FILTER = new FileExtensionFileFilter("gif", // NON-NLS
+                                                                                    StringLiterals.getString("gui.fileTypeDescr.gig"),
+                                                                                    ".gif"); // NON-NLS
 
-    public static final String ID = "z.frex.actions.saveImage";//$NON-NLS-1$
+    public static final String ID = "z.frex.actions.saveImage"; // NON-NLS
     private FileExtensionFileFilter lastImageFormat = PNG_FILTER;
+    private final String TITLE = StringLiterals.getString("gui.title.saveImage");
 
     public SaveImageAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Bild speichern...");
-        setToolTipText("Bild speichern");
-        setSmallIcon(Frex.getIcon("/icons/picture_save.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.saveImage"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.saveImage"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.saveImage")));
 
     }
 
@@ -48,10 +51,11 @@ public class SaveImageAction extends PlaneViewAction {
     @Override
     public void run() {
 
-        String lastDir = Frex.getPreferences().get("lastImageDir", Frex.getPreferences().get("lastDir", "."));
+        String lastDir = Frex.getPreferences().get("lastImageDir", // NON-NLS
+                                                   Frex.getPreferences().get("lastDir", ".")); // NON-NLS
         JFileChooser dialog = new JFileChooser(lastDir);
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        dialog.setDialogTitle("Bild speichern");
+        dialog.setDialogTitle(TITLE);
         dialog.setAcceptAllFileFilterUsed(false);
         dialog.addChoosableFileFilter(PNG_FILTER);
         dialog.addChoosableFileFilter(JPEG_FILTER);
@@ -62,7 +66,8 @@ public class SaveImageAction extends PlaneViewAction {
         int code = dialog.showSaveDialog(getWindow().getShell());
 
         if (code == JFileChooser.APPROVE_OPTION) {
-            Frex.getPreferences().put("lastImageDir", dialog.getCurrentDirectory().getPath());
+            Frex.getPreferences().put("lastImageDir", // NON-NLS
+                                      dialog.getCurrentDirectory().getPath());
             FileExtensionFileFilter selectedImageFormat = (FileExtensionFileFilter) dialog.getFileFilter();
             lastImageFormat = selectedImageFormat;
             File selectedFile = selectedImageFormat.appendMissingFileExtension(dialog.getSelectedFile());
@@ -71,10 +76,8 @@ public class SaveImageAction extends PlaneViewAction {
                 ImageIO.write(image, selectedImageFormat.getFormatName(), selectedFile);
             } catch (IOException e) {
                 MessageDialog.openError(getWindow().getShell(),
-                                        "Bild speichern",
-                                        "Fehler beim Speichern des Bildes nach\n"
-                                                + "[" + selectedFile + "]\n" + "Meldung: "
-                                                + e.getLocalizedMessage());
+                                        TITLE,
+                                        MessageFormat.format(StringLiterals.getString("gui.msg.errorSavingImage"), selectedFile, e.getLocalizedMessage()));
             }
         }
     }

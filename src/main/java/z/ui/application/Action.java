@@ -64,7 +64,7 @@ public abstract class Action extends AbstractAction {
 //            setSelected(!selected);
 //            System.out.println("post: selected = " + isSelected());
 //        }
-        System.out.println(this + ": selected = " + isSelected());
+        System.out.printf("%s: selected = %s%n", this, isSelected());  // NON-NLS
         run();
     }
 

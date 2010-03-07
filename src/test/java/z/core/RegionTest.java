@@ -6,6 +6,7 @@ import org.jdom.JDOMException;
 import z.util.JDOMHelper;
 
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class RegionTest extends TestCase {
     private static final double EPS = 1e-10;
 

@@ -3,6 +3,7 @@ package z.io;
 import junit.framework.TestCase;
 import org.jdom.Element;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class IOTest extends TestCase {
     public void testIO() throws Exception {
 

@@ -79,7 +79,7 @@ public class Frex {
     }
 
     public static Preferences getDialogSettings() {
-        return getPreferences().node("dialog-data");
+        return getPreferences().node("dialog-data");  // NON-NLS
     }
 
     public static Preferences getPreferences() {

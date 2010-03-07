@@ -1,5 +1,6 @@
 package z.frex.dialogs;
 
+import z.StringLiterals;
 import z.core.AlgorithmDescriptor;
 import z.core.AlgorithmRegistry;
 import z.core.IFractal;
@@ -17,10 +18,11 @@ import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.MessageFormat;
 
 public class SelectFractalDialog extends Dialog {
 
-    private static final String TITLE = "Fraktal auswählen";
+    private static final String TITLE = StringLiterals.getString("gui.title.selectFractal");
     private JList fractalList;
     private IFractal selectedFractal;
 
@@ -46,7 +48,7 @@ public class SelectFractalDialog extends Dialog {
         fractalList = new JList(AlgorithmRegistry.instance().getFractals().getAll());
         fractalList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        contentPane.add(new JLabel("Fraktale:"), BorderLayout.NORTH);
+        contentPane.add(new JLabel(StringLiterals.getString("gui.label.fractals")), BorderLayout.NORTH);
         contentPane.add(new JScrollPane(fractalList), BorderLayout.CENTER);
 
         fractalList.addMouseListener(new MouseAdapter() {
@@ -69,12 +71,14 @@ public class SelectFractalDialog extends Dialog {
                 selectedFractal = (IFractal) d.getAlgorithmClass().newInstance();
             } catch (Exception e) {
                 selectedFractal = null;
-                MessageDialog.openError(getShell(), TITLE,
-                                        "Fraktal konnte nicht erzeugt werden!\n" +
-                                                "Meldung: " + e.getLocalizedMessage());
+                MessageDialog.openError(getShell(),
+                                        TITLE,
+                                        MessageFormat.format(StringLiterals.getString("gui.msg.failedToInstantiateFractal"), e.getLocalizedMessage()));
             }
         } else {
-            MessageDialog.openError(getShell(), TITLE, "Bitte ein Fraktal auswählen!");
+            MessageDialog.openError(getShell(),
+                                    TITLE,
+                                    StringLiterals.getString("gui.msg.mustSelectFractal"));
         }
         if (selectedFractal != null) {
             super.okPressed();

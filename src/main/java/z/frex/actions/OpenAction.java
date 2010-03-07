@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Plane;
 import z.core.Project;
 import z.frex.Frex;
@@ -19,25 +20,25 @@ import java.io.File;
 import java.text.MessageFormat;
 
 public class OpenAction extends ApplicationWindowAction {
-    public static final String ID = "z.frex.actions.open";//$NON-NLS-1$
+    public static final String ID = "z.frex.actions.open"; // NON-NLS
 
     public static final FileExtensionFileFilter PLANE_FILTER = new FileExtensionFileFilter(
-            "zplane",  //$NON-NLS-1$
-            MessageFormat.format("Frex Ebenen (*{0})", Plane.FILENAME_EXTENSION),
+            "zplane",  // NON-NLS
+            MessageFormat.format(StringLiterals.getString("gui.fileTypeDescr.layer"), Plane.FILENAME_EXTENSION),
             Plane.FILENAME_EXTENSION);
 
     public static final FileExtensionFileFilter PROJECT_FILTER = new FileExtensionFileFilter(
-            "zproject", //$NON-NLS-1$
-            MessageFormat.format("Frex Projekte (*{0})", Project.FILENAME_EXTENSION),
+            "zproject",  // NON-NLS
+            MessageFormat.format(StringLiterals.getString("gui.fileTypeDescr.projects"), Project.FILENAME_EXTENSION),
             Project.FILENAME_EXTENSION);
 
     private boolean canceledByUser;
 
     public OpenAction(ApplicationWindow window) {
         super(window, ID);
-        setText("&Öffnen...");
-        setToolTipText("Öffnen");
-        setSmallIcon(Frex.getIcon("/icons/folder.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.open"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.open"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.open")));
     }
 
     public boolean isCanceledByUser() {
@@ -65,9 +66,9 @@ public class OpenAction extends ApplicationWindowAction {
 
     private String promptForFile() {
 
-        String lastDir = Frex.getPreferences().get("lastDir", ".");
+        String lastDir = Frex.getPreferences().get("lastDir", "."); // NON-NLS
         JFileChooser dialog = new JFileChooser(lastDir);
-        dialog.setDialogTitle("Öffnen");
+        dialog.setDialogTitle(StringLiterals.getString("gui.title.open"));
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
         dialog.setAcceptAllFileFilterUsed(false);
         dialog.addChoosableFileFilter(PLANE_FILTER);
@@ -76,7 +77,7 @@ public class OpenAction extends ApplicationWindowAction {
         int resp = dialog.showOpenDialog(getWindow().getShell());
 
         if (resp == JFileChooser.APPROVE_OPTION) {
-            Frex.getPreferences().put("lastDir", dialog.getCurrentDirectory().getPath());
+            Frex.getPreferences().put("lastDir", dialog.getCurrentDirectory().getPath()); // NON-NLS
             return dialog.getSelectedFile().getPath();
         }
         return null;
@@ -84,12 +85,10 @@ public class OpenAction extends ApplicationWindowAction {
 
     public void openError(File file, Exception e) {
         e.printStackTrace();
-        final String pattern = "Fehler beim �ffnen der Datei [{0}]."
-                + "  Fehler-Typ: {1}\n" + "  Fehler-Meldung: {2}";
 
         MessageDialog.openError(getWindow().getShell(),
-                                "�ffnen",
-                                MessageFormat.format(pattern,
+                                StringLiterals.getString("gui.title.openFile"),
+                                MessageFormat.format(StringLiterals.getString("gui.msg.errorOpeningFile"),
                                                      file.getPath(),
                                                      e.getClass().getName(),
                                                      e.getLocalizedMessage()));
@@ -102,7 +101,7 @@ public class OpenAction extends ApplicationWindowAction {
         if (activeComponent.isDirty()) {
             name = "*" + name;
         }
-        window.getShell().setTitle(name + " - Frex");
+        window.getShell().setTitle(MessageFormat.format(StringLiterals.getString("gui.frame.titleWithDoc"), name));
     }
 
     public static void openPlane(final ApplicationWindow window,
@@ -110,7 +109,9 @@ public class OpenAction extends ApplicationWindowAction {
         boolean reuseExistingWindow = true;
         boolean hasPageComponent = window.getPage().getActivePageComponent() != null;
         if (hasPageComponent) {
-            int r = MessageDialog.confirmYesNoCancel(window.getShell(), "Öffnen", "In neuem Fenster öffnen?");
+            int r = MessageDialog.confirmYesNoCancel(window.getShell(),
+                                                     StringLiterals.getString("gui.title.open"),
+                                                     StringLiterals.getString("gui.msg.askOpenInNewWindow"));
             if (r == JOptionPane.CANCEL_OPTION) {
                 return;
             }
@@ -133,7 +134,7 @@ public class OpenAction extends ApplicationWindowAction {
             regionHistory.setCurrentRegion(plane.getRegion());
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(window.getShell(), "Interner Fehler", e.getMessage());
+            MessageDialog.openError(window.getShell(), StringLiterals.getString("gui.title.internalError"), e.getMessage());
         }
     }
 }

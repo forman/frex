@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.frex.dialogs.HistogramDialog;
 import z.ui.application.ApplicationWindow;
 
@@ -10,8 +11,8 @@ public class EditIndexRangeAction extends PlaneViewAction {
 
     public EditIndexRangeAction(ApplicationWindow window) {
         super(window, EditIndexRangeAction.ID);
-        setText("&Histogram");
-        setToolTipText("Histogram anzeigen");
+        setText(StringLiterals.getString("gui.action.text.histo"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.histo"));
     }
 
     @Override

@@ -2,8 +2,10 @@ package z.math.term;
 
 import junit.framework.TestCase;
 import z.math.Symbol;
+
 import static z.math.term.Functor.*;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class FunctionTest extends TestCase {
     public void testFunction() {
         Symbol x = Symbol.createVariable("x", null);

@@ -2,19 +2,21 @@ package z.core;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import z.StringLiterals;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Project extends RenderableNode {
-    public static final String ELEMENT_NAME = "project"; //$NON-NLS-1$
+    public static final String ELEMENT_NAME = "project"; // NON-NLS
 
-    public static final String FILENAME_EXTENSION = ".zpr";
+    public static final String FILENAME_EXTENSION = ".zpr"; // NON-NLS
 
-    public static final String FILEFORMAT_VERSION = "1.0";
+    public static final String FILEFORMAT_VERSION = "1.0"; // NON-NLS
 
     private List<Plane> planeList;
 
@@ -117,8 +119,7 @@ public class Project extends RenderableNode {
         planeList.clear();
         final List children = element.getChildren(Plane.ELEMENT_NAME);
         for (int i = 0; i < children.size(); i++) {
-            Plane plane = new Plane(new File("Ebene " + (i + 1)
-                    + FILENAME_EXTENSION));
+            Plane plane = new Plane(new File(MessageFormat.format(StringLiterals.getString("model.defaultLayerName"), i + 1, FILENAME_EXTENSION)));
             Element child = (Element) children.get(i);
             plane.readExternal(child);
             addPlane(plane);

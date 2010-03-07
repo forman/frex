@@ -10,7 +10,7 @@ import z.math.term.Term;
 public class Cos extends Functor {
 
     public Cos() {
-        super("cos", 1);
+        super("cos", 1); // NON-NLS
     }
 
     @Override

@@ -1,6 +1,7 @@
 package z.frex.dialogs;
 
 import org.jdom.JDOMException;
+import z.StringLiterals;
 import z.math.ParseException;
 import z.ui.dialog.Dialog;
 import z.util.FileUtils;
@@ -72,8 +73,8 @@ public class ManageUserFractalsDialog extends Dialog {
                 fractalDef.parse();
             } catch (ParseException e) {
                 table.getSelectionModel().setSelectionInterval(i, i);
-                showError("Fehler in Formel",
-                          MessageFormat.format("Fehler in Formel ''{0}'':\n{1}",
+                showError(StringLiterals.getString("gui.title.errorInFormula"),
+                          MessageFormat.format(StringLiterals.getString("gui.msg.errorInFormula"),
                                                fractalDef.getCode(),
                                                e.getLocalizedMessage())
                 );
@@ -103,9 +104,9 @@ public class ManageUserFractalsDialog extends Dialog {
         try {
             defs = FractalDef.loadFractals(fractalsFile);
         } catch (JDOMException e) {
-            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\nUngültiges Dateiformat.");
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.invalidFileFormat"), fractalsFile));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\n" + e.getLocalizedMessage());
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.ioError"), fractalsFile, e.getLocalizedMessage()));
         }
         return defs;
     }
@@ -114,7 +115,7 @@ public class ManageUserFractalsDialog extends Dialog {
         try {
             FractalDef.saveFractals(fractalsFile, fractalDefs);
         } catch (JDOMException e) {
-            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\nUngültiges Dateiformat.");
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.invalidFileFormat"), fractalsFile));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\n" + e.getLocalizedMessage());
         }
@@ -123,7 +124,7 @@ public class ManageUserFractalsDialog extends Dialog {
     @Override
     protected void configureShell(JDialog newShell) {
         super.configureShell(newShell);
-        newShell.setTitle("Eigene Fractals");
+        newShell.setTitle(StringLiterals.getString("gui.title.myFractals"));
     }
 
     @Override
@@ -139,8 +140,8 @@ public class ManageUserFractalsDialog extends Dialog {
         table.setGridColor(Color.LIGHT_GRAY);
 
         addButton = new JButton();
-        addButton.setToolTipText("Hinzufügen");
-        addButton.setIcon(new ImageIcon(getClass().getResource("/icons/add.png")));
+        addButton.setToolTipText(StringLiterals.getString("gui.action.tooltip.addFractal"));
+        addButton.setIcon(new ImageIcon(getClass().getResource(StringLiterals.getString("gui.action.icon.addFractal"))));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = tableModel.addRow();
@@ -151,13 +152,14 @@ public class ManageUserFractalsDialog extends Dialog {
         });
 
         removeButton = new JButton();
-        removeButton.setToolTipText("Entfernen");
-        removeButton.setIcon(new ImageIcon(getClass().getResource("/icons/delete.png")));
+        removeButton.setToolTipText(StringLiterals.getString("gui.action.tooltip.removeFractal"));
+        removeButton.setIcon(new ImageIcon(getClass().getResource(StringLiterals.getString("gui.action.icon.removeFractal"))));
         removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow >= 0 && selectedRow < table.getRowCount()) {
-                    int i = JOptionPane.showConfirmDialog(getShell(), "Entfernen?", "Fractal Entfernen", JOptionPane.YES_NO_OPTION);
+                    int i = JOptionPane.showConfirmDialog(getShell(), StringLiterals.getString("gui.msg.removeFractal"),
+                                                          StringLiterals.getString("gui.title.removeFractal"), JOptionPane.YES_NO_OPTION);
                     if (i == JOptionPane.YES_OPTION) {
                         tableModel.removeRow(selectedRow);
                         table.getSelectionModel().addSelectionInterval(selectedRow, selectedRow);
@@ -167,8 +169,8 @@ public class ManageUserFractalsDialog extends Dialog {
         });
 
         moveUpButton = new JButton();
-        moveUpButton.setToolTipText("Nach oben");
-        moveUpButton.setIcon(new ImageIcon(getClass().getResource("/icons/arrow_up.png")));
+        moveUpButton.setToolTipText(StringLiterals.getString("gui.action.tooltip.moveUp"));
+        moveUpButton.setIcon(new ImageIcon(getClass().getResource(StringLiterals.getString("gui.action.icon.moveUp"))));
         moveUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
@@ -180,8 +182,8 @@ public class ManageUserFractalsDialog extends Dialog {
         });
 
         moveDownButton = new JButton();
-        moveDownButton.setToolTipText("Nach unten");
-        moveDownButton.setIcon(new ImageIcon(getClass().getResource("/icons/arrow_down.png")));
+        moveDownButton.setToolTipText(StringLiterals.getString("gui.action.tooltip.moveDown"));
+        moveDownButton.setIcon(new ImageIcon(getClass().getResource(StringLiterals.getString("gui.action.icon.moveDown"))));
         moveDownButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
@@ -243,9 +245,9 @@ public class ManageUserFractalsDialog extends Dialog {
         @Override
         public String getColumnName(int columnIndex) {
             if (columnIndex == 0) {
-                return "Fractal Name";
+                return StringLiterals.getString("gui.column.text.fractalName");
             } else {
-                return "Fractal Formel f(z,c) = ?";
+                return StringLiterals.getString("gui.column.text.fractalFormula");
             }
         }
 

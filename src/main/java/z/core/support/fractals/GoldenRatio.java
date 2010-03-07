@@ -12,7 +12,7 @@ import z.core.Region;
  *       z' = z&circ;2 - z - 1 + c
  * </pre>
  */
-public final class GoldenerSchnitt extends Fractal {
+public final class GoldenRatio extends Fractal {
 
     public Region getStartRegion() {
         return new Region(0, 0, 2.5);

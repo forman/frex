@@ -57,6 +57,6 @@ public abstract class AbstractPageComponent implements PageComponent {
 
     @Override
     public String toString() {
-        return getClass().getName() + "[id=" + getId() + ",displayName=" + displayName + "]";
+        return String.format("%s[id=%s,displayName=%s]", getClass().getName(), getId(), displayName);  // NON-NLS
     }
 }

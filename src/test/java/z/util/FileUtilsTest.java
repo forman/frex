@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 import java.io.File;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class FileUtilsTest extends TestCase {
     public void testEnsureExtension() {
         File f = new File("default.plane");

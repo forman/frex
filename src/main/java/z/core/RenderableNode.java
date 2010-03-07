@@ -6,6 +6,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import z.StringLiterals;
 import z.util.Assert;
 import z.util.ChangeListener;
 import z.util.ChangeListenerList;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.MessageFormat;
 
 public abstract class RenderableNode implements JDOMExternalizable {
 
@@ -31,7 +33,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     private boolean modified;
 
     protected RenderableNode(File file) {
-        Assert.notNull(file, "file");
+        Assert.notNull(file, "file"); // NON-NLS 
         this.file = file;
         this.name = getNameFromFile(file);
         changeListenerList = new ChangeListenerList();
@@ -43,11 +45,11 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void setFile(File file) {
-        Assert.notNull(file, "file");
+        Assert.notNull(file, "file"); // NON-NLS
         if (!this.file.equals(file)) {
             this.file = file;
             this.name = getNameFromFile(file);
-            System.out.println("name = " + name);
+            System.out.println("name = " + name); // NON-NLS
             fireStateChange();
         }
     }
@@ -57,7 +59,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void setName(String name) {
-        Assert.notNull(name, "name");
+        Assert.notNull(name, "name");  // NON-NLS
         if (!this.name.equals(name)) {
             this.file = new File(this.file.getParentFile(), name
                     + getFilenameExtension());
@@ -99,7 +101,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     public abstract String getFilenameExtension();
 
     protected static void readNode(final RenderableNode node) throws JDOMException, IOException {
-        Assert.notNull(node, "node");
+        Assert.notNull(node, "node");   // NON-NLS
         final SAXBuilder builder = new SAXBuilder();
         final Document document = builder.build(node.getFile());
         node.readExternal(document.getRootElement());
@@ -111,7 +113,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void write(final File file) throws JDOMException, IOException {
-        Assert.notNull(file, "file");
+        Assert.notNull(file, "file");   // NON-NLS
         final FileWriter fileWriter = new FileWriter(file);
         try {
             write(fileWriter);
@@ -121,7 +123,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void write(final Writer writer) throws JDOMException, IOException {
-        Assert.notNull(writer, "writer");
+        Assert.notNull(writer, "writer");  // NON-NLS
         Element element = new Element(getElementName());
         writeExternal(element);
         final XMLOutputter xmlOutputter = new XMLOutputter();
@@ -130,7 +132,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void readExternal(Element element) throws JDOMException {
-        Assert.notNull(element, "element");
+        Assert.notNull(element, "element"); // NON-NLS
         checkVersion(element);
         imageInfo = (ImageInfo) JDOMObjectIO.readObjectFromChild(element,
                                                                  ImageInfo.ELEMENT_NAME,
@@ -138,7 +140,7 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void writeExternal(Element element) throws JDOMException {
-        Assert.notNull(element, "element");
+        Assert.notNull(element, "element");  // NON-NLS
         element.setAttribute("version", getFileFormatVersion());
         JDOMObjectIO.writeObjectToChild(element,
                                         ImageInfo.ELEMENT_NAME,
@@ -147,12 +149,12 @@ public abstract class RenderableNode implements JDOMExternalizable {
     }
 
     public void addChangeListener(ChangeListener listener) {
-        Assert.notNull(listener, "listener");
+        Assert.notNull(listener, "listener"); // NON-NLS
         changeListenerList.addChangeListener(listener);
     }
 
     public void removeChangeListener(ChangeListener listener) {
-        Assert.notNull(listener, "listener");
+        Assert.notNull(listener, "listener"); // NON-NLS
         changeListenerList.removeChangeListener(listener);
     }
 
@@ -168,19 +170,18 @@ public abstract class RenderableNode implements JDOMExternalizable {
     // private
 
     protected void checkVersion(Element element) throws JDOMException {
-        Assert.notNull(element, "element");
+        Assert.notNull(element, "element"); // NON-NLS
         final String currentVersion = getFileFormatVersion();
         String detectedVersion = JDOMHelper.getAttributeString(element,
-                                                               "version",
+                                                               "version", // NON-NLS
                                                                currentVersion);
         if (detectedVersion.compareTo(currentVersion) > 0) {
-            throw new JDOMException("illegal file format version, <= "
-                    + currentVersion + " required");
+            throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.msg.formatVersionRequired"), currentVersion));
         }
     }
 
     protected String getNameFromFile(final File file) {
-        Assert.notNull(file, "file");
+        Assert.notNull(file, "file"); // NON-NLS
         String name = file.getName();
         if (name.endsWith(getFilenameExtension())) {
             name = name.substring(0, name.length()

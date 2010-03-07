@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.ImageInfo;
 import z.core.Plane;
 import z.frex.Frex;
@@ -11,9 +12,9 @@ public class FitImageSizeAction extends PlaneViewAction {
 
     public FitImageSizeAction(ApplicationWindow window) {
         super(window, FitImageSizeAction.ID);
-        setText("Bild anpassen");
-        setToolTipText("Bildgröße an Fenster anpassen");
-        setSmallIcon(Frex.getIcon("/icons/16x16/actions/view-fullscreen.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.fitImageSize"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.fitImageSize"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.fitImageSize")));
     }
 
     @Override

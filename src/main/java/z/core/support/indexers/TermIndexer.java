@@ -23,13 +23,13 @@ public final class TermIndexer extends Indexer {
         xTerm = new Real(0.0);
         yTerm = new Real(0.0);
         namespace = new Namespace();
-        namespace.addSymbol(Symbol.createVariable("x", xTerm));
-        namespace.addSymbol(Symbol.createVariable("y", yTerm));
+        namespace.addSymbol(Symbol.createVariable("x", xTerm)); // NON-NLS
+        namespace.addSymbol(Symbol.createVariable("y", yTerm)); // NON-NLS
     }
 
     public void reset() {
         super.reset();
-        expression = "x";
+        expression = "x"; // NON-NLS
         term = null;
     }
 
@@ -50,7 +50,7 @@ public final class TermIndexer extends Indexer {
         String oldExpression = expression;
         this.expression = expression;
         this.term = null;
-        propertyChangeSupport.firePropertyChange("expression",
+        propertyChangeSupport.firePropertyChange("expression", // NON-NLS 
                                                  oldExpression,
                                                  expression);
     }

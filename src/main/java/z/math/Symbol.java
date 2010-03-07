@@ -74,14 +74,14 @@ public class Symbol extends Functor {
         } else if (isConstant()) {
             return new Complex(new Ref(this), Functor.num(0));
         } else {
-            final Symbol x = namespace.addSymbol(getName() + "x");
-            final Symbol y = namespace.addSymbol(getName() + "y");
+            final Symbol x = namespace.addSymbol(getName() + "x"); // NON-NLS
+            final Symbol y = namespace.addSymbol(getName() + "y"); // NON-NLS
             return new Complex(new Ref(x), new Ref(y));
         }
     }
 
     @Override
     public String toString() {
-        return getName() + "=" + (term!= null?term.toString():"?");
+        return getName() + "=" + (term != null ? term.toString() : "?");
     }
 }

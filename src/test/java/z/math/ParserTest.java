@@ -9,9 +9,11 @@ package z.math;
 
 import junit.framework.TestCase;
 import z.math.term.Functor;
-import static z.math.term.Functor.*;
 import z.math.term.Term;
 
+import static z.math.term.Functor.*;
+
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class ParserTest extends TestCase {
 
     public void testNum() {

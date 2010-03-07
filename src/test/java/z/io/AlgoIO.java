@@ -15,17 +15,17 @@ public class AlgoIO implements IO {
     }
 
     public String getElementName() {
-        return "algo";
+        return "algo";  // NON-NLS
     }
 
     public void read(IOManager ioManager, Element element) {
-        algo.setThreshold(Double.parseDouble(element.getAttributeValue("threshold")));
-        algo.setMode(Integer.parseInt(element.getAttributeValue("mode")));
+        algo.setThreshold(Double.parseDouble(element.getAttributeValue("threshold")));   // NON-NLS
+        algo.setMode(Integer.parseInt(element.getAttributeValue("mode")));   // NON-NLS
     }
 
     public void write(IOManager ioManager, Element element) {
-        element.setAttribute("threshold", String.valueOf(algo.getThreshold()));
-        element.setAttribute("mode", String.valueOf(algo.getMode()));
+        element.setAttribute("threshold", String.valueOf(algo.getThreshold()));    // NON-NLS
+        element.setAttribute("mode", String.valueOf(algo.getMode()));  // NON-NLS
     }
 
     public static class Provider implements ExtensionProvider<IO> {

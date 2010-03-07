@@ -193,31 +193,31 @@ public class RGBA {
 
     public static RGBA parseRGBA(String s) throws ParseException {
         RGBA color;
-        if (s.equalsIgnoreCase("black")) {
+        if (s.equalsIgnoreCase("black")) {  // NON-NLS
             color = RGBA.BLACK;
-        } else if (s.equalsIgnoreCase("white")) {
+        } else if (s.equalsIgnoreCase("white")) {  // NON-NLS
             color = RGBA.WHITE;
-        } else if (s.equalsIgnoreCase("yellow")) {
+        } else if (s.equalsIgnoreCase("yellow")) {  // NON-NLS
             color = RGBA.YELLOW;
-        } else if (s.equalsIgnoreCase("orange")) {
+        } else if (s.equalsIgnoreCase("orange")) { // NON-NLS
             color = RGBA.ORANGE;
-        } else if (s.equalsIgnoreCase("red")) {
+        } else if (s.equalsIgnoreCase("red")) {   // NON-NLS
             color = RGBA.RED;
-        } else if (s.equalsIgnoreCase("green")) {
+        } else if (s.equalsIgnoreCase("green")) { // NON-NLS
             color = RGBA.GREEN;
-        } else if (s.equalsIgnoreCase("blue")) {
+        } else if (s.equalsIgnoreCase("blue")) { // NON-NLS
             color = RGBA.BLUE;
-        } else if (s.equalsIgnoreCase("cyan")) {
+        } else if (s.equalsIgnoreCase("cyan")) { // NON-NLS
             color = RGBA.CYAN;
-        } else if (s.equalsIgnoreCase("magenta")) {
+        } else if (s.equalsIgnoreCase("magenta")) { // NON-NLS
             color = RGBA.MAGENTA;
-        } else if (s.equalsIgnoreCase("lightGray")) {
+        } else if (s.equalsIgnoreCase("lightGray")) { // NON-NLS
             color = RGBA.LIGHT_GRAY;
-        } else if (s.equalsIgnoreCase("darkGray")) {
+        } else if (s.equalsIgnoreCase("darkGray")) { // NON-NLS
             color = RGBA.DARK_GRAY;
-        } else if (s.equalsIgnoreCase("pink")) {
+        } else if (s.equalsIgnoreCase("pink")) {  // NON-NLS
             color = RGBA.PINK;
-        } else if (s.equalsIgnoreCase("transparent")) {
+        } else if (s.equalsIgnoreCase("transparent")) { // NON-NLS
             color = RGBA.TRANSPARENT;
         } else {
             boolean ok = false;
@@ -264,14 +264,14 @@ public class RGBA {
 
     private static void checkComponent(int component) {
         if (component < 0 || component > 255) {
-            throw new IllegalArgumentException("component out of bounds: "
+            throw new IllegalArgumentException("Color component out of bounds: "
                     + component);
         }
     }
 
     private static void checkComponent(float component) {
         if (component < 0.0f || component > 1.0f) {
-            throw new IllegalArgumentException("component out of bounds: "
+            throw new IllegalArgumentException("Color component out of bounds: "
                     + component);
         }
     }

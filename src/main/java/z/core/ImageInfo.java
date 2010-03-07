@@ -11,13 +11,13 @@ import z.util.JDOMExternalizable;
 import z.util.JDOMHelper;
 
 public class ImageInfo implements JDOMExternalizable {
-    public static final String ELEMENT_NAME = "imageInfo"; //$NON-NLS-1$
+    public static final String ELEMENT_NAME = "imageInfo"; // NON-NLS
 
     public static final RGBA DEFAULT_BACKGROUND = RGBA.BLACK; // RGBA.TRANSPARENT;
 
-    public static final String DEFAULT_PATH = "z-out.png";
+    public static final String DEFAULT_PATH = "z-out.png"; // NON-NLS
 
-    public static final String DEFAULT_FORMAT = "PNG";
+    public static final String DEFAULT_FORMAT = "PNG";  // NON-NLS
 
     public static final int DEFAULT_SIZE = 512;
 
@@ -98,30 +98,30 @@ public class ImageInfo implements JDOMExternalizable {
     }
 
     public void writeExternal(Element element) throws JDOMException {
-        JDOMHelper.setAttributeString(element, "path", getImagePath());
-        JDOMHelper.setAttributeString(element, "format", getImageFormat());
-        JDOMHelper.setAttributeInt(element, "width", getImageWidth());
-        JDOMHelper.setAttributeInt(element, "height", getImageHeight());
-        JDOMHelper.setAttributeBoolean(element, "usingWindowSize", isUsingWindowSize());
-        JDOMHelper.setAttributeColor(element, "background", getBackground());
+        JDOMHelper.setAttributeString(element, "path", getImagePath()); // NON-NLS
+        JDOMHelper.setAttributeString(element, "format", getImageFormat()); // NON-NLS
+        JDOMHelper.setAttributeInt(element, "width", getImageWidth()); // NON-NLS
+        JDOMHelper.setAttributeInt(element, "height", getImageHeight()); // NON-NLS
+        JDOMHelper.setAttributeBoolean(element, "usingWindowSize", isUsingWindowSize()); // NON-NLS
+        JDOMHelper.setAttributeColor(element, "background", getBackground()); // NON-NLS
     }
 
     public void readExternal(Element element) throws JDOMException {
         setImagePath(JDOMHelper.getAttributeString(element,
-                                                   "path",
+                                                   "path", // NON-NLS
                                                    DEFAULT_PATH));
         setImageFormat(JDOMHelper.getAttributeString(element,
-                                                     "format",
+                                                     "format", // NON-NLS
                                                      DEFAULT_FORMAT));
-        setImageWidth(JDOMHelper.getAttributeInt(element, "width", DEFAULT_SIZE));
+        setImageWidth(JDOMHelper.getAttributeInt(element, "width", DEFAULT_SIZE));  // NON-NLS
         setImageHeight(JDOMHelper.getAttributeInt(element,
-                                                  "height",
+                                                  "height",   // NON-NLS
                                                   DEFAULT_SIZE));
         setUsingWindowSize(JDOMHelper.getAttributeBoolean(element,
-                                                          "usingWindowSize",
+                                                          "usingWindowSize",  // NON-NLS
                                                           false));
         setBackground(JDOMHelper.getAttributeColor(element,
-                                                   "background",
+                                                   "background", // NON-NLS
                                                    DEFAULT_BACKGROUND));
     }
 

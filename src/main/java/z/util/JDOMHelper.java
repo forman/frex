@@ -8,8 +8,10 @@ import org.jdom.Attribute;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import z.StringLiterals;
 import z.core.color.RGBA;
 
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.List;
 
@@ -246,8 +248,8 @@ public class JDOMHelper {
     public static Element getChild(Element element, String name) throws JDOMException {
         final Element child = element.getChild(name);
         if (child == null) {
-            throw new JDOMException("Missing child element '" + name
-                    + "' in element '" + element.getName() + "'");
+            throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.missing.child.element.0.in.element.1"),
+                                                         name, element.getName()));
         }
         return child;
     }
@@ -258,22 +260,20 @@ public class JDOMHelper {
                                    int max) throws JDOMException {
         final List children = element.getChildren(name);
         if (min > 0 && children.size() < min) {
-            throw new JDOMException("A minimum of " + min
-                    + " child element(s) '" + name
-                    + "' are expected in element '" + element.getName() + "'");
+            throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.a.minimum.of.0.child.element.s.1.are.expected.in.element.2"),
+                                                         min, name, element.getName()));
         }
         if (max > min && children.size() > max) {
-            throw new JDOMException("A maximum of " + max
-                    + " child element(s) '" + name
-                    + "' are expected in element '" + element.getName() + "'");
+            throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.a.maximum.of.0.child.element.s.1.are.expected.in.element.2"),
+                                                         max, name, element.getName()));
         }
         return children;
     }
 
     private static String createMissingAttributeExceptionMessage(Element element,
                                                                  String attributeName) {
-        return "Missing attribute '" + attributeName + "' in element '"
-                + element.getName() + "'";
+        return MessageFormat.format(StringLiterals.getString("ex.missing.attribute.0.in.element.1"),
+                                    attributeName, element.getName());
     }
 
 }

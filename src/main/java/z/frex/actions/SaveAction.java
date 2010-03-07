@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Plane;
 import z.frex.Frex;
 import z.ui.application.ApplicationWindow;
@@ -13,15 +14,15 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 public class SaveAction extends PlaneViewAction {
-    public static final String ID = "z.frex.actions.save";//$NON-NLS-1$
+    public static final String ID = "z.frex.actions.save"; // NON-NLS
 
     private boolean canceledByUser;
 
     public SaveAction(ApplicationWindow window) {
         super(window, ID);
-        setText("&Speichern");
-        setToolTipText("Speichern");
-        setSmallIcon(Frex.getIcon("/icons/disk.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.save"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.save"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.save")));
     }
 
     public boolean isCanceledByUser() {
@@ -61,9 +62,9 @@ public class SaveAction extends PlaneViewAction {
     }
 
     private void writeQuicklookFile(File file, BufferedImage image) {
-        File quicklookFile = FileUtils.ensureExtension(file, ".png");
+        File quicklookFile = FileUtils.ensureExtension(file, ".png"); // NON-NLS
         try {
-            ImageIO.write(image, "png", quicklookFile);
+            ImageIO.write(image, "PNG", quicklookFile); // NON-NLS
         } catch (IOException e) {
             // todo: log, but do nothing more, the image is not important
             e.printStackTrace();
@@ -72,16 +73,12 @@ public class SaveAction extends PlaneViewAction {
 
     public void openError(File file, Exception e) {
         e.printStackTrace();
-        final String pattern = "Fehler beim Speichern der Datei [{0}]." +
-                "  Fehler-Typ: {1}\n" +
-                "  Fehler-Meldung: {2}";
 
-        String msg = MessageFormat.format(pattern,
-                                          file.getPath(),
-                                          e.getClass().getName(),
-                                          e.getLocalizedMessage());
         MessageDialog.openError(getWindow().getShell(),
-                                "Speichern",
-                                msg);
+                                StringLiterals.getString("gui.title.saveFile"),
+                                MessageFormat.format(StringLiterals.getString("gui.msg.errorSavingFile"),
+                                                     file.getPath(),
+                                                     e.getClass().getName(),
+                                                     e.getLocalizedMessage()));
     }
 }

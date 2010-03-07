@@ -1,5 +1,6 @@
 package z.frex;
 
+import z.StringLiterals;
 import z.frex.actions.CloseAction;
 import z.frex.actions.EditColorsAction;
 import z.frex.actions.EditImageSizeAction;
@@ -37,23 +38,19 @@ import java.text.MessageFormat;
 import java.util.prefs.BackingStoreException;
 
 public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
-    private static final String ABOUT_TEXT = "" +
-            "<html><b>Frex - Version 1.2</b></html>\n" +
-            "\n" +
-            "<html>Copyright &copy; 2008 by Norman Fomferra</html>\n" +
-            "\n" +
-            "<html>Dieses Programm ist freie Software. Sie können es unter den Bedingungen der</html>\n" +
-            "<html>GNU General Public License, wie von der Free Software Foundation veröffentlicht,</html>\n" +
-            "<html>weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder</html>\n" +
-            "<html>(nach Ihrer Option) jeder späteren Version.</html>\n" +
-            "\n" +
-            "<html>Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, dass es Ihnen von</html>\n" +
-            "<html>Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie</html>\n" +
-            "<html>der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK.</html></html>\n" +
-            "<html>Details finden Sie in der GNU General Public License.</html>\n" +
-            "\n" +
-            "<html>Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem</html>\n" +
-            "<html>Programm erhalten haben. Falls nicht, siehe <a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses/</a>.</html>\n";
+    private static final String ABOUT_TEXT =
+            "<html><b>Frex - Version 1.2</b></html>\n\n" +
+                    "<html>Copyright &copy; 2008 by Norman Fomferra</html>\n\n" +
+                    "<html>Dieses Programm ist freie Software. Sie können es unter den Bedingungen der</html>\n" +
+                    "<html>GNU General Public License, wie von der Free Software Foundation veröffentlicht,</html>\n" +
+                    "<html>weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder</html>\n" +
+                    "<html>(nach Ihrer Option) jeder späteren Version.</html>\n\n" +
+                    "<html>Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, dass es Ihnen von</html>\n" +
+                    "<html>Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie</html>\n" +
+                    "<html>der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK.</html></html>\n" +
+                    "<html>Details finden Sie in der GNU General Public License.</html>\n\n" +
+                    "<html>Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem</html>\n" +
+                    "<html>Programm erhalten haben. Falls nicht, siehe <a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses/</a>.</html>\n";
 
     public FrexLifecycleAdvisor() {
     }
@@ -85,8 +82,10 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         register(new PanInteraction(window));
 
         Action aboutAction = ActionFactory.ABOUT.create(window);
-        aboutAction.putValue("aboutTitle", "�ber Frex");
-        aboutAction.putValue("aboutMessage", ABOUT_TEXT);
+        aboutAction.putValue("aboutTitle", // NON-NLS
+                             StringLiterals.getString("gui.title.about"));
+        aboutAction.putValue("aboutMessage", // NON-NLS
+                             ABOUT_TEXT);
         register(aboutAction);
     }
 
@@ -94,7 +93,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
     protected void fillMenuBar(JMenuBar menuBar) {
         assert SwingUtilities.isEventDispatchThread();
 
-        JMenu fileMenu = UIUtils.createMenu("&Datei");
+        JMenu fileMenu = UIUtils.createMenu(StringLiterals.getString("gui.menu.file"));
         fileMenu.add(getAction(NewPlaneAction.ID));
         fileMenu.add(getAction(OpenAction.ID));
         fileMenu.addSeparator();
@@ -107,7 +106,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         fileMenu.add(getAction(ActionFactory.QUIT.getId()));
         menuBar.add(fileMenu);
 
-        JMenu editMenu = UIUtils.createMenu("&Bearbeiten");
+        JMenu editMenu = UIUtils.createMenu(StringLiterals.getString("gui.menu.edit"));
         editMenu.add(getAction(EditPlanePropertiesAction.ID));
         editMenu.add(getAction(EditColorsAction.ID));
         editMenu.add(getAction(EditImageSizeAction.ID));
@@ -116,7 +115,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         editMenu.add(getAction(ManageUserFractalsAction.ID));
         menuBar.add(editMenu);
 
-        final JMenu helpMenu = UIUtils.createMenu("&?");
+        JMenu helpMenu = UIUtils.createMenu(StringLiterals.getString("gui.menu.help"));
         helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
         menuBar.add(helpMenu);
     }
@@ -159,8 +158,8 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
         configurer.setShowProgressIndicator(false);
-        configurer.setTitle("Frex");
-        configurer.setIconImage(Frex.getIcon("/icons/frex-16.png").getImage());
+        configurer.setTitle(StringLiterals.getString("gui.frame.title"));
+        configurer.setIconImage(Frex.getIcon(StringLiterals.getString("gui.frame.icon")).getImage());
     }
 
     @Override
@@ -177,15 +176,15 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         assert SwingUtilities.isEventDispatchThread();
         String title;
         if (Application.instance().getWindowCount() > 1) {
-            title = "Schlie�en";
+            title = StringLiterals.getString("gui.close.name");
         } else {
-            title = "Beenden";
+            title = StringLiterals.getString("gui.action.text.close");
         }
         PageComponent[] views = window.getPage().getPageComponents();
         for (PageComponent view : views) {
             if (view.isDirty() && view instanceof PlaneView) {
                 final PlaneView planeView = (PlaneView) view;
-                String pattern = "''{0}'' wurde ver�ndert.\nSpeichern?";
+                String pattern = StringLiterals.getString("gui.text.askSave");
                 int a = MessageDialog.confirmYesNoCancel(window.getShell(), title, MessageFormat.format(pattern, view.getDisplayName()));
                 if (a == JOptionPane.CANCEL_OPTION) {
                     return false;

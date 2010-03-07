@@ -18,7 +18,7 @@ public class AlgorithmDescriptor {
     private Image icon;
 
     public AlgorithmDescriptor(Class<? extends IAlgorithm> algorithmClass) {
-        Assert.notNull(algorithmClass, "algorithmClass");
+        Assert.notNull(algorithmClass, "algorithmClass"); // NON-NLS
         this.algorithmClass = algorithmClass;
         this.name = algorithmClass.getName();
     }

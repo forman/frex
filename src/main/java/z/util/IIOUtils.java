@@ -15,9 +15,8 @@ public class IIOUtils {
     public static String[] getUniqueImageFormatNames() {
         final String[] writerFormatNames = ImageIO.getWriterFormatNames();
         final Set<String> formatSet = new HashSet<String>();
-        for (int i = 0; i < writerFormatNames.length; i++) {
-            final String writerFormatName = writerFormatNames[i];
-            System.out.println("writerFormatName = " + writerFormatName);
+        for (final String writerFormatName : writerFormatNames) {
+            System.out.println("writerFormatName = " + writerFormatName); // NON-NLS
             formatSet.add(writerFormatName.toUpperCase());
         }
         final String[] uniqueFormatNames = new String[formatSet.size()];

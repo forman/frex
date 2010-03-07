@@ -20,7 +20,7 @@ public class Application {
     private Map<JFrame, ApplicationWindow> applicationWindows;
 
     public Application(ApplicationLifecycleAdvisor applicationLifecycleAdvisor) {
-        Assert.notNull(applicationLifecycleAdvisor, "applicationLifecycleAdvisor");
+        Assert.notNull(applicationLifecycleAdvisor, "applicationLifecycleAdvisor"); // NON-NLS
         this.applicationLifecycleAdvisor = applicationLifecycleAdvisor;
         this.applicationWindows = new HashMap<JFrame, ApplicationWindow>(11);
         load(this);

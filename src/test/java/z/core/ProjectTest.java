@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class ProjectTest extends TestCase {
 
     public ProjectTest(String s) {

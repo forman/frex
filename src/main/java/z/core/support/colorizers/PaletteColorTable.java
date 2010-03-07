@@ -79,12 +79,12 @@ public class PaletteColorTable extends ColorTable {
         super.writeExternal(element);
         for (int i = 0; i < getColorPointCount(); i++) {
             final ColorPoint point = getColorPoint(i);
-            Element child = new Element("colorPoint");
+            Element child = new Element("colorPoint"); // NON-NLS
             JDOMHelper.setAttributeDouble(child,
-                                          "pos",
+                                          "pos",  // NON-NLS
                                           point.getPosition());
             JDOMHelper.setAttributeColor(child,
-                                         "color",
+                                         "color",  // NON-NLS
                                          point.getColor());
             element.addContent(child);
         }
@@ -95,23 +95,23 @@ public class PaletteColorTable extends ColorTable {
         super.readExternal(element);
         tiePointList.clear();
         readOldFormat(element);
-        final List children = element.getChildren("colorPoint");
+        final List children = element.getChildren("colorPoint");   // NON-NLS
         for (Object aChildren : children) {
             Element child = (Element) aChildren;
             final float position = (float) JDOMHelper.getAttributeDouble(child,
-                                                                         "pos");
-            final RGBA color = JDOMHelper.getAttributeColor(child, "color");
+                                                                         "pos");  // NON-NLS
+            final RGBA color = JDOMHelper.getAttributeColor(child, "color");  // NON-NLS
             addColorPoint(new ColorPoint(position, color));
         }
     }
 
     private void readOldFormat(Element element) throws JDOMException {
-        final List children = element.getChildren("tiePoint");
+        final List children = element.getChildren("tiePoint");    // NON-NLS
         for (Object aChildren : children) {
             Element child = (Element) aChildren;
             final float position = (float) JDOMHelper.getAttributeDouble(child,
-                                                                         "pos");
-            final RGBA color = JDOMHelper.getAttributeColor(child, "color");
+                                                                         "pos");  // NON-NLS
+            final RGBA color = JDOMHelper.getAttributeColor(child, "color");  // NON-NLS
             addColorPoint(new ColorPoint(position, color));
         }
     }

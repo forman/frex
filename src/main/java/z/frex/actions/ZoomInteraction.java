@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Plane;
 import z.frex.Frex;
 import z.ui.application.ApplicationWindow;
@@ -13,13 +14,13 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 public class ZoomInteraction extends Interaction {
-    public static final String ID = "z.frex.actions.zoom";//$NON-NLS-1$
+    public static final String ID = "z.frex.actions.zoom"; // NON-NLS
 
     public ZoomInteraction(ApplicationWindow window) {
         super(window, ID);
-        setText("Zoom");
-        setToolTipText("Auschnitt wählen");
-        setSmallIcon(Frex.getIcon("/icons/zoom.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.interaction.text.zoom"));
+        setToolTipText(StringLiterals.getString("gui.interaction.tooltip.zoom"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.interaction.icon.zoom")));
         setInteractor(new ZoomInteractor());
     }
 
@@ -56,8 +57,8 @@ public class ZoomInteraction extends Interaction {
             if (rectangle != null && !rectangle.isEmpty()) {
                 if (rectangle.width < 5 || rectangle.height < 5) {
                     MessageDialog.openError(getWindow().getShell(),
-                                            "Zoom",
-                                            "Ausschnitt zu klein.");
+                                            StringLiterals.getString("gui.title.zoom"),
+                                            StringLiterals.getString("gui.msg.sectionTooSmall"));
                 } else {
                     final Plane plane = getPlaneView().getPlane();
                     plane.zoomRegion(imageBounds.width,

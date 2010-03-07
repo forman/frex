@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import java.io.File;
 
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class PlaneTest extends TestCase {
     public void testDefaultConstructor() {
         final String path = "C:\\projects\\mandel.plane";

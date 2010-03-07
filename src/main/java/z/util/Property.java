@@ -6,15 +6,17 @@ package z.util;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import z.StringLiterals;
 
 import java.awt.geom.Point2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Property {
-    public static final String PROPERTY_ELEMENT_NAME = "property";
+    public static final String PROPERTY_ELEMENT_NAME = "property";  // NON-NLS
 
     private String name;
 
@@ -84,12 +86,12 @@ public class Property {
         final Method[] methods = cls.getDeclaredMethods();
         for (int i = 0; i < methods.length; i++) {
             final Method method = methods[i];
-            if ((method.getName().startsWith("get") || method.getName()
-                    .startsWith("is"))
+            if ((method.getName().startsWith("get")   // NON-NLS
+                    || method.getName().startsWith("is"))  // NON-NLS
                     && !method.getReturnType().equals(Void.TYPE)
                     && method.getParameterTypes().length == 0) {
                 try {
-                    final int pos = method.getName().startsWith("get") ? 3 : 2;
+                    final int pos = method.getName().startsWith("get") ? 3 : 2; // NON-NLS
                     final String firstChar = method.getName()
                             .substring(pos, pos + 1)
                             .toLowerCase();
@@ -98,14 +100,16 @@ public class Property {
                     final String name = firstChar + subseqChars;
                     final Class type = method.getReturnType();
                     final Method getter = method;
-                    final String setterName = "set"
+                    final String setterName = "set"  // NON-NLS
                             + method.getName().substring(pos);
                     final Class[] setterParams = new Class[]{type};
                     final Method setter = cls.getDeclaredMethod(setterName,
                                                                 setterParams);
                     properties.add(new Property(name, type, getter, setter));
                 } catch (NoSuchMethodException e) {
+                    // ok
                 } catch (SecurityException e) {
+                    // ok
                 }
             }
         }
@@ -127,9 +131,9 @@ public class Property {
         final List children = element.getChildren(PROPERTY_ELEMENT_NAME);
         for (int j = 0; j < children.size(); j++) {
             Element child = (Element) children.get(j);
-            final String name = JDOMHelper.getAttributeString(child, "name");
+            final String name = JDOMHelper.getAttributeString(child, "name");   // NON-NLS
             final String textValue = JDOMHelper.getAttributeString(child,
-                                                                   "value");
+                                                                   "value"); // NON-NLS
             final Property property = getProperty(properties, name);
             if (property != null) {
                 try {
@@ -157,7 +161,7 @@ public class Property {
     public static Element writePropertiesToElement(final Element element,
                                                    Object instance,
                                                    Property[] properties) throws JDOMException {
-        element.setAttribute("class", instance.getClass().getName());
+        element.setAttribute("class", instance.getClass().getName());  // NON-NLS
         for (int i = 0; i < properties.length; i++) {
             final Property property = properties[i];
             try {
@@ -165,19 +169,17 @@ public class Property {
                 final Object value = property.getValue(instance);
                 final String textValue = convertValueToText(value);
                 final Element paramElement = new Element(PROPERTY_ELEMENT_NAME);
-                paramElement.setAttribute("name", name);
-                paramElement.setAttribute("value", textValue);
+                paramElement.setAttribute("name", name);  // NON-NLS
+                paramElement.setAttribute("value", textValue); // NON-NLS
                 element.addContent(paramElement);
             } catch (IllegalAccessException e) {
-                throw new JDOMException("Eigenschaft '" + property.getName()
-                        + "' konnte von Objekt der Klasse '"
-                        + instance.getClass().getName()
-                        + "' nicht gelesen werden", e); /* I18N */
+                throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.cannotGetProperty"),
+                                                             property.getName(),
+                                                             instance.getClass().getName()), e); /* I18N */
             } catch (InvocationTargetException e) {
-                throw new JDOMException("Eigenschaft '" + property.getName()
-                        + "' konnte von Objekt der Klasse '"
-                        + instance.getClass().getName()
-                        + "' nicht gelesen werden", e); /* I18N */
+                throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.cannotGetProperty"),
+                                                             property.getName(),
+                                                             instance.getClass().getName()), e); /* I18N */
             }
         }
         return element;

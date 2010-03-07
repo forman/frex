@@ -49,8 +49,12 @@ public class SineColorTable extends ColorTable {
         }
     }
 
-    static String[] functionElementNames = new String[]{"redParams",
-            "greenParams", "blueParams", "alphaParams"};
+    static String[] functionElementNames = new String[]{
+            "redParams", // NON-NLS
+            "greenParams", // NON-NLS
+            "blueParams", // NON-NLS
+            "alphaParams" // NON-NLS
+    };
 
     @Override
     public void writeExternal(Element element) throws JDOMException {
@@ -58,16 +62,16 @@ public class SineColorTable extends ColorTable {
         for (int i = 0; i < functions.length; i++) {
             Element functionElement = new Element(functionElementNames[i]);
             JDOMHelper.setAttributeDouble(functionElement,
-                                          "x1",
+                                          "x1", // NON-NLS
                                           functions[i].getX1());
             JDOMHelper.setAttributeDouble(functionElement,
-                                          "x2",
+                                          "x2", // NON-NLS
                                           functions[i].getX2());
             JDOMHelper.setAttributeDouble(functionElement,
-                                          "a",
+                                          "a", // NON-NLS
                                           functions[i].getA());
             JDOMHelper.setAttributeDouble(functionElement,
-                                          "b",
+                                          "b", // NON-NLS
                                           functions[i].getB());
             element.addContent(functionElement);
         }
@@ -79,10 +83,10 @@ public class SineColorTable extends ColorTable {
         for (int i = 0; i < functions.length; i++) {
             Element functionElement = JDOMHelper.getChild(element,
                                                           functionElementNames[i]);
-            int x1 = JDOMHelper.getAttributeInt(functionElement, "x1");
-            int x2 = JDOMHelper.getAttributeInt(functionElement, "x2");
-            double a = JDOMHelper.getAttributeDouble(functionElement, "a");
-            double b = JDOMHelper.getAttributeDouble(functionElement, "b");
+            int x1 = JDOMHelper.getAttributeInt(functionElement, "x1"); // NON-NLS
+            int x2 = JDOMHelper.getAttributeInt(functionElement, "x2"); // NON-NLS
+            double a = JDOMHelper.getAttributeDouble(functionElement, "a"); // NON-NLS
+            double b = JDOMHelper.getAttributeDouble(functionElement, "b"); // NON-NLS
             functions[i] = new Function(x1, x2, a, b);
         }
     }

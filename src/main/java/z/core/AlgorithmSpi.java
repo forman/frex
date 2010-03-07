@@ -1,5 +1,5 @@
 package z.core;
 
 public interface AlgorithmSpi {
-    void registerAlgorithms(AlgorithmRegistry registry);    
+    void registerAlgorithms(AlgorithmRegistry registry);
 }

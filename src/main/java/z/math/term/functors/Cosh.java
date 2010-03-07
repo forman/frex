@@ -10,7 +10,7 @@ import z.math.term.Term;
 public class Cosh extends Functor {
 
     public Cosh() {
-        super("cosh", 1);
+        super("cosh", 1); // NON-NLS
     }
 
     @Override

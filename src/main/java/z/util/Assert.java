@@ -16,6 +16,7 @@ package z.util;
  */
 public final class Assert {
     /* This class is not intended to be instantiated. */
+
     private Assert() {
     }
 

@@ -1,9 +1,10 @@
 package z.core;
 
+import org.jdom.JDOMException;
+import z.StringLiterals;
+import z.math.term.Term;
 import z.util.FileUtils;
 import z.util.FractalDef;
-import z.math.term.Term;
-import z.math.ParseException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,12 +15,11 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import org.jdom.JDOMException;
+import java.util.logging.Logger;
 
 public class AlgorithmRegistry {
 
@@ -109,7 +109,7 @@ public class AlgorithmRegistry {
             } catch (MalformedURLException e) {
                 logError(e);
             }
-            logInfo("plugin found: " + pluginFile);
+            logInfo(MessageFormat.format(StringLiterals.getString("log.plugin.found.0"), pluginFile));
             u.add(pluginUrl);
         }
         cl = new URLClassLoader(u.toArray(new URL[u.size()]), cl);
@@ -118,11 +118,13 @@ public class AlgorithmRegistry {
 
     private static File[] getPlugins() {
         File home = FileUtils.getFrexHome();
-        File pluginDir = new File(home, "plugins");
-        logInfo("scanning plugin directory " + pluginDir);
+        File pluginDir = new File(home, "plugins");  // NON-NLS
+        logInfo(MessageFormat.format(StringLiterals.getString("log.scanning.plugin.directory.0"), pluginDir));
         return pluginDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
-                return (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar")) || pathname.isDirectory();
+                return (pathname.isFile()
+                        && pathname.getName().toLowerCase().endsWith(".jar"))  // NON-NLS
+                        || pathname.isDirectory();
             }
         });
     }
@@ -136,11 +138,12 @@ public class AlgorithmRegistry {
     }
 
     private static void logError(Throwable t) {
-       getLogger().log(Level.SEVERE, t.getMessage(), t);
+        getLogger().log(Level.SEVERE, t.getMessage(), t);
     }
 
     private void loadPlugins() throws IOException {
-        Enumeration<URL> algorithmSpiUrls = pluginClassLoader.getResources("META-INF/services/" + AlgorithmSpi.class.getName());
+        Enumeration<URL> algorithmSpiUrls = pluginClassLoader.getResources(String.format("META-INF/services/%s", // NON-NLS
+                                                                                         AlgorithmSpi.class.getName()));
         while (algorithmSpiUrls.hasMoreElements()) {
             URL algorithmSpiUrl = algorithmSpiUrls.nextElement();
             try {
@@ -175,7 +178,7 @@ public class AlgorithmRegistry {
                     Class<?> algorithmSpiClass = pluginClassLoader.loadClass(className);
                     AlgorithmSpi algorithmSpi = (AlgorithmSpi) algorithmSpiClass.newInstance();
                     algorithmSpi.registerAlgorithms(this);
-                    logInfo("registered algorithms of " + algorithmSpiClass.getName());
+                    logInfo(MessageFormat.format(StringLiterals.getString("log.registered.algorithms.of.0"), algorithmSpiClass.getName()));
                 } catch (Exception e) {
                     logError(e);
                 }

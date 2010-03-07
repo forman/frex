@@ -70,8 +70,8 @@ public class ColorSelector extends Control implements Scrollable {
     private void setSelectedCell(int row, int column) {
         selectedRow = row;
         selectedColoumn = column;
-        System.out.println("selectedRow = " + selectedRow);
-        System.out.println("selectedColoumn = " + selectedColoumn);
+        System.out.println("selectedRow = " + selectedRow);  // NON-NLS
+        System.out.println("selectedColoumn = " + selectedColoumn);  // NON-NLS
         repaint();
         fireStateChange();
     }

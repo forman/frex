@@ -16,8 +16,8 @@ public class Namespace {
     private final Map<String, Symbol> symbolMap = new HashMap<String, Symbol>(64);
 
     public Namespace() {
-        addSymbol(Symbol.createConstant("PI", new Real(Math.PI)));
-        addSymbol(Symbol.createConstant("E", new Real(Math.E)));
+        addSymbol(Symbol.createConstant("PI", new Real(Math.PI))); // NON-NLS
+        addSymbol(Symbol.createConstant("E", new Real(Math.E)));   // NON-NLS
     }
 
     public boolean isSymbolDefined(String name) {

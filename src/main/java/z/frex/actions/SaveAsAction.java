@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Plane;
 import z.frex.Frex;
 import z.frex.PlaneView;
@@ -16,9 +17,9 @@ public class SaveAsAction extends PlaneViewAction {
 
     public SaveAsAction(ApplicationWindow window) {
         super(window, ID);
-        setText("&Speichern unter...");
-        setToolTipText("Speichern unter");
-        //setSmallIcon(Frex.getIcon("/icons/16x16/actions/document-save-as.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.saveAs"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.saveAs"));
+        // setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.saveAs")));
     }
 
     public boolean isCanceledByUser() {
@@ -53,9 +54,9 @@ public class SaveAsAction extends PlaneViewAction {
     }
 
     private String promptForFile() {
-        String lastDir = Frex.getPreferences().get("lastDir", ".");
+        String lastDir = Frex.getPreferences().get("lastDir", "."); // NON-NLS
         JFileChooser dialog = new JFileChooser(lastDir);
-        dialog.setDialogTitle("Speichern");
+        dialog.setDialogTitle(StringLiterals.getString("gui.title.saveFile"));
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
         dialog.setAcceptAllFileFilterUsed(false);
         dialog.addChoosableFileFilter(OpenAction.PLANE_FILTER);
@@ -64,7 +65,8 @@ public class SaveAsAction extends PlaneViewAction {
         dialog.setSelectedFile(new File(lastDir, getPlaneView().getPlane().getName()));
         int resp = dialog.showSaveDialog(getWindow().getShell());
         if (resp == JFileChooser.APPROVE_OPTION) {
-            Frex.getPreferences().put("lastDir", dialog.getCurrentDirectory().getPath());
+            Frex.getPreferences().put("lastDir", // NON-NLS
+                                      dialog.getCurrentDirectory().getPath());
             FileExtensionFileFilter fileFilter = (FileExtensionFileFilter) dialog.getFileFilter();
             File selectedFile = fileFilter.appendMissingFileExtension(dialog.getSelectedFile());
             return selectedFile.getPath();

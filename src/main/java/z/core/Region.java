@@ -123,21 +123,21 @@ public class Region implements JDOMExternalizable, Cloneable {
     }
 
     public void readExternal(Element element) throws JDOMException {
-        final double centerX = JDOMHelper.getAttributeDouble(element, "centerX");
-        final double centerY = JDOMHelper.getAttributeDouble(element, "centerY");
-        final double radius = JDOMHelper.getAttributeDouble(element, "radius");
+        final double centerX = JDOMHelper.getAttributeDouble(element, "centerX"); // NON-NLS
+        final double centerY = JDOMHelper.getAttributeDouble(element, "centerY");  // NON-NLS
+        final double radius = JDOMHelper.getAttributeDouble(element, "radius"); // NON-NLS
         set(centerX, centerY, radius);
     }
 
     public void writeExternal(Element element) throws JDOMException {
-        JDOMHelper.setAttributeDouble(element, "centerX", getCenterX());
-        JDOMHelper.setAttributeDouble(element, "centerY", getCenterY());
-        JDOMHelper.setAttributeDouble(element, "radius", getRadius());
+        JDOMHelper.setAttributeDouble(element, "centerX", getCenterX()); // NON-NLS
+        JDOMHelper.setAttributeDouble(element, "centerY", getCenterY()); // NON-NLS
+        JDOMHelper.setAttributeDouble(element, "radius", getRadius()); // NON-NLS
     }
 
     private void checkRadius(double radius) {
         if (radius <= 0.0) {
-            throw new IllegalArgumentException("radius <= 0.0");
+            throw new IllegalArgumentException("radius <= 0.0"); // NON-NLS
         }
     }
 }

@@ -1,7 +1,6 @@
 package z.compiler;
 
 import javax.tools.SimpleJavaFileObject;
-import javax.tools.JavaFileObject;
 import java.net.URI;
 
 /**
@@ -40,6 +39,7 @@ public class Code extends SimpleJavaFileObject {
     }
 
     private static URI toURI(String className) {
-        return URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension);
+        return URI.create(String.format("string:///%s%s", // NON-NLS
+                                        className.replace('.', '/'), Kind.SOURCE.extension));
     }
 }

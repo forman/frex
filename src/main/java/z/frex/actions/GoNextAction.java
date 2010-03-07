@@ -1,5 +1,6 @@
 package z.frex.actions;
 
+import z.StringLiterals;
 import z.core.Region;
 import z.frex.Frex;
 import z.ui.application.ApplicationWindow;
@@ -10,9 +11,9 @@ public class GoNextAction extends GoAction {
 
     public GoNextAction(ApplicationWindow window) {
         super(window, ID);
-        setText("Nächste");
-        setToolTipText("Nächste");
-        setSmallIcon(Frex.getIcon("/icons/16x16/actions/go-next.png"));//$NON-NLS-1$
+        setText(StringLiterals.getString("gui.action.text.next"));
+        setToolTipText(StringLiterals.getString("gui.action.tooltip.next"));
+        setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.next")));
     }
 
     @Override

@@ -8,13 +8,15 @@
 package z.math;
 
 import junit.framework.TestCase;
-import static z.math.Optimize.expandPowByIntExp;
-import static z.math.Optimize.replaceTermOccurences;
 import z.math.term.Term;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static z.math.Optimize.expandPowByIntExp;
+import static z.math.Optimize.replaceTermOccurences;
+
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class OptimizeTest extends TestCase {
     public void testReplaceTermOccurences() {
         List<Symbol> varList;

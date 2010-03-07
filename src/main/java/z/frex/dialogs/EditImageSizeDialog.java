@@ -1,5 +1,6 @@
 package z.frex.dialogs;
 
+import z.StringLiterals;
 import z.ui.dialog.Dialog;
 
 import javax.swing.JCheckBox;
@@ -58,7 +59,7 @@ public class EditImageSizeDialog extends Dialog {
     @Override
     protected void configureShell(JDialog shell) {
         super.configureShell(shell);
-        shell.setTitle("Bildgröße");
+        shell.setTitle(StringLiterals.getString("gui.title.imageSize"));
     }
 
     @Override
@@ -75,7 +76,7 @@ public class EditImageSizeDialog extends Dialog {
         gbc.insets.bottom = 2;
 
         usingWindowSize = new JCheckBox();
-        usingWindowSize.setText("Bildgröße an Fenster anpassen");
+        usingWindowSize.setText(StringLiterals.getString("gui.label.fitImageSizeToWindow"));
         usingWindowSize.setSelected(data.usingWindowSize);
         usingWindowSize.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -93,7 +94,7 @@ public class EditImageSizeDialog extends Dialog {
         gbc.gridy++;
 
         JLabel widthLabel = new JLabel();
-        widthLabel.setText("Breite: ");
+        widthLabel.setText(StringLiterals.getString("gui.label.width"));
         dialogArea.add(widthLabel, gbc);
         gbc.gridx++;
 
@@ -109,13 +110,13 @@ public class EditImageSizeDialog extends Dialog {
         gbc.gridx++;
 
         JLabel pixelLabel1 = new JLabel();
-        pixelLabel1.setText("Pixel");
+        pixelLabel1.setText(StringLiterals.getString("gui.unit.pixels"));
         dialogArea.add(pixelLabel1, gbc);
         gbc.gridx = 0;
         gbc.gridy++;
 
         JLabel heightLabel = new JLabel();
-        heightLabel.setText("H�he: ");
+        heightLabel.setText(StringLiterals.getString("gui.label.height"));
         dialogArea.add(heightLabel, gbc);
         gbc.gridx++;
 
@@ -131,7 +132,7 @@ public class EditImageSizeDialog extends Dialog {
         gbc.gridx++;
 
         JLabel pixelLabel2 = new JLabel();
-        pixelLabel2.setText("Pixel");
+        pixelLabel2.setText(StringLiterals.getString("gui.unit.pixels"));
         dialogArea.add(pixelLabel2, gbc);
 
         updateState();
@@ -139,8 +140,11 @@ public class EditImageSizeDialog extends Dialog {
     }
 
     private static String[] createProposals() {
-        return new String[]{"128", "256", "480", "512", "640",
-                "1024", "1280", "1536", "2048", "2560", "3072", "4096", "5120", "6144", "7168", "8192"};
+        return new String[]{
+                "128", "256", "480", "512", "640", // NON-NLS
+                "1024", "1280", "1536", "2048", "2560",// NON-NLS
+                "3072", "4096", "5120", "6144", "7168", "8192", // NON-NLS
+        };
     }
 
     @Override

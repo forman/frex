@@ -27,7 +27,6 @@ public final class InvMandelbrot2 extends Fractal {
     }
 
 
-
     public int compute(final double px,
                        final double py,
                        final double[] xValues,

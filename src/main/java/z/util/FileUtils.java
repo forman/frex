@@ -1,12 +1,6 @@
 package z.util;
 
-import z.core.AlgorithmRegistry;
-
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.CodeSource;
 
 public class FileUtils {
     public static File ensureExtension(File f, String ext) {
@@ -31,18 +25,18 @@ public class FileUtils {
     }
 
     public static File getFrexHome() {
-        return new File(System.getProperty("frex.home", "."));
+        return new File(System.getProperty("frex.home", "."));// NON-NLS
     }
 
     public static File getUserHome() {
-        return new File(System.getProperty("user.home"));
+        return new File(System.getProperty("user.home")); // NON-NLS
     }
 
     public static File getFrexLibDir() {
-        return new File(getFrexHome(), "lib");
+        return new File(getFrexHome(), "lib"); // NON-NLS
     }
 
     public static File getFrexUserDir() {
-        return new File(getUserHome(), ".frex");
+        return new File(getUserHome(), ".frex"); // NON-NLS
     }
 }

@@ -1,5 +1,6 @@
 package z.ui.dialog;
 
+import z.StringLiterals;
 import z.ui.UIUtils;
 
 import javax.swing.JButton;
@@ -58,8 +59,8 @@ public abstract class Dialog {
     protected abstract JComponent createDialogArea();
 
     protected void createButtonsForButtonBar() {
-        createButton(Dialog.ID_OK, "&OK", true);
-        createButton(Dialog.ID_CANCEL, "&Abbrechen", false);
+        createButton(Dialog.ID_OK, StringLiterals.getString("gui.ok"), true);
+        createButton(Dialog.ID_CANCEL, StringLiterals.getString("gui.cancel"), false);
     }
 
     protected void createButton(int code, String text, boolean isDefault) {

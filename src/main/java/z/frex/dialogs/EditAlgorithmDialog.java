@@ -1,5 +1,6 @@
 package z.frex.dialogs;
 
+import z.StringLiterals;
 import z.core.Algorithm;
 import z.ui.dialog.Dialog;
 import z.ui.dialog.MessageDialog;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 
 public class EditAlgorithmDialog extends Dialog {
@@ -41,7 +43,7 @@ public class EditAlgorithmDialog extends Dialog {
     @Override
     protected void configureShell(JDialog shell) {
         super.configureShell(shell);
-        shell.setTitle("Algorithmus Parameter");
+        shell.setTitle(StringLiterals.getString("gui.title.algorithm.parameter"));
     }
 
     @Override
@@ -63,11 +65,9 @@ public class EditAlgorithmDialog extends Dialog {
                 addPropertyToDialogArea(dialogArea, gbc, property);
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(getShell(), "Fehler", "Feld '"
-                        + property.getName()
-                        + "' konnte nicht gelesen werden.\n"
-                        + e.getClass().getName() + ",\nMeldung: "
-                        + e.getLocalizedMessage());
+                String pattern = StringLiterals.getString("gui.msg.cannotReadField");
+                MessageDialog.openError(getShell(), StringLiterals.getString("gui.title.error"),
+                                        MessageFormat.format(pattern, property.getName(), e.getClass().getName(), e.getLocalizedMessage()));
                 close();
                 return dialogArea;
             }
@@ -114,11 +114,10 @@ public class EditAlgorithmDialog extends Dialog {
                 assignField(property);
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(getShell(), "Fehler", "Feld '"
-                        + property.getName()
-                        + "' konnte nicht gesetzt werden.\n"
-                        + e.getClass().getName() + ",\nMeldung: "
-                        + e.getLocalizedMessage());
+                String pattern = StringLiterals.getString("gui.msg.cannotSetField");
+                MessageDialog.openError(getShell(),
+                                        StringLiterals.getString("gui.title.error"),
+                                        MessageFormat.format(pattern, property.getName(), e.getClass().getName(), e.getLocalizedMessage()));
                 return;
             }
         }
