@@ -11,6 +11,9 @@ import z.core.progress.SubProgressMonitor;
 import z.util.Assert;
 
 import java.text.MessageFormat;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class PlaneRenderer {
 
@@ -49,24 +52,6 @@ public class PlaneRenderer {
         }
     }
 
-    /**
-     * Renders a plane.
-     *
-     * @param plane     the plane
-     * @param pixelData the pixel data buffer in ABGR order
-     * @param pm        a progress monitor
-     */
-    public void renderPlane(Plane plane, int[] pixelData, ProgressMonitor pm) {
-        Assert.notNull(plane, "plane");  // NON-NLS
-        Assert.notNull(pixelData, "pixelData"); // NON-NLS
-        Assert.notNull(pm, "pm"); // NON-NLS
-        renderPlane(plane,
-                    pixelData,
-                    imageInfo.getBackground().getValue(),
-                    pm);
-    }
-
-
     private void renderPlane(Plane plane,
                              int[] pixelData,
                              int background,
@@ -76,22 +61,89 @@ public class PlaneRenderer {
         int imageHeight = imageInfo.getImageHeight();
         pm.beginTask(MessageFormat.format(StringLiterals.getString("gui.msg.computingLayer0"), plane.getName()), imageHeight);
         try {
-            renderPlane(plane, imageWidth, imageHeight, pixelData, pm, background);
+            renderPlane(plane, imageWidth, imageHeight, pixelData, background, pm);
         } finally {
             pm.done();
         }
     }
 
-    private void renderPlane(Plane plane, int imageWidth, int imageHeight, int[] pixelData, ProgressMonitor pm, int background) {
-        boolean computeFractal = !this.colorizeOnly;
+    private void renderPlane(final Plane plane,
+                             final int imageWidth,
+                             final int imageHeight,
+                             final int[] pixelData,
+                             final int background,
+                             final ProgressMonitor pm) {
         PlaneRaster raster = plane.getRaster();
-        if (raster == null || raster.getWidth() != imageWidth
+        final boolean computeFractal;
+        if (raster == null
+                || raster.getWidth() != imageWidth
                 || raster.getHeight() != imageHeight) {
             raster = new PlaneRaster(imageWidth, imageHeight, pixelData);
             plane.setRaster(raster);
             computeFractal = true;
+        } else {
+            computeFractal = !this.colorizeOnly;
         }
         raster.clearStatistics();
+
+        final IFractal fractal = plane.getFractal();
+        final IAccumulator accumulator = plane.getAccumulator();
+        final IIndexer indexer = plane.getIndexer();
+        final IColorizer colorizer = plane.getColorizer();
+
+        fractal.prepare();
+        if (accumulator != null) {
+            accumulator.prepare();
+            if (indexer != null) {
+                indexer.prepare();
+            }
+        }
+        colorizer.prepare();
+
+        int numProcessors = Runtime.getRuntime().availableProcessors();
+        if (numProcessors == 1) {
+            renderPlane(plane,
+                        0, imageHeight,
+                        imageWidth, imageHeight,
+                        pixelData, background, computeFractal,
+                        pm);
+            return;
+        }
+
+        ExecutorService executorService = Executors.newFixedThreadPool(numProcessors);
+        final int numLines = imageHeight / numProcessors;
+        final int rest = imageHeight % numProcessors;
+        int iy = 0;
+        for (int i = 0; i < numProcessors; i++) {
+            final int n = numLines + (i == 0 ? rest : 0);
+            final int iy0 = iy;
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    renderPlane(plane,
+                                iy0, n,
+                                imageWidth, imageHeight,
+                                pixelData, background,
+                                computeFractal,
+                                pm);
+                }
+            });
+            iy += n;
+        }
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(7L, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            // ok
+        }
+    }
+
+    private void renderPlane(Plane plane,
+                             int iy0, int numLines,
+                             int imageWidth, int imageHeight,
+                             int[] pixelData, int background,
+                             boolean computeFractal,
+                             ProgressMonitor pm) {
 
         final IFractal fractal = plane.getFractal();
         final IAccumulator accumulator = plane.getAccumulator();
@@ -100,7 +152,7 @@ public class PlaneRenderer {
         final boolean trapMode = plane.getTrapMode();
         final boolean decompositionMode = plane.getDecompositionMode();
 
-        final float[] rawData = raster.getRawData();
+        final float[] rawData = plane.getRaster().getRawData();
         final Region region = plane.getRegion();
         final double pixelSize = 2.0 * region.getRadius() / (double) Math.min(imageWidth, imageHeight);
         final double zx1 = region.getCenterX() - 0.5 * pixelSize * (double) imageWidth;
@@ -125,8 +177,9 @@ public class PlaneRenderer {
         double[] orbitX = new double[iterMax];
         double[] orbitY = new double[iterMax];
         double[] accuResult = new double[2];
+        int iy1 = iy0 + numLines - 1;
 
-        for (iy = 0; iy < imageHeight && !pm.isCanceled(); iy++) {
+        for (iy = iy0; iy <= iy1 && !pm.isCanceled(); iy++) {
             zy = zy2 - (double) iy * pixelSize;
             i = iy * imageWidth;
             k = iy * imageWidth;
