@@ -24,10 +24,16 @@ public class Optimize {
         Replacer(List<Symbol> varList, String varPrefix) {
             this.varList = varList;
             this.varPrefix = varPrefix;
+            this.lastVarId = 0;
             for (Symbol symbol : varList) {
                 String name = symbol.getName();
                 if (name.startsWith(varPrefix)) {
-                    lastVarId = Math.max(lastVarId, Integer.parseInt(name.substring(varPrefix.length())));
+                    try {
+                        int index = Integer.parseInt(name.substring(varPrefix.length()));
+                        lastVarId = Math.max(lastVarId, index);
+                    } catch (NumberFormatException e) {
+                        // ok
+                    }
                 }
             }
         }

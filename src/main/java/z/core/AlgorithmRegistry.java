@@ -71,7 +71,6 @@ public class AlgorithmRegistry {
             logError(e);
         }
 
-
         try {
             loadUserFractals();
         } catch (Throwable e) {

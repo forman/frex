@@ -6,7 +6,7 @@ import z.core.Region;
 
 /**
  * <pre>
- *       z' = {fractalCode}
+ *       z' = ${fractalCode}
  * </pre>
  */
 public final class Mandelbrot${fractalName} extends Fractal implements CompiledCode {
@@ -23,29 +23,31 @@ public final class Mandelbrot${fractalName} extends Fractal implements CompiledC
                        final double[] xValues,
                        final double[] yValues) {
         final int iterMax = this.iterMax;
-        final double rr = bailOutSqr;
-        final boolean julia = this.juliaMode;
-        final double cx = julia ? juliaCX : px;
-        final double cy = julia ? juliaCY : py;
-        double zx = julia ? px : 0.0;
-        double zy = julia ? py : 0.0;
+        final double rr = this.bailOutSqr;
 
-        double zxx;
-        double zyy;
-        double tzx = 0;
-        double tzy = 0;
+        final double cx, cy;
+        double zx, zy;
+        if (this.juliaMode) {
+            cx = this.juliaCX;
+            cy = this.juliaCY;
+            zx = px;
+            zy = py;
+        } else {
+            cx = px;
+            cy = py;
+            zx = 0.0;
+            zy = 0.0;
+        }
 
 ${variableDeclarations}
 
         int iter;
         for (iter = 0; iter < iterMax; iter++) {
-            zxx = zx * zx;
-            zyy = zy * zy;
+
+${variableAssignments}
             if (zxx + zyy > rr) {
                 return iter;
             }
-
-${variableAssignments}
 
             xValues[iter] = tzx;
             yValues[iter] = tzy;

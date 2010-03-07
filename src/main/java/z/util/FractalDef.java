@@ -103,18 +103,18 @@ public class FractalDef {
         List<Symbol> varList = new ArrayList<Symbol>(32);
         Symbol szx = complexNamespace.getSymbol("zx"); // NON-NLS
         Symbol szy = complexNamespace.getSymbol("zy"); // NON-NLS
-        varList.add(Symbol.createVariable("t1", Functor.mul(Functor.ref(szx), Functor.ref(szx)))); // NON-NLS
-        varList.add(Symbol.createVariable("t2", Functor.mul(Functor.ref(szy), Functor.ref(szy)))); // NON-NLS
-        varList.add(Symbol.createVariable("zzx", zx)); // NON-NLS
-        varList.add(Symbol.createVariable("zzy", zy)); // NON-NLS
+        varList.add(Symbol.createVariable("zxx", Functor.mul(Functor.ref(szx), Functor.ref(szx)))); // NON-NLS
+        varList.add(Symbol.createVariable("zyy", Functor.mul(Functor.ref(szy), Functor.ref(szy)))); // NON-NLS
+        varList.add(Symbol.createVariable("tzx", zx)); // NON-NLS
+        varList.add(Symbol.createVariable("tzy", zy)); // NON-NLS
         Optimize.replaceTermOccurences(varList, "t"); // NON-NLS
         StringBuilder variableDeclarations = new StringBuilder();
         for (Symbol var : varList) {
-            variableDeclarations.append(String.format("    double %s;\n", var.getName())); // NON-NLS
+            variableDeclarations.append(String.format("        double %s;\n", var.getName())); // NON-NLS
         }
         StringBuilder variableAssignments = new StringBuilder();
         for (Symbol var : varList) {
-            variableAssignments.append(String.format("        %s = %s;\n", var.getName(), var.getValue())); // NON-NLS
+            variableAssignments.append(String.format("            %s = %s;\n", var.getName(), var.getValue())); // NON-NLS
         }
 
         final String fname = getName().replace(' ', '_').replace('-', '_');
@@ -189,7 +189,7 @@ public class FractalDef {
         if (classpathFile != null) {
             classpath.add(classpathFile);
         }
-        // todo - hardcoded dependency
+        // This hardcoded dependency is only used while compiling from the IDE
         File jdomJarFile = new File(FileUtils.getUserHome(),
                                     ".m2/repository/jdom/jdom/1.1/jdom-1.1.jar");  // NON-NLS
         if (jdomJarFile.exists()) {
