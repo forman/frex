@@ -43,8 +43,8 @@ public class HistogramDialog extends JDialog {
         float position2 = (dialog.getIndexMax() - statistics.min) / (statistics.max - statistics.min);
         System.out.println("position1 = " + position1);  // NON-NLS
         System.out.println("position2 = " + position2);  // NON-NLS
-        position1 = crop(position1);
-        position2 = crop(position2);
+        position1 = Double.isNaN(position1) ? 0 : crop(position1);
+        position2 = Double.isNaN(position2) ? 1 : crop(position2);
         DefaultSliderBarModel model = new DefaultSliderBarModel(new ColorPoint[]{
                 new ColorPoint(position1, RGBA.WHITE),
                 new ColorPoint(position2, RGBA.WHITE),
@@ -79,10 +79,6 @@ public class HistogramDialog extends JDialog {
 
         public HistogramCanvas() {
             setPreferredSize(new Dimension(200, 200));
-        }
-
-        public PlaneRaster.Statistics getStatistics() {
-            return statistics;
         }
 
         public void setStatistics(PlaneRaster.Statistics statistics) {
