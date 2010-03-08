@@ -70,26 +70,6 @@ public class AlgorithmRegistry {
         } catch (Throwable e) {
             logError(e);
         }
-
-        try {
-            loadUserFractals();
-        } catch (Throwable e) {
-            logError(e);
-        }
-    }
-
-    private void loadUserFractals() throws JDOMException, IOException {
-        FractalDef[] fractalDefs = FractalDef.loadUserFractals();
-        for (FractalDef fractalDef : fractalDefs) {
-            try {
-                Term term = fractalDef.parse();
-                assert term != null;
-                AlgorithmDescriptor descriptor = fractalDef.compile(term);
-                fractals.register(descriptor);
-            } catch (Throwable e) {
-                logError(e);
-            }
-        }
     }
 
     private void extendPluginClassLoader() {

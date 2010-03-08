@@ -3,6 +3,7 @@ package z.math.term;
 import z.math.Complex;
 import z.math.Namespace;
 import z.math.Symbol;
+import z.util.Assert;
 
 public class Ref extends Term {
     private static final Term[] NO_ARGS = new Term[0];
@@ -10,9 +11,7 @@ public class Ref extends Term {
     private final Symbol symbol;
 
     public Ref(Symbol symbol) {
-        if (symbol == null) {
-            throw new NullPointerException("symbol is null");
-        }
+        Assert.notNull(symbol, "symbol"); // NON-NLS
         this.symbol = symbol;
     }
 

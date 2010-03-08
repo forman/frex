@@ -27,6 +27,7 @@ public final class Mandelbrot${fractalName} extends Fractal implements CompiledC
 
         final double cx, cy;
         double zx, zy;
+
         if (this.juliaMode) {
             cx = this.juliaCX;
             cy = this.juliaCY;
@@ -41,18 +42,17 @@ public final class Mandelbrot${fractalName} extends Fractal implements CompiledC
 
 ${variableDeclarations}
 
-        int iter;
-        for (iter = 0; iter < iterMax; iter++) {
+        for (int iter = 0; iter < iterMax; iter++) {
 
 ${variableAssignments}
             if (zxx + zyy > rr) {
                 return iter;
             }
 
-            xValues[iter] = tzx;
-            yValues[iter] = tzy;
-            zx = tzx;
-            zy = tzy;
+            xValues[iter] = _zx;
+            yValues[iter] = _zy;
+            zx = _zx;
+            zy = _zy;
         }
         return iterMax;
     }

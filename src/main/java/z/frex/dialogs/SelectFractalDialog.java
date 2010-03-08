@@ -6,6 +6,7 @@ import z.core.AlgorithmRegistry;
 import z.core.IFractal;
 import z.ui.dialog.Dialog;
 import z.ui.dialog.MessageDialog;
+import z.util.FractalDef;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -19,6 +20,8 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SelectFractalDialog extends Dialog {
 
@@ -45,7 +48,11 @@ public class SelectFractalDialog extends Dialog {
     protected JComponent createDialogArea() {
         JPanel contentPane = new JPanel(new BorderLayout(2, 2));
 
-        fractalList = new JList(AlgorithmRegistry.instance().getFractals().getAll());
+        AlgorithmDescriptor[] algorithmDescriptors = AlgorithmRegistry.instance().getFractals().getAll();
+        ArrayList<AlgorithmDescriptor> list = new ArrayList<AlgorithmDescriptor>();
+        list.addAll(Arrays.asList(algorithmDescriptors));
+        list.addAll(Arrays.asList(FractalDef.getUserAlgorithmDescriptors()));
+        fractalList = new JList(list.toArray(new AlgorithmDescriptor[list.size()]));
         fractalList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         contentPane.add(new JLabel(StringLiterals.getString("gui.label.fractals")), BorderLayout.NORTH);

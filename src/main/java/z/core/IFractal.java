@@ -12,7 +12,7 @@ public interface IFractal extends IAlgorithm {
      * @param zy     the Y-coordinate of the current complex Z-value
      * @param orbitX the orbit X-coordinates (a <code>double[maxIter-1]</code>)
      * @param orbitY the orbit Y-coordinates (a <code>double[maxIter-1]</code>)
-     * @return the number of iterations, ranging from zero to {@link getIterMax()}
+     * @return the number of iterations, ranging from zero to {@link #getIterMax()}
      */
     int compute(double zx,
                 double zy,

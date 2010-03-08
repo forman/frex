@@ -46,12 +46,11 @@ public class ManageUserFractalsDialog extends Dialog {
 
     public ManageUserFractalsDialog(JFrame parentShell) {
         super(parentShell);
-        File fractalsFile = FractalDef.DEFAULT_USER_FRACTALS_FILE;
-        if (fractalsFile.exists()) {
-            setFractals(load(parentShell, fractalsFile));
-        } else {
-            setFractals(new FractalDef[0]);
+        FractalDef[] fractalDefs = FractalDef.reloadUserFractals();
+        if (fractalDefs == null) {
+            fractalDefs = new FractalDef[0];
         }
+        setFractals(fractalDefs);
     }
 
     public FractalDef[] getFractals() {
@@ -86,7 +85,7 @@ public class ManageUserFractalsDialog extends Dialog {
         if (!frexUserDir.exists()) {
             frexUserDir.mkdir();
         }
-        save(getShell(), new File(frexUserDir, FractalDef.MY_FRACTALS_XML), getFractals());
+        save(getShell(), new File(frexUserDir, FractalDef.MY_FRACTALS_FILE_NAME), getFractals());
         super.okPressed();
     }
 
