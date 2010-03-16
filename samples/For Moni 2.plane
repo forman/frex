@@ -1,0 +1,28 @@
+<plane name="Fuer_moni_2" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="698" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError">
+    <property name="iterMax" value="250" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaMode" value="false" />
+    <property name="juliaCX" value="-0.08577076286439943" />
+    <property name="juliaCY" value="0.6504198800958303" />
+  </fractal>
+  <region centerX="-0.08576974259202497" centerY="0.650420287067955" radius="6.2264247960459514E-12" />
+  <accumulator class="z.core.support.accumulators.RadialOrbitTrap">
+    <property name="trapRadius" value="0.5" />
+    <property name="trapCenterX" value="-1.0" />
+    <property name="trapCenterY" value="1.0" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="8192" indexMin="3.780692" indexMax="6.3741336">
+    <colorPoint pos="0.0" color="0,0,0" />
+    <colorPoint pos="0.6544944047927856" color="255,255,0" />
+    <colorPoint pos="0.7893258333206177" color="255,255,255" />
+    <colorPoint pos="1.0" color="0,0,0" />
+    <colorPoint pos="0.5758426785469055" color="252,163,41" />
+    <colorPoint pos="0.8876404762268066" color="79,18,26" />
+    <colorPoint pos="0.4578651785850525" color="255,0,0" />
+    <colorPoint pos="0.19382022321224213" color="125,31,122" />
+    <colorPoint pos="0.30337077379226685" color="204,130,115" />
+  </colorizer>
+</plane>

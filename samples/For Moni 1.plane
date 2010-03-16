@@ -1,0 +1,26 @@
+<plane name="Fuer_moni" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="698" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError">
+    <property name="iterMax" value="250" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaMode" value="false" />
+    <property name="juliaCX" value="-0.08577076286439943" />
+    <property name="juliaCY" value="0.6504198800958303" />
+  </fractal>
+  <region centerX="-0.08576959168799887" centerY="0.6504201621182412" radius="1.0575840406362114E-7" />
+  <accumulator class="z.core.support.accumulators.RadialOrbitTrap">
+    <property name="trapRadius" value="0.5" />
+    <property name="trapCenterX" value="-1.0" />
+    <property name="trapCenterY" value="1.0" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="256" indexMin="1.0122162" indexMax="3.780692">
+    <colorPoint pos="0.0" color="0,0,0" />
+    <colorPoint pos="0.26123595237731934" color="255,255,0" />
+    <colorPoint pos="0.42696627974510193" color="255,255,255" />
+    <colorPoint pos="1.0" color="0,0,0" />
+    <colorPoint pos="0.3511236011981964" color="252,163,41" />
+    <colorPoint pos="0.7977527976036072" color="79,18,26" />
+    <colorPoint pos="0.13764044642448425" color="255,0,0" />
+  </colorizer>
+</plane>
