@@ -40,10 +40,22 @@ public class Complex {
         return new Complex(new Real(x), new Real(y));
     }
 
+    public static Complex re(Complex z) {
+        return new Complex(z.getX(), new Real(0.0));
+    }
+
+    public static Complex im(Complex z) {
+        return new Complex(z.getY(), new Real(0.0));
+    }
+
     public static Complex neg(Complex z) {
         final Term zx = Functor.neg(z.getX());
         final Term zy = Functor.neg(z.getY());
         return new Complex(zx, zy);
+    }
+
+    public static Complex abs(Complex z) {
+        return new Complex(absZ(z), new Real(0.0));
     }
 
     public static Complex add(Complex z1, Complex z2) {
@@ -76,10 +88,10 @@ public class Complex {
     public static Complex sqrt(Complex z) {
         final Term zx = Functor.sqrt(Functor.mul(Functor.num(0.5),
                                                  Functor.add(z.getX(),
-                                                             abs(z))));
+                                                             absZ(z))));
         final Term zy = Functor.sqrt(Functor.mul(Functor.num(-0.5),
                                                  Functor.add(z.getX(),
-                                                             abs(z))));
+                                                             absZ(z))));
         return new Complex(zx, zy);
     }
 
@@ -184,7 +196,7 @@ public class Complex {
         return Functor.mul(z1.getX(), z2.getY());
     }
 
-    private static Term abs(Complex z) {
+    private static Term absZ(Complex z) {
         return Functor.sqrt(sqrAbs(z));
     }
 

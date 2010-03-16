@@ -26,10 +26,10 @@ public class Pow extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        if (args[1].isConstant()) {
+    public Term differentiate(Symbol var, Term[] args) {
+        if (args[1].isReal()) {
             double n = args[1].evaluate();
-            Term inner = args[0].derivate(var);
+            Term inner = args[0].differentiate(var);
             Term outer = mul(args[1], pow(args[0], num(n - 1)));
             return mul(inner, outer);
         }

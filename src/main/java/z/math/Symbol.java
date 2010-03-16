@@ -63,7 +63,7 @@ public class Symbol extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
+    public Term differentiate(Symbol var, Term[] args) {
         return this == var ? Functor.num(1) : Functor.num(0);
     }
 

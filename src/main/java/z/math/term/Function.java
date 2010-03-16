@@ -53,8 +53,8 @@ public class Function extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        return getExpandedBody(args).derivate(var);
+    public Term differentiate(Symbol var, Term[] args) {
+        return getExpandedBody(args).differentiate(var);
     }
 
     @Override

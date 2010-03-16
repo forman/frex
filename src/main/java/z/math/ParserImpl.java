@@ -195,6 +195,15 @@ public class ParserImpl implements Parser {
             } else if (name.equalsIgnoreCase("sqrt")) { // NON-NLS
                 Term x2 = parseUnary(true);
                 x1 = Functor.sqrt(x2);
+            } else if (name.equalsIgnoreCase("re")) { // NON-NLS
+                Term x2 = parseUnary(true);
+                x1 = Functor.re(x2);
+            } else if (name.equalsIgnoreCase("im")) { // NON-NLS
+                Term x2 = parseUnary(true);
+                x1 = Functor.im(x2);
+            } else if (name.equalsIgnoreCase("abs")) { // NON-NLS
+                Term x2 = parseUnary(true);
+                x1 = Functor.abs(x2);
             } else {
                 tokenizer.pushBack();
                 x1 = parsePrimary(required);

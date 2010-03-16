@@ -6,6 +6,7 @@ import z.core.AlgorithmRegistry;
 import z.core.AlgorithmSpi;
 import z.core.AlgorithmSubRegistry;
 import z.core.IAlgorithm;
+import z.core.support.fractals.BurningShip;
 import z.core.support.fractals.NormansError;
 
 public class DefaultAlgorithmSpi implements AlgorithmSpi {
@@ -25,7 +26,8 @@ public class DefaultAlgorithmSpi implements AlgorithmSpi {
         register(fractals, z.core.support.fractals.InvMandelbrot1.class, StringLiterals.getString("z.core.support.fractals.InvMandelbrot1.name"));
         register(fractals, z.core.support.fractals.InvMandelbrot2.class, StringLiterals.getString("z.core.support.fractals.InvMandelbrot2.name"));
         register(fractals, z.core.support.fractals.InvMandelbrot3.class, StringLiterals.getString("z.core.support.fractals.InvMandelbrot3.name"));
-        register(fractals, NormansError.class, StringLiterals.getString("z.core.support.fractals.NormansError.name"));
+        register(fractals, z.core.support.fractals.BurningShip.class, StringLiterals.getString("z.core.support.fractals.BurningShip.name"));
+        register(fractals, z.core.support.fractals.NormansError.class, StringLiterals.getString("z.core.support.fractals.NormansError.name"));
         register(fractals, z.core.support.fractals.NormansError2.class, StringLiterals.getString("z.core.support.fractals.NormansError2.name"));
         register(fractals, z.core.support.fractals.NormansError3.class, StringLiterals.getString("z.core.support.fractals.NormansError3.name"));
         register(fractals, z.core.support.fractals.Sandbox.class, StringLiterals.getString("z.core.support.fractals.Sandbox.name"));

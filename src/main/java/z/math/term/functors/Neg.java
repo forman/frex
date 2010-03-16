@@ -24,8 +24,8 @@ public class Neg extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        return neg(args[0].derivate(var));
+    public Term differentiate(Symbol var, Term[] args) {
+        return neg(args[0].differentiate(var));
     }
 
     @Override

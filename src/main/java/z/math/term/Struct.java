@@ -84,8 +84,8 @@ public class Struct extends Term {
     }
 
     @Override
-    public Term derivate(Symbol var) {
-        return getFunctor().derivate(var, args);
+    public Term differentiate(Symbol var) {
+        return getFunctor().differentiate(var, args);
     }
 
     @Override

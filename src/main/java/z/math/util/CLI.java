@@ -61,7 +61,7 @@ public class CLI {
             if (term != null) {
                 System.out.println(MessageFormat.format(StringLiterals.getString("cli.out.input.0"), term));
                 System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.simp.input.0"), term.simplify()));
-                final Term d = term.derivate(derivVar);
+                final Term d = term.differentiate(derivVar);
                 System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.deriv.0"), d));
                 System.out.println(MessageFormat.format(StringLiterals.getString("cli.stdout.simp.deriv.0"), d.simplify()));
                 final Complex z = term.createComplex(complexNamespace,

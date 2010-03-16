@@ -25,8 +25,8 @@ public class Sinh extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        Term inner = args[0].derivate(var);
+    public Term differentiate(Symbol var, Term[] args) {
+        Term inner = args[0].differentiate(var);
         Term outer = cosh(args[0]);
         return mul(inner, outer);
     }

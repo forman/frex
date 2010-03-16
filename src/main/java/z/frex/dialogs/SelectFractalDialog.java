@@ -1,5 +1,6 @@
 package z.frex.dialogs;
 
+import org.jdom.JDOMException;
 import z.StringLiterals;
 import z.core.AlgorithmDescriptor;
 import z.core.AlgorithmRegistry;
@@ -19,6 +20,7 @@ import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +53,6 @@ public class SelectFractalDialog extends Dialog {
         AlgorithmDescriptor[] algorithmDescriptors = AlgorithmRegistry.instance().getFractals().getAll();
         ArrayList<AlgorithmDescriptor> list = new ArrayList<AlgorithmDescriptor>();
         list.addAll(Arrays.asList(algorithmDescriptors));
-        list.addAll(Arrays.asList(FractalDef.getUserAlgorithmDescriptors()));
         fractalList = new JList(list.toArray(new AlgorithmDescriptor[list.size()]));
         fractalList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

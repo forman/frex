@@ -123,7 +123,7 @@ public class Optimize {
         for (int i = 0; i < terms.length; i++) {
             terms[i] = expandPowByIntExp(x.getArg(i));
         }
-        if (x.isPow() && terms[1].isConstant()) {
+        if (x.isPow() && terms[1].isReal()) {
             final double realExp = terms[1].evaluate();
             int intExp = (int) Math.floor(realExp);
             final double delta = realExp - intExp;

@@ -26,8 +26,8 @@ public class Add extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        return add(args[0].derivate(var), args[1].derivate(var));
+    public Term differentiate(Symbol var, Term[] args) {
+        return add(args[0].differentiate(var), args[1].differentiate(var));
     }
 
     @Override

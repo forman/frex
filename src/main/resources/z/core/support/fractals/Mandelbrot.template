@@ -1,4 +1,3 @@
-package z.contrib.fractals;
 
 import z.compiler.CompiledCode;
 import z.core.Fractal;
@@ -9,7 +8,7 @@ import z.core.Region;
  *       z' = ${fractalCode}
  * </pre>
  */
-public final class Mandelbrot${fractalName} extends Fractal implements CompiledCode {
+public final class Mandelbrot_${fractalName} extends Fractal implements CompiledCode {
 
     public Region getStartRegion() {
         if (isJuliaMode()) {
@@ -48,7 +47,7 @@ ${variableAssignments}
             if (zxx + zyy > rr) {
                 return iter;
             }
-
+${perturbationBlock}
             xValues[iter] = _zx;
             yValues[iter] = _zy;
             zx = _zx;

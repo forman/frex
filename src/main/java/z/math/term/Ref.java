@@ -36,7 +36,7 @@ public class Ref extends Term {
 
     @Override
     public int compareTo(Term other) {
-        if (other.isConstant()) {
+        if (other.isReal()) {
             return 1;
         }
         if (other.isSymbolRef()) {
@@ -62,8 +62,8 @@ public class Ref extends Term {
     }
 
     @Override
-    public Term derivate(Symbol var) {
-        return getSymbol().derivate(var, NO_ARGS);
+    public Term differentiate(Symbol var) {
+        return getSymbol().differentiate(var, NO_ARGS);
     }
 
     @Override

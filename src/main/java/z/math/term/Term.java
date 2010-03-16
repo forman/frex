@@ -34,7 +34,7 @@ public abstract class Term {
 
     public abstract Term simplify();
 
-    public abstract Term derivate(Symbol var);
+    public abstract Term differentiate(Symbol var);
 
     public abstract Complex createComplex(Namespace namespace, Symbol unitSymbol);
 
@@ -50,7 +50,7 @@ public abstract class Term {
         return equals(Functor.num(2));
     }
 
-    public final boolean isConstant() {
+    public final boolean isReal() {
         return this instanceof Real;
     }
 

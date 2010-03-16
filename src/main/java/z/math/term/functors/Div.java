@@ -26,9 +26,9 @@ public class Div extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        return div(sub(mul(args[0].derivate(var), args[1]),
-                       mul(args[0], args[1].derivate(var))),
+    public Term differentiate(Symbol var, Term[] args) {
+        return div(sub(mul(args[0].differentiate(var), args[1]),
+                       mul(args[0], args[1].differentiate(var))),
                    pow(args[1], num(2)));
     }
 

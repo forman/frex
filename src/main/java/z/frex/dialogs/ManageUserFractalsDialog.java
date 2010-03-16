@@ -4,7 +4,6 @@ import org.jdom.JDOMException;
 import z.StringLiterals;
 import z.math.ParseException;
 import z.ui.dialog.Dialog;
-import z.util.FileUtils;
 import z.util.FractalDef;
 
 import javax.swing.ImageIcon;
@@ -28,7 +27,6 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -37,37 +35,47 @@ import java.util.Arrays;
 public class ManageUserFractalsDialog extends Dialog {
 
     private ArrayList<FractalDef> fractals;
-    private ManageUserFractalsDialog.FractalTableModel tableModel;
+    private ArrayList<FractalDef> clonedFractals;
+
     private JButton addButton;
     private JButton removeButton;
     private JButton moveUpButton;
     private JButton moveDownButton;
+
     private JTable table;
+    private ManageUserFractalsDialog.FractalTableModel tableModel;
 
     public ManageUserFractalsDialog(JFrame parentShell) {
         super(parentShell);
-        FractalDef[] fractalDefs = FractalDef.reloadUserFractals();
+
+        FractalDef[] fractalDefs = load(parentShell);
         if (fractalDefs == null) {
             fractalDefs = new FractalDef[0];
         }
-        setFractals(fractalDefs);
+
+        this.fractals = new ArrayList<FractalDef>(fractalDefs.length);
+        this.fractals.addAll(Arrays.asList(fractalDefs));
+
+        this.clonedFractals = new ArrayList<FractalDef>(fractalDefs.length);
+        this.clonedFractals.addAll(fractals);
+        for (int i = 0; i < fractals.size(); i++) {
+            clonedFractals.set(i, fractals.get(i).clone());
+        }
     }
 
     public FractalDef[] getFractals() {
         return fractals.toArray(new FractalDef[fractals.size()]);
     }
 
-    public void setFractals(FractalDef[] fractals) {
-        this.fractals = new ArrayList<FractalDef>(fractals.length);
-        this.fractals.addAll(Arrays.asList(fractals));
-    }
-
     @Override
     protected void okPressed() {
+        if (!tableModel.isModified()) {
+            return;
+        }
 
-        FractalDef[] fractalDefs = getFractals();
-        for (int i = 0; i < fractalDefs.length; i++) {
-            FractalDef fractalDef = fractalDefs[i];
+        // todo - compile in separate thread
+        for (int i = 0; i < fractals.size(); i++) {
+            FractalDef fractalDef = fractals.get(i);
             try {
                 fractalDef.parse();
             } catch (ParseException e) {
@@ -81,42 +89,42 @@ public class ManageUserFractalsDialog extends Dialog {
             }
         }
 
-        File frexUserDir = FileUtils.getFrexUserDir();
-        if (!frexUserDir.exists()) {
-            frexUserDir.mkdir();
+        save(getShell(), getFractals());
+
+        try {
+            FractalDef.buildAll();
+        } catch (JDOMException e) {
+            showError("JDOMException", e.getMessage());  // TODO i18n
+        } catch (IOException e) {
+            showError("IOException", e.getMessage());    // TODO i18n
         }
-        save(getShell(), new File(frexUserDir, FractalDef.MY_FRACTALS_FILE_NAME), getFractals());
+
         super.okPressed();
     }
 
-
-    private void showError(String title, String message) {
-        JOptionPane.showMessageDialog(getShell(),
-                                      message,
-                                      title,
-                                      JOptionPane.ERROR_MESSAGE);
-    }
-
-
-    private static FractalDef[] load(Component parentComponent, File fractalsFile) {
+    private static FractalDef[] load(Component parentComponent) {
         FractalDef[] defs = new FractalDef[0];
         try {
-            defs = FractalDef.loadFractals(fractalsFile);
+            defs = FractalDef.loadMyFractals();
         } catch (JDOMException e) {
-            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.invalidFileFormat"), fractalsFile));
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.invalidFileFormat"),
+                                                                                FractalDef.MY_FRACTALS_FILE));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.ioError"), fractalsFile, e.getLocalizedMessage()));
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.ioError"),
+                                                                                FractalDef.MY_FRACTALS_FILE, e.getLocalizedMessage()));
         }
         return defs;
     }
 
-    private static void save(Component parentComponent, File fractalsFile, FractalDef[] fractalDefs) {
+    private static void save(Component parentComponent, FractalDef[] defs) {
         try {
-            FractalDef.saveFractals(fractalsFile, fractalDefs);
+            FractalDef.saveMyFractals(defs);
         } catch (JDOMException e) {
-            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.invalidFileFormat"), fractalsFile));
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.invalidFileFormat"),
+                                                                                FractalDef.MY_FRACTALS_FILE));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(parentComponent, fractalsFile + ":\n" + e.getLocalizedMessage());
+            JOptionPane.showMessageDialog(parentComponent, MessageFormat.format(StringLiterals.getString("gui.msg.ioError"),
+                                                                                FractalDef.MY_FRACTALS_FILE, e.getLocalizedMessage()));
         }
     }
 
@@ -137,6 +145,9 @@ public class ManageUserFractalsDialog extends Dialog {
         table.getTableHeader().setResizingAllowed(true);
         table.setSurrendersFocusOnKeystroke(true);
         table.setGridColor(Color.LIGHT_GRAY);
+        table.getColumnModel().getColumn(0).setPreferredWidth(32);
+        table.getColumnModel().getColumn(1).setPreferredWidth(200);
+        table.getColumnModel().getColumn(2).setPreferredWidth(16);
 
         addButton = new JButton();
         addButton.setToolTipText(StringLiterals.getString("gui.action.tooltip.addFractal"));
@@ -231,6 +242,12 @@ public class ManageUserFractalsDialog extends Dialog {
 
 
     private class FractalTableModel extends AbstractTableModel {
+        private boolean modified;
+
+        public boolean isModified() {
+            return modified;
+        }
+
         @Override
         public int getRowCount() {
             return fractals.size();
@@ -238,20 +255,27 @@ public class ManageUserFractalsDialog extends Dialog {
 
         @Override
         public int getColumnCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public String getColumnName(int columnIndex) {
             if (columnIndex == 0) {
                 return StringLiterals.getString("gui.column.text.fractalName");
+            } else if (columnIndex == 1) {
+                return StringLiterals.getString("gui.column.text.fractalCode");
+            } else if (columnIndex == 2) {
+                return StringLiterals.getString("gui.column.text.fractalPert");
             } else {
-                return StringLiterals.getString("gui.column.text.fractalFormula");
+                return null;
             }
         }
 
         @Override
         public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 2) {
+                return Boolean.class;
+            }
             return String.class;
         }
 
@@ -259,18 +283,24 @@ public class ManageUserFractalsDialog extends Dialog {
         public Object getValueAt(int rowIndex, int columnIndex) {
             if (columnIndex == 0) {
                 return fractals.get(rowIndex).getName();
-            } else {
+            } else if (columnIndex == 1) {
                 return fractals.get(rowIndex).getCode();
+            } else if (columnIndex == 2) {
+                return fractals.get(rowIndex).isPerturbation();
             }
+            return null;
         }
 
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
             if (columnIndex == 0) {
                 fractals.get(rowIndex).setName((String) aValue);
-            } else {
+            } else if (columnIndex == 1) {
                 fractals.get(rowIndex).setCode((String) aValue);
+            } else if (columnIndex == 2) {
+                fractals.get(rowIndex).setPerturbation((Boolean) aValue);
             }
+            modified = true;
         }
 
         @Override

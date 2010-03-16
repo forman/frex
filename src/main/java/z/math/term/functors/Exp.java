@@ -24,8 +24,8 @@ public class Exp extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        Term inner = args[0].derivate(var);
+    public Term differentiate(Symbol var, Term[] args) {
+        Term inner = args[0].differentiate(var);
         Term outer = exp(args[0]);
         return mul(inner, outer);
     }

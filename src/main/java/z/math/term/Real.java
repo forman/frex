@@ -41,7 +41,7 @@ public class Real extends Term {
 
     @Override
     public int compareTo(Term other) {
-        if (other.isConstant()) {
+        if (other.isReal()) {
             final double d = getValue() - ((Real) other).getValue();
             return d == 0 ? 0 : d < 0 ? -1 : 1;
         }
@@ -64,7 +64,7 @@ public class Real extends Term {
     }
 
     @Override
-    public Term derivate(Symbol var) {
+    public Term differentiate(Symbol var) {
         return Functor.num(0);
     }
 

@@ -184,6 +184,14 @@ public abstract class Dialog {
         this.buttonId = buttonId;
     }
 
+    protected void showError(String title, String message) {
+        JOptionPane.showMessageDialog(getShell(),
+                                      message,
+                                      title,
+                                      JOptionPane.ERROR_MESSAGE);
+    }
+
+
     private class ButtonActionListener implements ActionListener {
         private final int buttonId;
 

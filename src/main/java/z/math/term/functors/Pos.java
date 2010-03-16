@@ -23,8 +23,8 @@ public class Pos extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        return args[0].derivate(var);
+    public Term differentiate(Symbol var, Term[] args) {
+        return args[0].differentiate(var);
     }
 
     @Override

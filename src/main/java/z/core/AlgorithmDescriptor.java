@@ -5,7 +5,7 @@ import z.util.Assert;
 import java.awt.Image;
 
 public class AlgorithmDescriptor {
-    private final Class<? extends IAlgorithm> algorithmClass;
+    private final Class<IAlgorithm> algorithmClass;
 
     private String name;
 
@@ -17,9 +17,10 @@ public class AlgorithmDescriptor {
 
     private Image icon;
 
-    public AlgorithmDescriptor(Class<? extends IAlgorithm> algorithmClass) {
+    public AlgorithmDescriptor(Class<?> algorithmClass) {
         Assert.notNull(algorithmClass, "algorithmClass"); // NON-NLS
-        this.algorithmClass = algorithmClass;
+        Assert.argument(IAlgorithm.class.isAssignableFrom(algorithmClass), "algorithmClass"); // NON-NLS
+        this.algorithmClass = (Class<IAlgorithm>) algorithmClass;
         this.name = algorithmClass.getName();
     }
 

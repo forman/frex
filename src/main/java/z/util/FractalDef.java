@@ -1,16 +1,17 @@
 package z.util;
 
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import z.StringLiterals;
+import z.compiler.Code;
 import z.compiler.CodeCompiler;
+import z.compiler.CompiledCode;
 import z.core.AlgorithmDescriptor;
-import z.core.IAlgorithm;
+import z.core.AlgorithmRegistry;
+import z.core.AlgorithmSubRegistry;
 import z.math.Complex;
 import z.math.Namespace;
 import z.math.Optimize;
@@ -38,25 +39,31 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class FractalDef {
+public class FractalDef implements Cloneable {
     public static final String MY_FRACTALS_FILE_NAME = "myFractals.xml"; // NON-NLS
+    public static final String MY_FRACTALS_DIR_NAME = "myFractals"; // NON-NLS
     public static final File MY_FRACTALS_FILE = new File(FileUtils.getFrexUserDir(), MY_FRACTALS_FILE_NAME);
+    public static final File MY_FRACTALS_DIR = new File(FileUtils.getFrexUserDir(), MY_FRACTALS_DIR_NAME);
 
     private static final Symbol COMPLEX_UNIT = Symbol.createSymbol("i"); // NON-NLS
 
-    private static FractalDef[] fractalDefs;
-
     private String name;
     private String code;
-    private Namespace parserNamespace;
+    private boolean perturbation;
+    private static final String PERTUBATION_BLOCK = "            if (_zy < _zx) {\n" +
+    "                double t = _zx;\n" +
+    "                _zx = _zy;\n" +
+    "                _zy = t;\n" +
+    "            }";
 
     public FractalDef() {
-        this("", "");
+        this("", "", false);
     }
 
-    public FractalDef(String name, String code) {
+    public FractalDef(String name, String code, boolean perturbation) {
         this.name = name;
         this.code = code;
+        this.perturbation = perturbation;
     }
 
     public String getName() {
@@ -75,31 +82,140 @@ public class FractalDef {
         this.code = code;
     }
 
-    public Term parse() throws ParseException {
-        if (parserNamespace == null) {
-            parserNamespace = new Namespace();
-            parserNamespace.addSymbol(COMPLEX_UNIT);
-        }
-        Parser parser = new ParserImpl(parserNamespace);
-        String code = getCode();
-        return parser.parse(code);
+    public boolean isPerturbation() {
+        return perturbation;
     }
 
-    public AlgorithmDescriptor compile(Term term) throws ClassNotFoundException, IOException {
-        File outputDir = new File(FileUtils.getFrexUserDir(), "myFractals"); // NON-NLS
-        outputDir.mkdirs();
-        deleteFiles(outputDir.listFiles());
+    public void setPerturbation(boolean perturbation) {
+        this.perturbation = perturbation;
+    }
 
-        File[] classpathFiles = getClasspathFiles();
-        for (File classpathFile : classpathFiles) {
-            System.out.printf("classpathFile = %s%n", classpathFile);  // NON-NLS
+    @Override
+    public String toString() {
+        return "FractalDef{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", perturbation=" + perturbation +
+                '}';
+    }
+
+    @SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException"})
+    @Override
+    public FractalDef clone() {
+        try {
+            return (FractalDef) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+
+    String getClassName() {
+        return "Mandelbrot_" + getJavaName(); // NON-NLS
+    }
+
+    File getJavaFile() {
+        return new File(MY_FRACTALS_DIR, getClassName() + ".java"); // NON-NLS
+    }
+
+    File getClassFile() {
+        return new File(MY_FRACTALS_DIR, getClassName() + ".class"); // NON-NLS
+    }
+
+    public static boolean buildAll() throws JDOMException, IOException {
+
+        if (!MY_FRACTALS_FILE.exists()
+                || MY_FRACTALS_DIR.exists() && !isBuildDirModified()) {
+            return false;
         }
 
-        CodeCompiler compiler = new CodeCompiler(outputDir, classpathFiles);
-        String templateCode = getTemplateCode();
+        MY_FRACTALS_DIR.mkdirs();
+        File[] files = MY_FRACTALS_DIR.listFiles();
+        for (File file : files) {
+            file.delete();
+        }
 
+        FractalDef[] fractals = loadMyFractals();
+
+        AlgorithmDescriptor[] algorithmDescriptors = compileAll(fractals);
+
+        if (algorithmDescriptors.length > 0) {
+            AlgorithmSubRegistry algorithmSubRegistry = AlgorithmRegistry.instance().getFractals();
+
+            for (AlgorithmDescriptor descriptor : algorithmSubRegistry.getAll()) {
+                if (CompiledCode.class.isAssignableFrom(descriptor.getAlgorithmClass())) {
+                    algorithmSubRegistry.unregister(descriptor);
+                }
+            }
+
+            for (AlgorithmDescriptor algorithmDescriptor : algorithmDescriptors) {
+                algorithmSubRegistry.register(algorithmDescriptor);
+            }
+        }
+
+
+        return true;
+    }
+
+    private static AlgorithmDescriptor[] compileAll(FractalDef[] fractalDefs) {
+        CodeCompiler compiler = new CodeCompiler(MY_FRACTALS_DIR, getClasspathFiles());
+        List<AlgorithmDescriptor> algorithmDescriptors = new ArrayList<AlgorithmDescriptor>();
+        for (FractalDef fractalDef : fractalDefs) {
+            try {
+                String code = fractalDef.generateJavaCode();
+                File file = new File(MY_FRACTALS_DIR, fractalDef.getClassName() + ".java");  // NON-NLS
+                FileWriter writer = new FileWriter(file);
+                try {
+                    writer.write(code);
+                    Class<?> compiledClass = compiler.compile(new Code(fractalDef.getClassName(), code));
+                    AlgorithmDescriptor descriptor = new AlgorithmDescriptor(compiledClass);
+                    descriptor.setName(fractalDef.getName());
+                    descriptor.setOriginator(System.getProperty("user.name")); // NON-NLS
+                    algorithmDescriptors.add(descriptor);
+                } finally {
+                    writer.close();
+                }
+            } catch (IOException e) {
+                // todo
+                getLogger().log(Level.SEVERE, e.getMessage(), e);
+            } catch (ParseException e) {
+                // todo
+                getLogger().log(Level.SEVERE, e.getMessage(), e);
+            } catch (ClassNotFoundException e) {
+                // todo
+                getLogger().log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+        return algorithmDescriptors.toArray(new AlgorithmDescriptor[algorithmDescriptors.size()]);
+    }
+
+    private String generateJavaCode() throws ParseException {
+
+        List<Symbol> varList = parse();
+        StringBuilder variableDeclarations = new StringBuilder();
+        for (Symbol var : varList) {
+            variableDeclarations.append(String.format("        double %s;\n", var.getName())); // NON-NLS
+        }
+        StringBuilder variableAssignments = new StringBuilder();
+        for (Symbol var : varList) {
+            variableAssignments.append(String.format("            %s = %s;\n", var.getName(), var.getValue())); // NON-NLS
+        }
+
+        String javaCode = getTemplateCode();
+        javaCode = javaCode.replace("${fractalName}", getJavaName()); // NON-NLS
+        javaCode = javaCode.replace("${fractalCode}", getCode()); // NON-NLS
+        javaCode = javaCode.replace("${variableDeclarations}", variableDeclarations); // NON-NLS
+        javaCode = javaCode.replace("${variableAssignments}", variableAssignments); // NON-NLS
+        javaCode = javaCode.replace("${perturbationBlock}", isPerturbation() ? PERTUBATION_BLOCK  : ""); // NON-NLS
+        return javaCode;
+    }
+
+    public List<Symbol> parse() throws ParseException {
         Namespace complexNamespace = new Namespace();
+        Namespace parserNamespace = new Namespace();
+        parserNamespace.addSymbol(COMPLEX_UNIT);
 
+        Parser parser = new ParserImpl(parserNamespace);
+        Term term = parser.parse(code);
         Complex z = term.createComplex(complexNamespace, COMPLEX_UNIT);
         Term zx = Optimize.expandPowByIntExp(z.getX().simplify());
         Term zy = Optimize.expandPowByIntExp(z.getY().simplify());
@@ -111,65 +227,34 @@ public class FractalDef {
         varList.add(Symbol.createVariable("zyy", Functor.mul(Functor.ref(szy), Functor.ref(szy)))); // NON-NLS
         varList.add(Symbol.createVariable("_zx", zx)); // NON-NLS
         varList.add(Symbol.createVariable("_zy", zy)); // NON-NLS
-// todo - add derivative code
-/*
-        Symbol sz = parserNamespace.getSymbol("z");
-        if (sz == null) {
-            sz = parserNamespace.addSymbol("z");
-        }
-        Term dterm = term.derivate(sz).simplify(); // NON-NLS
-        Complex dz = dterm.createComplex(complexNamespace, COMPLEX_UNIT);
-        Term dzx = Optimize.expandPowByIntExp(dz.getX().simplify());
-        Term dzy = Optimize.expandPowByIntExp(dz.getY().simplify());
-        varList.add(Symbol.createVariable("_dzx", dzx)); // NON-NLS
-        varList.add(Symbol.createVariable("_dzy", dzy)); // NON-NLS
-*/
+
         Optimize.replaceTermOccurences(varList, "t"); // NON-NLS
-        StringBuilder variableDeclarations = new StringBuilder();
-        for (Symbol var : varList) {
-            variableDeclarations.append(String.format("        double %s;\n", var.getName())); // NON-NLS
-        }
-        StringBuilder variableAssignments = new StringBuilder();
-        for (Symbol var : varList) {
-            variableAssignments.append(String.format("            %s = %s;\n", var.getName(), var.getValue())); // NON-NLS
-        }
 
-        final String fname = getName().replace(' ', '_').replace('-', '_');
-        final String fcode = getCode();
-        String tcode = templateCode;
-        tcode = tcode.replace("${fractalName}", fname); // NON-NLS
-        tcode = tcode.replace("${fractalCode}", fcode); // NON-NLS
-        tcode = tcode.replace("${variableDeclarations}", variableDeclarations); // NON-NLS
-        tcode = tcode.replace("${variableAssignments}", variableAssignments); // NON-NLS
+        return varList;
+    }
 
-        getLogger().info(MessageFormat.format(StringLiterals.getString("log.compiling.0.to.1"), fcode, outputDir));
-        getLogger().info(MessageFormat.format(StringLiterals.getString("log.code.n.0.n"), tcode));
-        Class<? extends IAlgorithm> aClass = (Class<? extends IAlgorithm>) compiler.compile("z.contrib.fractals", // NON-NLS
-                                                                                            "Mandelbrot" + fname, tcode); // NON-NLS
-        AlgorithmDescriptor descriptor = new AlgorithmDescriptor(aClass);
-        descriptor.setName(getName());
-        descriptor.setOriginator(System.getProperty("user.name")); // NON-NLS
-        return descriptor;
+    private String getJavaName() {
+        return getName().replace(' ', '_').replace('-', '_');
+    }
+
+    private static boolean isBuildDirModified() throws JDOMException, IOException {
+        boolean modified = false;
+        FractalDef[] fractalDefs = loadMyFractals();
+        for (FractalDef fractalDef : fractalDefs) {
+            File javaFile = fractalDef.getJavaFile();
+            if (!javaFile.exists() || javaFile.lastModified() < MY_FRACTALS_FILE.lastModified()) {
+                modified = true;
+            }
+            File classFile = fractalDef.getClassFile();
+            if (!classFile.exists() || classFile.lastModified() < javaFile.lastModified()) {
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     public static Logger getLogger() {
         return Logger.getAnonymousLogger();
-    }
-
-    public static void deleteFiles(File[] files) {
-        if (files == null) {
-            return;
-        }
-        for (File file : files) {
-            if (file.isDirectory()) {
-                deleteFiles(file.listFiles());
-            }
-            if (file.delete()) {
-                getLogger().info(MessageFormat.format(StringLiterals.getString("log.deleted.0"), file));
-            } else {
-                getLogger().info(MessageFormat.format(StringLiterals.getString("log.error.deleting.0"), file));
-            }
-        }
     }
 
     public static String getTemplateCode() {
@@ -240,36 +325,9 @@ public class FractalDef {
         return classPathDir;
     }
 
-    public static AlgorithmDescriptor[] getUserAlgorithmDescriptors() {
-        if (fractalDefs == null) {
-            reloadUserFractals();
-        }
-        if (fractalDefs == null) {
-            return new AlgorithmDescriptor[0];
-        }
-        ArrayList<AlgorithmDescriptor> descriptorArrayList = new ArrayList<AlgorithmDescriptor>();
-        for (FractalDef fractalDef : fractalDefs) {
-            try {
-                Term term = fractalDef.parse();
-                AlgorithmDescriptor descriptor = fractalDef.compile(term);
-                descriptorArrayList.add(descriptor);
-            } catch (Exception e) {
-                Logger.getAnonymousLogger().log(Level.SEVERE, e.getMessage(), e);
-            }
-        }
-        return descriptorArrayList.toArray(new AlgorithmDescriptor[descriptorArrayList.size()]);
-    }
 
-    public static FractalDef[] reloadUserFractals() {
-        fractalDefs = null;
-        if (MY_FRACTALS_FILE.exists()) {
-            try {
-                fractalDefs = loadFractals(MY_FRACTALS_FILE);
-            } catch (Exception e) {
-                // todo - log
-            }
-        }
-        return fractalDefs;
+    public static FractalDef[] loadMyFractals() throws JDOMException, IOException {
+        return loadFractals(MY_FRACTALS_FILE);
     }
 
     public static FractalDef[] loadFractals(File file) throws JDOMException, IOException {
@@ -282,10 +340,14 @@ public class FractalDef {
                 Element fractalElement = (Element) child;
                 Element nameElement = fractalElement.getChild("name"); // NON-NLS
                 Element codeElement = fractalElement.getChild("code"); // NON-NLS
+                Element diffElement = fractalElement.getChild("perturbation"); // NON-NLS
                 String name = nameElement != null && nameElement.getTextNormalize() != null ? nameElement.getTextNormalize() : "";
                 String code = codeElement != null && codeElement.getTextNormalize() != null ? codeElement.getTextNormalize() : "";
+                boolean diff = diffElement != null
+                        && diffElement.getTextNormalize() != null
+                        && Boolean.parseBoolean(diffElement.getTextNormalize());
                 if (!name.isEmpty() && !code.isEmpty()) {
-                    fractalDefs.add(new FractalDef(name, code));
+                    fractalDefs.add(new FractalDef(name, code, diff));
                 }
             } catch (Exception e) {
                 // todo - log
@@ -294,19 +356,30 @@ public class FractalDef {
         return fractalDefs.toArray(new FractalDef[fractalDefs.size()]);
     }
 
-    public static void saveFractals(File file, FractalDef[] fractalDefs) throws JDOMException, IOException {
+    public static void saveMyFractals(FractalDef[] fractalDefs) throws JDOMException, IOException {
+        saveFractals(fractalDefs, MY_FRACTALS_FILE);
+    }
+
+    public static void saveFractals(FractalDef[] fractalDefs, File file) throws JDOMException, IOException {
         final XMLOutputter xmlOutputter = new XMLOutputter();
         FileWriter writer = new FileWriter(file);
 
         Element fractalsElement = new Element("fractals"); // NON-NLS
         for (FractalDef fractalDef : fractalDefs) {
             Element fractalElement = new Element("fractal"); // NON-NLS
+
             Element nameElement = new Element("name"); // NON-NLS
             nameElement.setText(fractalDef.getName());
             fractalElement.addContent(nameElement);
+
             Element codeElement = new Element("code"); // NON-NLS
             codeElement.setText(fractalDef.getCode());
             fractalElement.addContent(codeElement);
+
+            Element diffElement = new Element("perturbation"); // NON-NLS
+            diffElement.setText(fractalDef.isPerturbation() + "");
+            fractalElement.addContent(diffElement);
+
             fractalsElement.addContent(fractalElement);
         }
 

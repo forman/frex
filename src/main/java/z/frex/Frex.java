@@ -4,13 +4,16 @@ import z.core.Plane;
 import z.core.Project;
 import z.ui.application.Application;
 import z.ui.application.ApplicationWindow;
+import z.util.FractalDef;
 import z.util.RegionHistory;
 
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
@@ -27,6 +30,13 @@ public class Frex {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        try {
+            FractalDef.buildAll();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, MessageFormat.format("Failed to compile ''{0}''.",
+                                                          FractalDef.MY_FRACTALS_FILE), e);
         }
 
         try {

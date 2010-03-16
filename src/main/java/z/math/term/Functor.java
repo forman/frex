@@ -3,14 +3,17 @@ package z.math.term;
 import z.math.Complex;
 import z.math.Namespace;
 import z.math.Symbol;
+import z.math.term.functors.Abs;
 import z.math.term.functors.Add;
 import z.math.term.functors.Cos;
 import z.math.term.functors.Cosh;
 import z.math.term.functors.Div;
 import z.math.term.functors.Exp;
+import z.math.term.functors.Im;
 import z.math.term.functors.Mul;
 import z.math.term.functors.Neg;
 import z.math.term.functors.Pow;
+import z.math.term.functors.Re;
 import z.math.term.functors.Sin;
 import z.math.term.functors.Sinh;
 import z.math.term.functors.Sqrt;
@@ -24,6 +27,7 @@ import java.util.Map;
 public abstract class Functor {
 
     public static final Functor NEG = new Neg();
+    public static final Functor ABS = new Abs();
 
     public static final Functor ADD = new Add();
     public static final Functor SUB = new Sub();
@@ -37,6 +41,8 @@ public abstract class Functor {
     public static final Functor SIN = new Sin();
     public static final Functor SINH = new Sinh();
     public static final Functor SQRT = new Sqrt();
+    public static final Functor RE = new Re();
+    public static final Functor IM = new Im();
 
     private static final Map<ID, Functor> MAP = new HashMap<ID, Functor>(256);
     private final ID id;
@@ -122,6 +128,18 @@ public abstract class Functor {
         return new Struct(SQRT, arg);
     }
 
+    public static Term abs(Term arg) {
+        return new Struct(ABS, arg);
+    }
+
+    public static Term re(Term arg) {
+        return new Struct(RE, arg);
+    }
+
+    public static Term im(Term arg) {
+        return new Struct(IM, arg);
+    }
+
     public static Term sin(Term arg) {
         return new Struct(SIN, arg);
     }
@@ -180,7 +198,7 @@ public abstract class Functor {
 
     public abstract Term simplify(Term[] args);
 
-    public abstract Term derivate(Symbol var, Term[] args);
+    public abstract Term differentiate(Symbol var, Term[] args);
 
     public abstract Complex createComplex(Namespace namespace, Symbol unitSymbol, Term[] args);
 

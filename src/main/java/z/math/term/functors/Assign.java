@@ -23,8 +23,8 @@ public class Assign extends Functor {
     }
 
     @Override
-    public Term derivate(Symbol var, Term[] args) {
-        return args[1].derivate(var);
+    public Term differentiate(Symbol var, Term[] args) {
+        return args[1].differentiate(var);
     }
 
     @Override
