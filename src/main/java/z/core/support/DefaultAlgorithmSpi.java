@@ -30,6 +30,7 @@ public class DefaultAlgorithmSpi implements AlgorithmSpi {
         register(fractals, z.core.support.fractals.NormansError.class, StringLiterals.getString("z.core.support.fractals.NormansError.name"));
         register(fractals, z.core.support.fractals.NormansError2.class, StringLiterals.getString("z.core.support.fractals.NormansError2.name"));
         register(fractals, z.core.support.fractals.NormansError3.class, StringLiterals.getString("z.core.support.fractals.NormansError3.name"));
+        register(fractals, z.core.support.fractals.NormansError4.class, StringLiterals.getString("z.core.support.fractals.NormansError4.name"));
         register(fractals, z.core.support.fractals.Sandbox.class, StringLiterals.getString("z.core.support.fractals.Sandbox.name"));
         register(fractals, z.core.support.fractals.Nova1.class, StringLiterals.getString("z.core.support.fractals.Nova1.name"));
         register(fractals, z.core.support.fractals.Nova2.class, StringLiterals.getString("z.core.support.fractals.Nova2.name"));
