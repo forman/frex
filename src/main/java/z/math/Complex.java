@@ -102,32 +102,43 @@ public class Complex {
             Real nz2x = (Real) z2x;
             Real nz2y = (Real) z2y;
             if (nz2y.evaluate() == 0.0) {
-                final double n = nz2x.evaluate();
-                return pow(z1, n);
+                final double v = nz2x.evaluate();
+                final int n = (int)v;
+                if (v == n)    {
+                    return pow(z1, n);
+                }
             }
         }
-        throw new IllegalArgumentException("numeric exponent expected");
+        throw new IllegalArgumentException("numeric integer exponent expected");
     }
 
-    public static Complex pow(Complex z, double n) {
+    public static Complex pow(Complex z, int n) {
         if (n < 0) {
             return div(ONE, pow(z, -n));
-        } else if (n == 0.0) {
+        } else if (n == 0) {
             return ONE;
-        } else if (n == 1.0) {
+        } else if (n == 1) {
             return z;
-        } else if (n == 2.0) {
+        } else if (n == 2) {
             final Term zx = Functor.sub(sqrX(z), sqrY(z));
             final Term zy = Functor.mul(Functor.num(2), mulXY(z, z));
             return new Complex(zx, zy);
-        } else if (n == 3.0) {
-            return mul(pow(z, 1), pow(z, 2));
-        } else if (n == 4.0) {
-            return mul(pow(z, 2), pow(z, 2));
-        } else if (n == 5.0) {
-            return mul(pow(z, 2), pow(z, 3));
-        } else if (n == 6.0) {
-            return mul(pow(z, 3), pow(z, 3));
+        } else if (n == 3 || n == 5 || n == 7 || n == 11 || n == 13 || n == 17) {
+            return mul(z, pow(z, n - 1));
+        } else if (n % 2 == 0) {
+            return mul(pow(z, 2), pow(z, n - 2));
+        } else if (n % 3 == 0) {
+            return mul(pow(z, 3), pow(z, n - 3));
+        } else if (n % 5 == 0) {
+            return mul(pow(z, 5), pow(z, n - 5));
+        } else if (n % 7 == 0) {
+            return mul(pow(z, 7), pow(z, n - 7));
+        } else if (n % 11 == 0) {
+            return mul(pow(z, 11), pow(z, n - 11));
+        } else if (n % 13 == 0) {
+            return mul(pow(z, 13), pow(z, n - 13));
+        } else if (n % 17 == 0) {
+            return mul(pow(z, 17), pow(z, n - 17));
         } else {
             throw new IllegalArgumentException("exponent not supported: " + n);
         }
