@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.CodeSource;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -263,7 +264,7 @@ public class FractalDef implements Cloneable {
         if (stream == null) {
             throw new IllegalStateException(MessageFormat.format("Resource not found: {0}", resource)); // NON-NLS
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8"))); // NON-NLS
         try {
             StringBuilder sb = new StringBuilder();
             try {

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -99,7 +100,7 @@ public class ColorRegistry {
 
     private static Entry[] loadEntries() throws IOException, ParseException {
         final InputStream stream = ColorRegistry.class.getResourceAsStream(DATA_RESOURCE_PATH);
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8"))); // NON-NLS
         try {
             return loadEntries(reader);
         } finally {
