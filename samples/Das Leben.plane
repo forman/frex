@@ -1,0 +1,23 @@
+<plane name="Das Leben" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="698" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError4">
+    <property name="juliaMode" value="false" />
+    <property name="iterMax" value="100" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaCX" value="-0.6" />
+    <property name="juliaCY" value="0.0" />
+  </fractal>
+  <region centerX="-0.4793308770363367" centerY="0.05130273907642211" radius="0.001229944650167592" />
+  <accumulator class="z.core.support.accumulators.LinearOrbitTrap2">
+    <property name="trapRadius" value="0.1" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="256">
+    <colorPoint pos="0.0" color="0,0,0" />
+    <colorPoint pos="0.14606741070747375" color="133,56,43" />
+    <colorPoint pos="0.7078651785850525" color="255,255,255" />
+    <colorPoint pos="1.0" color="0,0,0" />
+    <colorPoint pos="0.4157303273677826" color="217,186,140" />
+    <colorPoint pos="0.8960674405097961" color="125,31,122" />
+  </colorizer>
+</plane>

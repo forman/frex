@@ -1,0 +1,22 @@
+<plane name="Das Leben 2" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="698" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError4">
+    <property name="juliaMode" value="true" />
+    <property name="iterMax" value="250" />
+    <property name="bailOut" value="10.0" />
+    <property name="juliaCX" value="-0.3921403196999833" />
+    <property name="juliaCY" value="8.448202389004184E-4" />
+  </fractal>
+  <region centerX="0.6198598306464579" centerY="0.36506777664946194" radius="3.289894243076328E-5" />
+  <accumulator class="z.core.support.accumulators.RadialOrbitTrap2">
+    <property name="trapRadius" value="1.0" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="8192" indexMin="0.8662439" indexMax="3.9035003">
+    <colorPoint pos="0.6853932738304138" color="255,255,255" />
+    <colorPoint pos="0.12921348214149475" color="0,0,0" />
+    <colorPoint pos="0.6151685118675232" color="255,117,33" />
+    <colorPoint pos="0.7612359523773193" color="252,163,41" />
+    <colorPoint pos="0.8426966071128845" color="255,255,255" />
+  </colorizer>
+</plane>

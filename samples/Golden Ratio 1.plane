@@ -1,0 +1,24 @@
+<plane name="GoldenRatio_2" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="698" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.GoldenRatio">
+    <property name="iterMax" value="100" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaMode" value="true" />
+    <property name="juliaCX" value="0.8875072330274797" />
+    <property name="juliaCY" value="0.3125553548021398" />
+  </fractal>
+  <region centerX="0.46990079343173763" centerY="-0.3271467882730302" radius="9.576907618297789E-5" />
+  <accumulator class="z.core.support.accumulators.RadialOrbitTrap">
+    <property name="trapRadius" value="1.0" />
+    <property name="trapCenterX" value="-1.0" />
+    <property name="trapCenterY" value="1.0" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="8192" indexMin="4.7318997" indexMax="7.712145">
+    <colorPoint pos="0.5561797618865967" color="0,0,0" />
+    <colorPoint pos="0.39606741070747375" color="0,0,255" />
+    <colorPoint pos="0.9016854166984558" color="255,255,0" />
+    <colorPoint pos="0.6432584524154663" color="79,18,26" />
+    <colorPoint pos="0.03089887648820877" color="255,255,255" />
+  </colorizer>
+</plane>

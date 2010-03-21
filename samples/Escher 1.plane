@@ -1,0 +1,23 @@
+<plane name="Escher 1" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1024" height="1024" usingWindowSize="false" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError4">
+    <property name="juliaMode" value="true" />
+    <property name="iterMax" value="100" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaCX" value="-0.5346804593184546" />
+    <property name="juliaCY" value="0.138830760419188" />
+  </fractal>
+  <region centerX="0.5352195945945946" centerY="-0.13517736486486487" radius="0.9043074324324325" />
+  <accumulator class="z.core.support.accumulators.LinearOrbitTrap2">
+    <property name="trapRadius" value="0.1" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="256" indexMax="2.5">
+    <colorPoint pos="0.0" color="0,0,0" />
+    <colorPoint pos="0.41292133927345276" color="217,186,140" />
+    <colorPoint pos="0.6600000262260437" color="255,255,255" />
+    <colorPoint pos="1.0" color="0,0,0" />
+    <colorPoint pos="0.1825842708349228" color="133,56,43" />
+    <colorPoint pos="0.8398876190185547" color="125,31,122" />
+  </colorizer>
+</plane>

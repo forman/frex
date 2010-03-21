@@ -1,0 +1,38 @@
+<plane name="GoldenRatio_3" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1278" height="698" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.GoldenRatio">
+    <property name="iterMax" value="100" />
+    <property name="bailOut" value="100.0" />
+    <property name="juliaMode" value="true" />
+    <property name="juliaCX" value="0.8875072330274797" />
+    <property name="juliaCY" value="0.3125553548021398" />
+  </fractal>
+  <region centerX="0.46979498834198824" centerY="-0.3271089645161662" radius="1.973707400058383E-5" />
+  <accumulator class="z.core.support.accumulators.RadialOrbitTrap">
+    <property name="trapRadius" value="1.0" />
+    <property name="trapCenterX" value="-1.0" />
+    <property name="trapCenterY" value="1.0" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="8192" indexMin="4.9147544" indexMax="9.243059">
+    <colorPoint pos="0.3511236011981964" color="255,0,0" />
+    <colorPoint pos="0.25561797618865967" color="133,56,43" />
+    <colorPoint pos="0.30337077379226685" color="242,59,28" />
+    <colorPoint pos="0.48595505952835083" color="255,255,255" />
+    <colorPoint pos="0.466292142868042" color="255,255,0" />
+    <colorPoint pos="0.23595505952835083" color="255,255,255" />
+    <colorPoint pos="0.32865169644355774" color="255,255,255" />
+    <colorPoint pos="0.27808988094329834" color="255,255,255" />
+    <colorPoint pos="0.5028089880943298" color="255,255,0" />
+    <colorPoint pos="1.0" color="99,61,156" />
+    <colorPoint pos="0.6741573214530945" color="0,0,0" />
+    <colorPoint pos="0.6910112500190735" color="255,0,0" />
+    <colorPoint pos="0.7134831547737122" color="0,0,0" />
+    <colorPoint pos="0.7359550595283508" color="242,59,28" />
+    <colorPoint pos="0.7556179761886597" color="0,0,0" />
+    <colorPoint pos="0.7780898809432983" color="133,56,43" />
+    <colorPoint pos="0.800561785697937" color="0,0,0" />
+    <colorPoint pos="0.5224719047546387" color="255,255,255" />
+    <colorPoint pos="0.5449438095092773" color="255,255,0" />
+  </colorizer>
+</plane>
