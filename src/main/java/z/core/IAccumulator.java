@@ -4,18 +4,25 @@
  */
 package z.core;
 
+/**
+ * Accumulators are used to aggregate the complex orbit computed by {@link IFractal}s.
+ */
 public interface IAccumulator extends IAlgorithm {
     String ELEMENT_NAME = "accumulator"; //$NON-NLS-1$
 
     /**
-     * @param orbitX   the orbit X-coordinates (a <code>double[maxIter-1]</code>)
-     * @param orbitY   the orbit Y-coordinates (a <code>double[maxIter-1]</code>)
+     * Accumulates a given complex orbit.
+     * Depending on the value of {@link #computesIndex()},
+     * the result is either a real index value or a complex number.
+     *
+     * @param orbitX   the complex orbit's X-coordinates (a <code>double[maxIter-1]</code>)
+     * @param orbitY   the complex orbit's Y-coordinates (a <code>double[maxIter-1]</code>)
      * @param iter     number of iterations, always &gt;= 1 and &lt;=
      *                 <code>maxIter</code>
      * @param maxIter  maximum number of iterations
      * @param trapMode if true, method returns immediately if orbit is trapped
-     * @param result   <code>result[0]</code> is the accumulated X-value,
-     *                 <code>result[1]</code> is the accumulated Y-value
+     * @param result   <code>result[0]</code> is the X-coordinate of the accumulated complex return value,
+     *                 <code>result[1]</code> is the y-coordinate of the accumulated complex return value.
      */
     void compute(double[] orbitX,
                  double[] orbitY,
@@ -25,7 +32,7 @@ public interface IAccumulator extends IAlgorithm {
                  double[] result);
 
     /**
-     * Returns, whether or not the {@link #compute} method returns an index and not a new Z-value.
+     * Returns, whether or not the {@link #compute} method returns a real index and not a new complex value.
      *
      * @return true, if so.
      */

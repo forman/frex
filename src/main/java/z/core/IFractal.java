@@ -4,14 +4,18 @@
  */
 package z.core;
 
+/**
+ * Fractals compute a complex orbit for a given complex Z-value.
+ */
 public interface IFractal extends IAlgorithm {
     String ELEMENT_NAME = "fractal"; //$NON-NLS-1$
 
     /**
-     * @param zx     the X-coordinate of the current complex Z-value
-     * @param zy     the Y-coordinate of the current complex Z-value
-     * @param orbitX the orbit X-coordinates (a <code>double[maxIter-1]</code>)
-     * @param orbitY the orbit Y-coordinates (a <code>double[maxIter-1]</code>)
+     * Computes the complex orbit from the given complex Z-value.
+     * @param zx     The X-coordinate of the current complex Z-value.
+     * @param zy     The Y-coordinate of the current complex Z-value.
+     * @param orbitX Return value. The complex orbit's X-coordinates (a <code>double[iterMax-1]</code>)
+     * @param orbitY Return value. The complex orbit's Y-coordinates (a <code>double[iterMax-1]</code>)
      * @return the number of iterations, ranging from zero to {@link #getIterMax()}
      */
     int compute(double zx,
