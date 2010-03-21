@@ -32,19 +32,19 @@ public class PlaneRenderer {
      * Renders multiple planes.
      *
      * @param planes     the planes
-     * @param pixelDatas the pixel data buffers in ABGR order
+     * @param pixelDataBuffers the pixel data buffers in ABGR order
      * @param pm         a progress monitor
      */
-    public void renderPlanes(Plane[] planes, int[][] pixelDatas, ProgressMonitor pm) {
+    public void renderPlanes(Plane[] planes, int[][] pixelDataBuffers, ProgressMonitor pm) {
         Assert.notNull(planes, "planes"); // NON-NLS
-        Assert.notNull(pixelDatas, "pixelDatas"); // NON-NLS
+        Assert.notNull(pixelDataBuffers, "pixelDataBuffers"); // NON-NLS
         Assert.notNull(pm, "pm"); // NON-NLS
         int background = imageInfo.getBackground().getValue();
 
         pm.beginTask(StringLiterals.getString("gui.msg.computingLayer"), planes.length);
         try {
             for (int i = 0; i < planes.length && !pm.isCanceled(); i++) {
-                renderPlane(planes[i], pixelDatas[i], background, new SubProgressMonitor(pm, 1));
+                renderPlane(planes[i], pixelDataBuffers[i], background, new SubProgressMonitor(pm, 1));
                 background = RGBA.TRANSPARENT.getValue();
             }
         } finally {
@@ -53,7 +53,7 @@ public class PlaneRenderer {
     }
 
     private void renderPlane(Plane plane,
-                             int[] pixelData,
+                             int[] pixelDataBuffer,
                              int background,
                              ProgressMonitor pm) {
 
@@ -61,7 +61,7 @@ public class PlaneRenderer {
         int imageHeight = imageInfo.getImageHeight();
         pm.beginTask(MessageFormat.format(StringLiterals.getString("gui.msg.computingLayer0"), plane.getName()), imageHeight);
         try {
-            renderPlane(plane, imageWidth, imageHeight, pixelData, background, pm);
+            renderPlane(plane, imageWidth, imageHeight, pixelDataBuffer, background, pm);
         } finally {
             pm.done();
         }
@@ -70,7 +70,7 @@ public class PlaneRenderer {
     private void renderPlane(final Plane plane,
                              final int imageWidth,
                              final int imageHeight,
-                             final int[] pixelData,
+                             final int[] pixelDataBuffer,
                              final int background,
                              final ProgressMonitor pm) {
         PlaneRaster raster = plane.getRaster();
@@ -78,7 +78,7 @@ public class PlaneRenderer {
         if (raster == null
                 || raster.getWidth() != imageWidth
                 || raster.getHeight() != imageHeight) {
-            raster = new PlaneRaster(imageWidth, imageHeight, pixelData);
+            raster = new PlaneRaster(imageWidth, imageHeight, pixelDataBuffer);
             plane.setRaster(raster);
             computeFractal = true;
         } else {
@@ -105,7 +105,7 @@ public class PlaneRenderer {
             renderPlane(plane,
                         0, imageHeight,
                         imageWidth, imageHeight,
-                        pixelData, background, computeFractal,
+                        pixelDataBuffer, background, computeFractal,
                         pm);
             return;
         }
@@ -123,7 +123,7 @@ public class PlaneRenderer {
                     renderPlane(plane,
                                 iy0, n,
                                 imageWidth, imageHeight,
-                                pixelData, background,
+                                pixelDataBuffer, background,
                                 computeFractal,
                                 pm);
                 }
@@ -141,7 +141,7 @@ public class PlaneRenderer {
     private void renderPlane(Plane plane,
                              int iy0, int numLines,
                              int imageWidth, int imageHeight,
-                             int[] pixelData, int background,
+                             int[] pixelDataBuffer, int background,
                              boolean computeFractal,
                              ProgressMonitor pm) {
 
@@ -174,10 +174,10 @@ public class PlaneRenderer {
         int i, k, iy, ix, color, iter;
         float index;
         final int iterMax = fractal.getIterMax();
-        double[] orbitX = new double[iterMax];
-        double[] orbitY = new double[iterMax];
-        double[] accuResult = new double[2];
-        int iy1 = iy0 + numLines - 1;
+        final double[] orbitX = new double[iterMax];
+        final double[] orbitY = new double[iterMax];
+        final double[] accuResult = new double[2];
+        final int iy1 = iy0 + numLines - 1;
 
         for (iy = iy0; iy <= iy1 && !pm.isCanceled(); iy++) {
             zy = zy2 - (double) iy * pixelSize;
@@ -227,7 +227,7 @@ public class PlaneRenderer {
                     color = background;
                 }
 
-                pixelData[i++] = color;
+                pixelDataBuffer[i++] = color;
             }
             pm.worked(1);
         }
