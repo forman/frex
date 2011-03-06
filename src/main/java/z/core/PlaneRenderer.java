@@ -161,7 +161,7 @@ public class PlaneRenderer {
         fractal.prepare();
         if (accumulator != null) {
             accumulator.prepare();
-            if (!accumulator.computesIndex()) {
+            if (accumulator.computesIndex()) {
                 indexer = null;
             }
             if (indexer != null) {
