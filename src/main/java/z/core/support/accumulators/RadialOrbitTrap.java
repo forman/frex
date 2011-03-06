@@ -6,7 +6,7 @@ package z.core.support.accumulators;
 
 import z.core.Accumulator;
 
-public class RadialOrbitTrap extends Accumulator {
+public final class RadialOrbitTrap extends Accumulator {
     protected double trapCenterX;
 
     protected double trapCenterY;
@@ -53,7 +53,8 @@ public class RadialOrbitTrap extends Accumulator {
                         final double[] orbitY,
                         final int iter,
                         final int maxIter,
-                        boolean trapMode, final double[] result) {
+                        final boolean trapMode,
+                        final double[] result) {
         //final double r = trapRadius;
         final double rSqr = trapRadiusSqr;
         final double cx = trapCenterX;
