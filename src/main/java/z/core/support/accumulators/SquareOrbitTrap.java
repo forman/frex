@@ -6,7 +6,7 @@ package z.core.support.accumulators;
 
 import z.core.Accumulator;
 
-public class SquareOrbitTrap extends Accumulator {
+public final class SquareOrbitTrap extends Accumulator {
     protected double offsetX;
 
     protected double offsetY;
@@ -58,7 +58,7 @@ public class SquareOrbitTrap extends Accumulator {
                         final double[] orbitY,
                         final int iter,
                         final int maxIter,
-                        boolean trapMode,
+                        final boolean trapMode,
                         final double[] result) {
         final double x0 = offsetX;
         final double y0 = offsetY;
