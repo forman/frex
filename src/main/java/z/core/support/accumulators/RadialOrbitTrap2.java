@@ -6,7 +6,7 @@ package z.core.support.accumulators;
 
 import z.core.Accumulator;
 
-public class RadialOrbitTrap2 extends Accumulator {
+public final class RadialOrbitTrap2 extends Accumulator {
     private double trapRadius;
 
     public void reset() {
