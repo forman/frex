@@ -25,8 +25,4 @@ public abstract class ApplicationWindowAction extends Action {
     public ApplicationWindow getWindow() {
         return window;
     }
-
-    public void dispose() {
-        window = null;
-    }
 }

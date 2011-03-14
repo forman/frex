@@ -28,8 +28,8 @@ public class PaletteColorTable extends ColorTable {
         return c;
     }
 
-    public Collection<ColorPoint> getColorPoints() {
-        return Collections.unmodifiableCollection(tiePointList);
+    public List<ColorPoint> getColorPoints() {
+        return Collections.unmodifiableList(tiePointList);
     }
 
     public void setColorPoints(Collection<ColorPoint> points) {

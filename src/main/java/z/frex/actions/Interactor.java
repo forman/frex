@@ -16,12 +16,13 @@ public abstract class Interactor implements MouseListener, MouseMotionListener, 
         return view;
     }
 
-    @SuppressWarnings("unused")
     public void activate(PlaneView view) {
+        System.out.println(this + ".activate(): view = " + view);
         this.view = view;
     }
 
     public void deactivate() {
+        System.out.println(this + ".deactivate(): view = " + view);
         this.view = null;
     }
 

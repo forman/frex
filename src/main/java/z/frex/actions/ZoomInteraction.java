@@ -3,6 +3,8 @@ package z.frex.actions;
 import z.StringLiterals;
 import z.core.Plane;
 import z.frex.Frex;
+import z.frex.PlaneView;
+import z.ui.ImageCanvas;
 import z.ui.application.ApplicationWindow;
 import z.ui.dialog.MessageDialog;
 import z.util.RegionHistory;
@@ -33,7 +35,9 @@ public class ZoomInteraction extends Interaction {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            imageBounds = getPlaneView().getImageCanvas().getImageBounds();
+            PlaneView planeView = getPlaneView();
+            ImageCanvas imageCanvas = planeView.getImageCanvas();
+            imageBounds = imageCanvas.getImageBounds();
             point = e.getPoint();
             rectangle = new Rectangle(e.getX(), e.getY(), 1, 1);
         }
@@ -56,7 +60,7 @@ public class ZoomInteraction extends Interaction {
         public void mouseReleased(MouseEvent e) {
             if (rectangle != null && !rectangle.isEmpty()) {
                 if (rectangle.width < 5 || rectangle.height < 5) {
-                    MessageDialog.openError(getWindow().getShell(),
+                    MessageDialog.showError(getWindow().getShell(),
                                             StringLiterals.getString("gui.title.zoom"),
                                             StringLiterals.getString("gui.msg.sectionTooSmall"));
                 } else {

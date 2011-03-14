@@ -1,6 +1,7 @@
 package z.frex;
 
 import z.StringLiterals;
+import z.core.IColorizer;
 import z.frex.actions.CloseAction;
 import z.frex.actions.EditColorsAction;
 import z.frex.actions.EditImageSizeAction;
@@ -9,6 +10,7 @@ import z.frex.actions.FitImageSizeAction;
 import z.frex.actions.GoBackAction;
 import z.frex.actions.GoHomeAction;
 import z.frex.actions.GoNextAction;
+import z.frex.actions.OpenColorsAction;
 import z.frex.actions.ManageUserFractalsAction;
 import z.frex.actions.NewPlaneAction;
 import z.frex.actions.OpenAction;
@@ -16,6 +18,7 @@ import z.frex.actions.PanInteraction;
 import z.frex.actions.SaveAction;
 import z.frex.actions.SaveAsAction;
 import z.frex.actions.SaveImageAction;
+import z.frex.actions.SafeColorsAction;
 import z.frex.actions.ZoomInteraction;
 import z.ui.UIUtils;
 import z.ui.application.Action;

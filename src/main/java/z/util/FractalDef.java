@@ -52,10 +52,10 @@ public class FractalDef implements Cloneable {
     private String code;
     private boolean perturbation;
     private static final String PERTUBATION_BLOCK = "            if (_zy < _zx) {\n" +
-    "                double t = _zx;\n" +
-    "                _zx = _zy;\n" +
-    "                _zy = t;\n" +
-    "            }";
+            "                double t = _zx;\n" +
+            "                _zx = _zy;\n" +
+            "                _zy = t;\n" +
+            "            }";
 
     public FractalDef() {
         this("", "", false);
@@ -124,10 +124,26 @@ public class FractalDef implements Cloneable {
 
     public static boolean buildAll() throws JDOMException, IOException {
 
-        if (!MY_FRACTALS_FILE.exists()
-                || MY_FRACTALS_DIR.exists() && !isBuildDirModified()) {
+        final FractalDef[] fractalDefs = loadMyFractals();
+        if (fractalDefs.length == 0) {
             return false;
         }
+
+        /*
+        boolean mustCompile = false;
+        if (!mustCompile) {
+            for (FractalDef fractalDef : fractalDefs) {
+                File javaFile = fractalDef.getJavaFile();
+                if (!javaFile.exists() || javaFile.lastModified() < MY_FRACTALS_FILE.lastModified()) {
+                    mustCompile = true;
+                }
+                File classFile = fractalDef.getClassFile();
+                if (!classFile.exists() || classFile.lastModified() < javaFile.lastModified()) {
+                    mustCompile = true;
+                }
+            }
+        }
+        */
 
         MY_FRACTALS_DIR.mkdirs();
         File[] files = MY_FRACTALS_DIR.listFiles();
@@ -135,9 +151,10 @@ public class FractalDef implements Cloneable {
             file.delete();
         }
 
-        FractalDef[] fractals = loadMyFractals();
-
-        AlgorithmDescriptor[] algorithmDescriptors = compileAll(fractals);
+        AlgorithmDescriptor[] algorithmDescriptors = compileAll(fractalDefs);
+        if (algorithmDescriptors.length == 0) {
+            return false;
+        }
 
         if (algorithmDescriptors.length > 0) {
             AlgorithmSubRegistry algorithmSubRegistry = AlgorithmRegistry.instance().getFractals();
@@ -152,7 +169,6 @@ public class FractalDef implements Cloneable {
                 algorithmSubRegistry.register(algorithmDescriptor);
             }
         }
-
 
         return true;
     }
@@ -206,7 +222,7 @@ public class FractalDef implements Cloneable {
         javaCode = javaCode.replace("${fractalCode}", getCode()); // NON-NLS
         javaCode = javaCode.replace("${variableDeclarations}", variableDeclarations); // NON-NLS
         javaCode = javaCode.replace("${variableAssignments}", variableAssignments); // NON-NLS
-        javaCode = javaCode.replace("${perturbationBlock}", isPerturbation() ? PERTUBATION_BLOCK  : ""); // NON-NLS
+        javaCode = javaCode.replace("${perturbationBlock}", isPerturbation() ? PERTUBATION_BLOCK : ""); // NON-NLS
         return javaCode;
     }
 
@@ -236,22 +252,6 @@ public class FractalDef implements Cloneable {
 
     private String getJavaName() {
         return getName().replace(' ', '_').replace('-', '_');
-    }
-
-    private static boolean isBuildDirModified() throws JDOMException, IOException {
-        boolean modified = false;
-        FractalDef[] fractalDefs = loadMyFractals();
-        for (FractalDef fractalDef : fractalDefs) {
-            File javaFile = fractalDef.getJavaFile();
-            if (!javaFile.exists() || javaFile.lastModified() < MY_FRACTALS_FILE.lastModified()) {
-                modified = true;
-            }
-            File classFile = fractalDef.getClassFile();
-            if (!classFile.exists() || classFile.lastModified() < javaFile.lastModified()) {
-                modified = true;
-            }
-        }
-        return modified;
     }
 
     public static Logger getLogger() {
@@ -332,6 +332,9 @@ public class FractalDef implements Cloneable {
     }
 
     public static FractalDef[] loadFractals(File file) throws JDOMException, IOException {
+        if (!file.exists()) {
+            return new FractalDef[0];
+        }
         ArrayList<FractalDef> fractalDefs = new ArrayList<FractalDef>(16);
         final SAXBuilder builder = new SAXBuilder();
         final Document document = builder.build(file);
@@ -362,6 +365,10 @@ public class FractalDef implements Cloneable {
     }
 
     public static void saveFractals(FractalDef[] fractalDefs, File file) throws JDOMException, IOException {
+        File dir = file.getParentFile();
+        if (dir != null && !dir.exists()) {
+            dir.mkdirs();
+        }
         final XMLOutputter xmlOutputter = new XMLOutputter();
         FileWriter writer = new FileWriter(file);
 

@@ -119,13 +119,13 @@ public class EditPlanePropertiesDialog extends Dialog {
         data.bailOut = Double.parseDouble(bailOut.getText());
         if (orbitUsed.isSelected()) {
             if (data.accumulator == null) {
-                MessageDialog.openError(getShell(),
+                MessageDialog.showError(getShell(),
                                         StringLiterals.getString("gui.title.accu"),
                                         StringLiterals.getString("gui.errmsg.mustSelectAccu"));
                 return;
             }
             if (!data.accumulator.computesIndex() && data.indexer == null) {
-                MessageDialog.openError(getShell(),
+                MessageDialog.showError(getShell(),
                                         StringLiterals.getString("gui.title.indexer"),
                                         StringLiterals.getString("gui.errmsg.mustSelectIndexer"));
                 return;
@@ -373,7 +373,7 @@ public class EditPlanePropertiesDialog extends Dialog {
                 data.accumulator = (IAccumulator) ad.getAlgorithmClass().newInstance();
                 data.accumulator.reset();
             } catch (Exception e) {
-                MessageDialog.openError(getShell(),
+                MessageDialog.showError(getShell(),
                                         StringLiterals.getString("gui.title.accu"),
                                         MessageFormat.format(StringLiterals.getString("gui.errmsg.invalidAccu"), e.getLocalizedMessage()));
             }
@@ -388,7 +388,7 @@ public class EditPlanePropertiesDialog extends Dialog {
                 data.indexer = (IIndexer) ad.getAlgorithmClass().newInstance();
                 data.indexer.reset();
             } catch (Exception e) {
-                MessageDialog.openError(getShell(),
+                MessageDialog.showError(getShell(),
                                         StringLiterals.getString("gui.title.indexer"),
                                         MessageFormat.format(StringLiterals.getString("gui.errmsg.invalidIndexer"), e.getLocalizedMessage()));
             }

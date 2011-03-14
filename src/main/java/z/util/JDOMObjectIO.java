@@ -18,9 +18,13 @@ public class JDOMObjectIO {
         if (childElement == null) {
             return null;
         }
-        final Object object = createObject(childElement, defaultType);
+        return readObject(childElement, defaultType);
+    }
+
+    public static Object readObject(Element element, Class<?> defaultType) throws JDOMException {
+        final Object object = createObject(element, defaultType);
         if (object instanceof JDOMExternalizable) {
-            ((JDOMExternalizable) object).readExternal(childElement);
+            ((JDOMExternalizable) object).readExternal(element);
         }
         return object;
     }
@@ -39,6 +43,11 @@ public class JDOMObjectIO {
             return;
         }
         final Element childElement = new Element(childName);
+        writeObject(object, defaultType, childElement);
+        element.addContent(childElement);
+    }
+
+    private static void writeObject(Object object, Class<?> defaultType, Element childElement) throws JDOMException {
         if (defaultType == null || object.getClass() != defaultType) {
             JDOMHelper.setAttributeString(childElement,
                                           CLASS_ATTRIBUTE_NAME,
@@ -47,15 +56,14 @@ public class JDOMObjectIO {
         if (object instanceof JDOMExternalizable) {
             ((JDOMExternalizable) object).writeExternal(childElement);
         }
-        element.addContent(childElement);
     }
 
-    private static Object createObject(final Element element, Class<?> defaultType) throws JDOMException {
+    public static Object createObject(final Element element, Class<?> defaultType) throws JDOMException {
         Class<?> type = getType(element, defaultType);
         return createInstance(element, type);
     }
 
-    private static Class<?> getType(final Element element, Class<?> defaultType) throws JDOMException {
+    public static Class<?> getType(final Element element, Class<?> defaultType) throws JDOMException {
         Class<?> type = defaultType;
         final String className = JDOMHelper.getAttributeString(element,
                                                                CLASS_ATTRIBUTE_NAME,

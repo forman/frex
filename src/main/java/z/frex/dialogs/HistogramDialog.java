@@ -9,13 +9,19 @@ import z.ui.Control;
 import z.ui.DefaultSliderBarModel;
 import z.ui.SliderBar;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Rectangle;
 
 public class HistogramDialog extends JDialog {
@@ -34,11 +40,14 @@ public class HistogramDialog extends JDialog {
         setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 
         view = dialog.getView();
-        statistics = view.getPlane().getRaster().getOuterStatistics();
+        statistics = view.getPlane().getRaster().getTotalStatistics();
+
+        JPanel histogramEditor = new JPanel(new BorderLayout(2,2));
 
         histogramCanvas = new HistogramCanvas();
+        histogramCanvas.setBackground(new Color(230, 230, 230));
         histogramCanvas.setStatistics(statistics);
-        getContentPane().add(histogramCanvas, BorderLayout.CENTER);
+        histogramEditor.add(histogramCanvas, BorderLayout.CENTER);
         float position1 = (dialog.getIndexMin() - statistics.min) / (statistics.max - statistics.min);
         float position2 = (dialog.getIndexMax() - statistics.min) / (statistics.max - statistics.min);
         System.out.println("position1 = " + position1);  // NON-NLS
@@ -61,7 +70,31 @@ public class HistogramDialog extends JDialog {
                 );
             }
         });
-        getContentPane().add(sliderBar, BorderLayout.SOUTH);
+        histogramEditor.add(sliderBar, BorderLayout.SOUTH);
+
+
+        JRadioButton rb1 = new JRadioButton("All", true);
+        JRadioButton rb2 = new JRadioButton("Inner", false);
+        JRadioButton rb3 = new JRadioButton("Outer", false);
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(rb1);
+        buttonGroup.add(rb2);
+        buttonGroup.add(rb3);
+
+        JPanel statSelector = new JPanel(new GridLayout(3, 1));
+        statSelector.add(rb1);
+        statSelector.add(rb2);
+        statSelector.add(rb3);
+
+        JPanel jPanel1 = new JPanel(new BorderLayout(2,2));
+        jPanel1.add(statSelector, BorderLayout.NORTH);
+
+        JPanel jPanel2 = new JPanel(new BorderLayout(2,2));
+        jPanel2.add(histogramEditor, BorderLayout.CENTER);
+        jPanel2.add(jPanel1, BorderLayout.EAST);
+
+        setContentPane(jPanel2);
     }
 
     private float crop(float position1) {

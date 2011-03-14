@@ -20,18 +20,6 @@ public abstract class GoAction extends PlaneViewAction {
     }
 
     @Override
-    public void dispose() {
-        if (changeHandler != null) {
-            final PlaneView view = getPlaneView();
-            if (view != null) {
-                getRegionHistory(view).removeChangeListener(changeHandler);
-            }
-            changeHandler = null;
-        }
-        super.dispose();
-    }
-
-    @Override
     public void onPlaneViewOpened(PlaneView view) {
         getRegionHistory(view).addChangeListener(changeHandler);
     }

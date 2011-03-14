@@ -6,6 +6,7 @@ import z.core.Project;
 import z.frex.Frex;
 import z.frex.PlaneView;
 import z.ui.FileExtensionFileFilter;
+import z.ui.UIUtils;
 import z.ui.application.Application;
 import z.ui.application.ApplicationWindow;
 import z.ui.application.PageComponent;
@@ -14,7 +15,6 @@ import z.util.ChangeEvent;
 import z.util.ChangeListener;
 import z.util.RegionHistory;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.io.File;
 import java.text.MessageFormat;
@@ -49,13 +49,12 @@ public class OpenAction extends ApplicationWindowAction {
     public void run() {
         canceledByUser = false;
 
-        String filePath = promptForFile();
-        if (filePath == null) {
+        File file = promptForFile();
+        if (file == null) {
             canceledByUser = true;
             return;
         }
 
-        final File file = new File(filePath);
         try {
             final Plane plane = Plane.readPlane(file);
             openPlane(getWindow(), plane);
@@ -64,29 +63,17 @@ public class OpenAction extends ApplicationWindowAction {
         }
     }
 
-    private String promptForFile() {
-
-        String lastDir = Frex.getPreferences().get("lastDir", "."); // NON-NLS
-        JFileChooser dialog = new JFileChooser(lastDir);
-        dialog.setDialogTitle(StringLiterals.getString("gui.title.open"));
-        dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        dialog.setAcceptAllFileFilterUsed(false);
-        dialog.addChoosableFileFilter(PLANE_FILTER);
-        dialog.addChoosableFileFilter(PROJECT_FILTER);
-        dialog.setFileFilter(PLANE_FILTER);
-        int resp = dialog.showOpenDialog(getWindow().getShell());
-
-        if (resp == JFileChooser.APPROVE_OPTION) {
-            Frex.getPreferences().put("lastDir", dialog.getCurrentDirectory().getPath()); // NON-NLS
-            return dialog.getSelectedFile().getPath();
-        }
-        return null;
+    private File promptForFile() {
+        return UIUtils.showOpenDialog(getWindow().getShell(),
+                                      StringLiterals.getString("gui.title.openFile"),
+                                      "lastDir",  // NON-NLS
+                                      "",    // NON-NLS
+                                      PLANE_FILTER, PROJECT_FILTER);
     }
 
     public void openError(File file, Exception e) {
         e.printStackTrace();
-
-        MessageDialog.openError(getWindow().getShell(),
+        MessageDialog.showError(getWindow().getShell(),
                                 StringLiterals.getString("gui.title.openFile"),
                                 MessageFormat.format(StringLiterals.getString("gui.msg.errorOpeningFile"),
                                                      file.getPath(),
@@ -110,7 +97,7 @@ public class OpenAction extends ApplicationWindowAction {
         boolean hasPageComponent = window.getPage().getActivePageComponent() != null;
         if (hasPageComponent) {
             int r = MessageDialog.confirmYesNoCancel(window.getShell(),
-                                                     StringLiterals.getString("gui.title.open"),
+                                                     StringLiterals.getString("gui.title.openFile"),
                                                      StringLiterals.getString("gui.msg.askOpenInNewWindow"));
             if (r == JOptionPane.CANCEL_OPTION) {
                 return;
@@ -134,7 +121,7 @@ public class OpenAction extends ApplicationWindowAction {
             regionHistory.setCurrentRegion(plane.getRegion());
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(window.getShell(), StringLiterals.getString("gui.title.internalError"), e.getMessage());
+            MessageDialog.showError(window.getShell(), StringLiterals.getString("gui.title.internalError"), e.getMessage());
         }
     }
 }

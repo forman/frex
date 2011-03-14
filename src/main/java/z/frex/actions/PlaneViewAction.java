@@ -18,12 +18,6 @@ public abstract class PlaneViewAction extends ApplicationWindowAction {
         updateState();
     }
 
-    @Override
-    public void dispose() {
-        getWindow().getPage().removePageComponentListener(pageComponentHandler);
-        super.dispose();
-    }
-
     public PlaneView getPlaneView() {
         final ApplicationPage activePage = getWindow().getPage();
         if (activePage == null) {

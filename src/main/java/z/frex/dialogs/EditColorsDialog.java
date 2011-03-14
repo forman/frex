@@ -2,10 +2,13 @@ package z.frex.dialogs;
 
 import z.StringLiterals;
 import z.core.IColorizer;
+import z.core.Plane;
 import z.core.color.RGBA;
 import z.core.support.colorizers.PaletteColorTable;
 import z.frex.Frex;
 import z.frex.PlaneView;
+import z.frex.actions.OpenColorsAction;
+import z.frex.actions.SafeColorsAction;
 import z.ui.ColorBar;
 import z.ui.DefaultSliderBarModel;
 import z.ui.PaletteEditor;
@@ -13,15 +16,19 @@ import z.ui.SliderBarModel;
 import z.ui.UIUtils;
 import z.ui.dialog.Dialog;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -195,18 +202,18 @@ public class EditColorsDialog extends Dialog {
 
     @Override
     protected JComponent createDialogArea() {
-        JPanel dialogArea = new JPanel(new GridBagLayout());
+        JPanel contentArea = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = createGridBagConstraints();
 
 
         JPanel numColorsPanel = createNumColorsPanel();
         gbc.gridy = 0;
         gbc.gridx = 0;
-        dialogArea.add(numColorsPanel, gbc);
+        contentArea.add(numColorsPanel, gbc);
 
         JPanel indexTransformPanel = createIndexTransformPanel();
         gbc.gridx = 1;
-        dialogArea.add(indexTransformPanel, gbc);
+        contentArea.add(indexTransformPanel, gbc);
 
         final SliderBarModel paletteModel = new DefaultSliderBarModel(paletteColorTable.getColorPoints());
         paletteEditor = new PaletteEditor(paletteModel);
@@ -219,7 +226,7 @@ public class EditColorsDialog extends Dialog {
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
-        dialogArea.add(paletteEditor, gbc);
+        contentArea.add(paletteEditor, gbc);
 
         colorBar = new ColorBar(2, 26, 14);
         colorBar.addChangeListener(new ChangeListener() {
@@ -229,9 +236,36 @@ public class EditColorsDialog extends Dialog {
             }
         });
         gbc.gridy = 2;
-        dialogArea.add(colorBar, gbc);
+        contentArea.add(colorBar, gbc);
 
         loadColorBarColors();
+
+        JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
+        toolBar.add(new OpenColorsAction(view.getPage().getWindow(), new OpenColorsAction.Callback() {
+            @Override
+            public void apply(IColorizer colorizer) {
+                if (colorizer instanceof PaletteColorTable) {
+                    PaletteColorTable colorTable = (PaletteColorTable) colorizer;
+                    cyclic.setSelected(colorTable.isCyclic());
+                    numColors.setSelectedItem(String.valueOf(colorTable.getNumColors()));
+                    paletteEditor.getModel().setColorPoints(colorTable.getColorPoints());
+                    indexMin.setSelectedItem(String.valueOf(colorTable.getIndexMin()));
+                    indexMax.setSelectedItem(String.valueOf(colorTable.getIndexMax()));
+                    updatePaletteColorTable();
+                    applyPaletteColorTable();
+                }else {
+                    Plane plane = view.getPlane();
+                    plane.setColorizer(colorizer);
+                    view.generateImage(true);
+                }
+            }
+        }));
+        toolBar.add(new SafeColorsAction(view.getPage().getWindow()));
+
+        JPanel dialogArea = new JPanel(new BorderLayout(4,4));
+        dialogArea.add(toolBar, BorderLayout.NORTH);
+        dialogArea.add(contentArea, BorderLayout.CENTER);
 
         return dialogArea;
     }

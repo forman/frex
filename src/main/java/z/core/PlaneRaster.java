@@ -121,51 +121,53 @@ public class PlaneRaster {
         float v;
         for (int i = 0; i < n; i++) {
             v = rawData[i];
-            if (v < 0.0F) {
-                v = -1.0f - v;
-                innerCount++;
-                if (v < innerMin) {
-                    innerMin = v;
+            if (!Float.isNaN(v) && !Float.isInfinite(v)) {
+                if (v < 0.0F) {
+                    v = -1.0f - v;
+                    innerCount++;
+                    if (v < innerMin) {
+                        innerMin = v;
+                    }
+                    if (v > innerMax) {
+                        innerMax = v;
+                    }
+                    innerSum += v;
+                } else {
+                    outerCount++;
+                    if (v < outerMin) {
+                        outerMin = v;
+                    }
+                    if (v > outerMax) {
+                        outerMax = v;
+                    }
+                    outerSum += v;
                 }
-                if (v > innerMax) {
-                    innerMax = v;
+                if (v < totalMin) {
+                    totalMin = v;
                 }
-                innerSum += v;
-            } else {
-                outerCount++;
-                if (v < outerMin) {
-                    outerMin = v;
+                if (v > totalMax) {
+                    totalMax = v;
                 }
-                if (v > outerMax) {
-                    outerMax = v;
-                }
-                outerSum += v;
-            }
-            if (v < totalMin) {
-                totalMin = v;
-            }
-            if (v > totalMax) {
-                totalMax = v;
             }
         }
         totalSum = innerSum + outerSum;
-        final int histLength = 512;
-        int[] innerHist = new int[histLength];
-        int[] outerHist = new int[histLength];
-        int[] totalHist = new int[histLength];
-        float innerScale = innerMax > innerMin ? (float) histLength / (innerMax - innerMin) : 0.0f;
-        float outerScale = outerMax > outerMin ? (float) histLength / (outerMax - outerMin) : 0.0f;
-        float totalScale = totalMax > totalMin ? (float) histLength / (totalMax - totalMin) : 0.0f;
+        final int histSize = 512;
+        int[] innerHist = new int[histSize];
+        int[] outerHist = new int[histSize];
+        int[] totalHist = new int[histSize];
+        float innerScale = innerMax > innerMin ? (float) histSize / (innerMax - innerMin) : 0.0f;
+        float outerScale = outerMax > outerMin ? (float) histSize / (outerMax - outerMin) : 0.0f;
+        float totalScale = totalMax > totalMin ? (float) histSize / (totalMax - totalMin) : 0.0f;
         for (int i = 0; i < n; i++) {
             v = rawData[i];
             if (v < 0.0f) {
                 v = -1.0f - v;
-                innerHist[histIdx(innerMin, innerScale, v, histLength)]++;
+                innerHist[getHistogramIndex(innerMin, innerScale, v, histSize)]++;
             } else {
-                outerHist[histIdx(outerMin, outerScale, v, histLength)]++;
+                outerHist[getHistogramIndex(outerMin, outerScale, v, histSize)]++;
             }
 
-            totalHist[histIdx(totalMin, totalScale, v, histLength)]++;
+            totalHist[getHistogramIndex(totalMin, totalScale, v, histSize)]++;
         }
 
         innerStatistics = new Statistics(innerCount,
@@ -205,8 +207,14 @@ public class PlaneRaster {
         return max;
     }
 
-    private static int histIdx(float innerMin, float innerScale, float v, int n) {
-        int j = (int) (innerScale * (v - innerMin));
-        return j < 0 ? 0 : j >= n ? n - 1 : j;
+    private static int getHistogramIndex(float min, float scale, float value, int size) {
+        int index = (int) (scale * (value - min));
+        if (index < 0) {
+            return 0;
+        } else if (index >= size) {
+            return size - 1;
+        } else {
+            return index;
+        }
     }
 }

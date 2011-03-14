@@ -74,7 +74,7 @@ public class SaveAction extends PlaneViewAction {
     public void openError(File file, Exception e) {
         e.printStackTrace();
 
-        MessageDialog.openError(getWindow().getShell(),
+        MessageDialog.showError(getWindow().getShell(),
                                 StringLiterals.getString("gui.title.saveFile"),
                                 MessageFormat.format(StringLiterals.getString("gui.msg.errorSavingFile"),
                                                      file.getPath(),

@@ -9,7 +9,7 @@ public class MessageDialog {
         JOptionPane.showMessageDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static void openError(Component parent, String title, String message) {
+    public static void showError(Component parent, String title, String message) {
         JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
     }
 

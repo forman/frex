@@ -63,7 +63,7 @@ public class SelectColorDialog extends Dialog {
     protected void okPressed() {
         selectedColor = colorSelector.getSelectedColor();
         if (selectedColor == null) {
-            MessageDialog.openError(getShell(),
+            MessageDialog.showError(getShell(),
                                     TITLE,
                                     StringLiterals.getString("gui.msg.mustSelectColor"));
             return;

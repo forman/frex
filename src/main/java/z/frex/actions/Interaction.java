@@ -20,64 +20,40 @@ public class Interaction extends PlaneViewAction {
     private PageComponentHandler pageComponentHandler;
 
     public Interaction(ApplicationWindow window, String id) {
-        this(window, id, null);
-    }
-
-    public Interaction(ApplicationWindow window, String id, Interactor interactor) {
         super(window, id);
         setSelected(false);
-        this.interactor = interactor;
         this.pageComponentHandler = new PageComponentHandler();
         window.getPage().addPageComponentListener(pageComponentHandler);
         addPropertyChangeListener(new ActivationHandler());
-    }
-
-    public Interactor getInteractor() {
-        return interactor;
     }
 
     protected void setInteractor(Interactor interactor) {
         this.interactor = interactor;
     }
 
-    @Override
-    public void dispose() {
-        if (pageComponentHandler != null) {
-            getWindow().getPage().removePageComponentListener(pageComponentHandler);
-            activeInteractions.remove(getWindow());
-            interactor = null;
-            pageComponentHandler = null;
-        }
-        super.dispose();
-    }
-
     private void attachInteractor(final PageComponent pageComponent) {
         if (pageComponent instanceof PlaneView) {
-            if (interactor != null) {
-                final PlaneView view = (PlaneView) pageComponent;
-                ImageCanvas imageCanvas = view.getImageCanvas();
-                imageCanvas.addMouseListener(interactor);
-                imageCanvas.addMouseMotionListener(interactor);
-                imageCanvas.addPaintListener(interactor);
-                if (!interactor.isActivated()) {
-                    interactor.activate(view);
-                }
+            final PlaneView view = (PlaneView) pageComponent;
+            if (!interactor.isActivated()) {
+                interactor.activate(view);
             }
+            ImageCanvas imageCanvas = view.getImageCanvas();
+            imageCanvas.addMouseListener(interactor);
+            imageCanvas.addMouseMotionListener(interactor);
+            imageCanvas.addPaintListener(interactor);
         }
     }
 
     private void detachInteractor(final PageComponent pageComponent) {
         if (pageComponent instanceof PlaneView) {
-            if (interactor != null) {
-                final PlaneView view = (PlaneView) pageComponent;
-                ImageCanvas imageCanvas = view.getImageCanvas();
-                if (interactor.isActivated()) {
-                    interactor.deactivate();
-                }
-                imageCanvas.removeMouseListener(interactor);
-                imageCanvas.removeMouseMotionListener(interactor);
-                imageCanvas.removePaintListener(interactor);
+            final PlaneView view = (PlaneView) pageComponent;
+            if (interactor.isActivated()) {
+                interactor.deactivate();
             }
+            ImageCanvas imageCanvas = view.getImageCanvas();
+            imageCanvas.removeMouseListener(interactor);
+            imageCanvas.removeMouseMotionListener(interactor);
+            imageCanvas.removePaintListener(interactor);
         }
     }
 
@@ -109,6 +85,7 @@ public class Interaction extends PlaneViewAction {
     private final class ActivationHandler implements PropertyChangeListener {
         public void propertyChange(PropertyChangeEvent event) {
             if (event.getPropertyName().equals(SELECTED_KEY)) {
+                System.out.printf("%s: selected = %s%n", this, isSelected());  // NON-NLS
                 registerActiveInteraction();
                 updateInteractor();
             }

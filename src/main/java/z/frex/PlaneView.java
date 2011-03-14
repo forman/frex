@@ -128,37 +128,6 @@ public class PlaneView extends AbstractPageComponent {
                 System.out.println("maxRasterIndex = " + maxRasterIndex); // NON-NLS
                 paletteColorTable.setIndexMin(minRasterIndex);
                 paletteColorTable.setIndexMax(maxRasterIndex);
-
-                // todo: the following code skips 2.5% of the pixels from the lower and upper bounds
-                // make autoAdjustMinMax an preferences setting
-                boolean autoAdjustMinMax = false;
-                if (autoAdjustMinMax && maxRasterIndex > minRasterIndex) {
-
-                    int[] histogram = totalStatistics.histogram;
-                    float skipSum = (2.5f / 100.0f) * (float) totalStatistics.count;
-                    float s = (totalStatistics.max - totalStatistics.min) / (float) histogram.length;
-
-                    float sum = 0.0f;
-                    for (int i = 0; i < histogram.length; i++) {
-                        sum += histogram[i];
-                        if (sum > skipSum) {
-                            minRasterIndex += s * (float) i;
-                            break;
-                        }
-                    }
-
-                    sum = 0.0f;
-                    for (int i = 0; i < histogram.length; i++) {
-                        sum += histogram[histogram.length - 1 - i];
-                        if (sum > skipSum) {
-                            maxRasterIndex -= s * (float) i;
-                            break;
-                        }
-                    }
-
-                    paletteColorTable.setIndexMin(minRasterIndex);
-                    paletteColorTable.setIndexMax(maxRasterIndex);
-                }
             }
         }
         // todo: use real UI progress monitor
@@ -305,7 +274,7 @@ public class PlaneView extends AbstractPageComponent {
 
         private void handleError(Throwable e) {
             e.printStackTrace();
-            MessageDialog.openError(getControl(), StringLiterals.getString("gui.msg.imageGenerator"),
+            MessageDialog.showError(getControl(), StringLiterals.getString("gui.msg.imageGenerator"),
                                     MessageFormat.format(StringLiterals.getString("gui.msg.internalError"), new Object[]{e.getClass().getName(), e.getLocalizedMessage()}));
         }
     }

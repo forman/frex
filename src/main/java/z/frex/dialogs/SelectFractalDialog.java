@@ -1,13 +1,11 @@
 package z.frex.dialogs;
 
-import org.jdom.JDOMException;
 import z.StringLiterals;
 import z.core.AlgorithmDescriptor;
 import z.core.AlgorithmRegistry;
 import z.core.IFractal;
 import z.ui.dialog.Dialog;
 import z.ui.dialog.MessageDialog;
-import z.util.FractalDef;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -20,7 +18,6 @@ import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,12 +76,12 @@ public class SelectFractalDialog extends Dialog {
                 selectedFractal = (IFractal) d.getAlgorithmClass().newInstance();
             } catch (Exception e) {
                 selectedFractal = null;
-                MessageDialog.openError(getShell(),
+                MessageDialog.showError(getShell(),
                                         TITLE,
                                         MessageFormat.format(StringLiterals.getString("gui.msg.failedToInstantiateFractal"), e.getLocalizedMessage()));
             }
         } else {
-            MessageDialog.openError(getShell(),
+            MessageDialog.showError(getShell(),
                                     TITLE,
                                     StringLiterals.getString("gui.msg.mustSelectFractal"));
         }

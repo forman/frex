@@ -6,8 +6,7 @@ import z.core.AlgorithmRegistry;
 import z.core.AlgorithmSpi;
 import z.core.AlgorithmSubRegistry;
 import z.core.IAlgorithm;
-import z.core.support.fractals.BurningShip;
-import z.core.support.fractals.NormansError;
+import z.core.support.accumulators.RadialOrbitTrap4;
 
 public class DefaultAlgorithmSpi implements AlgorithmSpi {
 
@@ -40,8 +39,11 @@ public class DefaultAlgorithmSpi implements AlgorithmSpi {
 
         register(accumulators, z.core.support.accumulators.LinearOrbitTrap.class, StringLiterals.getString("z.core.support.accumulators.LinearOrbitTrap.name"));
         register(accumulators, z.core.support.accumulators.LinearOrbitTrap2.class, StringLiterals.getString("z.core.support.accumulators.LinearOrbitTrap2.name"));
+        register(accumulators, z.core.support.accumulators.LinearOrbitTrap3.class, "Linear Orbit Trap #3");
         register(accumulators, z.core.support.accumulators.RadialOrbitTrap.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap.name"));
         register(accumulators, z.core.support.accumulators.RadialOrbitTrap2.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap2.name"));
+        register(accumulators, z.core.support.accumulators.RadialOrbitTrap3.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap3.name"));
+        register(accumulators, z.core.support.accumulators.RadialOrbitTrap4.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap4.name"));
         register(accumulators, z.core.support.accumulators.RingOrbitTrap.class, StringLiterals.getString("z.core.support.accumulators.RingOrbitTrap.name"));
         register(accumulators, z.core.support.accumulators.RingOrbitTrap2.class, StringLiterals.getString("z.core.support.accumulators.RingOrbitTrap2."));
         register(accumulators, z.core.support.accumulators.SquareOrbitTrap.class, StringLiterals.getString("z.core.support.accumulators.SquareOrbitTrap.name"));
@@ -52,6 +54,8 @@ public class DefaultAlgorithmSpi implements AlgorithmSpi {
         register(indexers, z.core.support.indexers.AbsZ.class, StringLiterals.getString("z.core.support.indexers.AbsZ.name"));
         register(indexers, z.core.support.indexers.AngleZ.class, StringLiterals.getString("z.core.support.indexers.AngleZ.name"));
         register(indexers, z.core.support.indexers.SinAbsZ.class, StringLiterals.getString("z.core.support.indexers.SinAbsZ.name"));
+        register(indexers, z.core.support.indexers.Turbulence.class, "Turbulence");
+        register(indexers, z.core.support.indexers.Image.class, "Image");
     }
 
 

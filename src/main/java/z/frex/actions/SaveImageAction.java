@@ -3,11 +3,11 @@ package z.frex.actions;
 import z.StringLiterals;
 import z.frex.Frex;
 import z.ui.FileExtensionFileFilter;
+import z.ui.UIUtils;
 import z.ui.application.ApplicationWindow;
 import z.ui.dialog.MessageDialog;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,40 +44,32 @@ public class SaveImageAction extends PlaneViewAction {
         setText(StringLiterals.getString("gui.action.text.saveImage"));
         setToolTipText(StringLiterals.getString("gui.action.tooltip.saveImage"));
         setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.saveImage")));
-
     }
-
 
     @Override
     public void run() {
-
-        String lastDir = Frex.getPreferences().get("lastImageDir", // NON-NLS
-                                                   Frex.getPreferences().get("lastDir", ".")); // NON-NLS
-        JFileChooser dialog = new JFileChooser(lastDir);
-        dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        dialog.setDialogTitle(TITLE);
-        dialog.setAcceptAllFileFilterUsed(false);
-        dialog.addChoosableFileFilter(PNG_FILTER);
-        dialog.addChoosableFileFilter(JPEG_FILTER);
-        dialog.addChoosableFileFilter(WBMP_FILTER);
-        dialog.addChoosableFileFilter(BMP_FILTER);
-        dialog.addChoosableFileFilter(GIF_FILTER);
-        dialog.setFileFilter(lastImageFormat);
-        int code = dialog.showSaveDialog(getWindow().getShell());
-
-        if (code == JFileChooser.APPROVE_OPTION) {
-            Frex.getPreferences().put("lastImageDir", // NON-NLS
-                                      dialog.getCurrentDirectory().getPath());
-            FileExtensionFileFilter selectedImageFormat = (FileExtensionFileFilter) dialog.getFileFilter();
-            lastImageFormat = selectedImageFormat;
-            File selectedFile = selectedImageFormat.appendMissingFileExtension(dialog.getSelectedFile());
+        FileExtensionFileFilter[] selectedImageFormat = new FileExtensionFileFilter[] {lastImageFormat};
+        File selectedFile = UIUtils.showSafeDialog(getWindow().getShell(),
+                                                   TITLE,
+                                                   "lastImageDir",  // NON-NLS
+                                                   getPlaneView().getPlane().getName(), // NON-NLS
+                                                   selectedImageFormat,
+                                                   PNG_FILTER,
+                                                   JPEG_FILTER,
+                                                   WBMP_FILTER,
+                                                   BMP_FILTER,
+                                                   GIF_FILTER);
+        if (selectedFile != null) {
+            lastImageFormat = selectedImageFormat[0];
             BufferedImage image = getPlaneView().getImageCanvas().getImage();
             try {
-                ImageIO.write(image, selectedImageFormat.getFormatName(), selectedFile);
+                ImageIO.write(image, selectedImageFormat[0].getFormatName(), selectedFile);
             } catch (IOException e) {
-                MessageDialog.openError(getWindow().getShell(),
+                MessageDialog.showError(getWindow().getShell(),
                                         TITLE,
-                                        MessageFormat.format(StringLiterals.getString("gui.msg.errorSavingImage"), selectedFile, e.getLocalizedMessage()));
+                                        MessageFormat.format(StringLiterals.getString("gui.msg.errorSavingImage"),
+                                                             selectedFile,
+                                                             e.getLocalizedMessage()));
             }
         }
     }

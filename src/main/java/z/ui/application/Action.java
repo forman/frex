@@ -58,12 +58,6 @@ public abstract class Action extends AbstractAction {
     }
 
     public final void actionPerformed(ActionEvent e) {
-//        if (isSelectable()) {
-//            boolean selected = isSelected();
-//            System.out.println("pre: selected = " + selected);
-//            setSelected(!selected);
-//            System.out.println("post: selected = " + isSelected());
-//        }
         System.out.printf("%s: selected = %s%n", this, isSelected());  // NON-NLS
         run();
     }

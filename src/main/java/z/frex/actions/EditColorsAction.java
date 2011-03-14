@@ -20,7 +20,6 @@ public class EditColorsAction extends PlaneViewAction {
 
     @Override
     public void run() {
-
         EditColorsDialog dialog = new EditColorsDialog(getPlaneView());
         dialog.setBounds(dialogBounds);
         dialog.open();

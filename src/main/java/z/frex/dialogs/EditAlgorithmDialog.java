@@ -2,18 +2,28 @@ package z.frex.dialogs;
 
 import z.StringLiterals;
 import z.core.Algorithm;
+import z.frex.Frex;
 import z.ui.dialog.Dialog;
 import z.ui.dialog.MessageDialog;
+import z.util.GreyscaleImage;
 import z.util.Property;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -66,7 +76,7 @@ public class EditAlgorithmDialog extends Dialog {
             } catch (Exception e) {
                 e.printStackTrace();
                 String pattern = StringLiterals.getString("gui.msg.cannotReadField");
-                MessageDialog.openError(getShell(), StringLiterals.getString("gui.title.error"),
+                MessageDialog.showError(getShell(), StringLiterals.getString("gui.title.error"),
                                         MessageFormat.format(pattern, property.getName(), e.getClass().getName(), e.getLocalizedMessage()));
                 close();
                 return dialogArea;
@@ -93,6 +103,9 @@ public class EditAlgorithmDialog extends Dialog {
             Object object = property.getGetter().invoke(algorithm);
             text.setText(object.toString());
             component = text;
+        } else if (property.getType() == GreyscaleImage.class) {
+            GreyscaleImage image = (GreyscaleImage) property.getGetter().invoke(algorithm);
+            component = new GreyscaleImagePanel(image);
         } else {
             component = new JLabel("?");
         }
@@ -102,10 +115,11 @@ public class EditAlgorithmDialog extends Dialog {
 
         gbc.gridx = 1;
         dialogArea.add(component, gbc);
+
         controls.put(property, component);
     }
 
-    @Override
+   @Override
     protected void okPressed() {
         // todo: validate fields
         final Property[] properties = algorithm.getProperties();
@@ -115,7 +129,7 @@ public class EditAlgorithmDialog extends Dialog {
             } catch (Exception e) {
                 e.printStackTrace();
                 String pattern = StringLiterals.getString("gui.msg.cannotSetField");
-                MessageDialog.openError(getShell(),
+                MessageDialog.showError(getShell(),
                                         StringLiterals.getString("gui.title.error"),
                                         MessageFormat.format(pattern, property.getName(), e.getClass().getName(), e.getLocalizedMessage()));
                 return;
@@ -143,9 +157,73 @@ public class EditAlgorithmDialog extends Dialog {
         } else if (property.getType() == String.class) {
             final JTextField text = (JTextField) controls.get(property);
             value = text.getText();
+        } else if (property.getType() == GreyscaleImage.class) {
+            final GreyscaleImagePanel panel = (GreyscaleImagePanel) controls.get(property);
+            value = panel.getImage();
         }
         if (value != null) {
             property.getSetter().invoke(algorithm, value);
         }
     }
+
+
+    public class GreyscaleImagePanel extends JPanel {
+         GreyscaleImage image;
+
+        public GreyscaleImagePanel(GreyscaleImage image) {
+            super(new BorderLayout(2,2));
+            this.image = image;
+            final JTextField filenameField = new JTextField();
+            filenameField.setEditable(false);
+            filenameField.setColumns(24);
+            filenameField.setText(image.getSourceFile() != null ? image.getSourceFile().getName() : "");
+            add(filenameField);
+            final JButton button = new JButton("...");
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String lastDir = Frex.getPreferences().get("lastImageDir", "."); // NON-NLS
+                    JFileChooser dialog = new JFileChooser(lastDir);
+                    dialog.setDialogTitle(StringLiterals.getString("gui.title.open"));
+                    dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    dialog.setAcceptAllFileFilterUsed(true);
+                    FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files",
+                                                                                 "jpg",
+                                                                                 "png",
+                                                                                 "gif",
+                                                                                 "tiff",
+                                                                                 "bmp");
+                    dialog.addChoosableFileFilter(imageFilter);
+                    dialog.setFileFilter(imageFilter);
+                    int resp = dialog.showOpenDialog(EditAlgorithmDialog.this.getShell());
+
+                    if (resp == JFileChooser.APPROVE_OPTION) {
+                        Frex.getPreferences().put("lasImagetDir", dialog.getCurrentDirectory().getPath()); // NON-NLS
+                        File selectedFile = dialog.getSelectedFile();
+                        try {
+                            filenameField.setText("[Loading...]");
+                            GreyscaleImage image = GreyscaleImage.create(selectedFile);
+                            setImage(image);
+                            filenameField.setText(image.getSourceFile().getName());
+                        } catch (IOException e1) {
+                           MessageDialog.showError(getShell(),
+                                                   StringLiterals.getString("gui.title.error"),
+                                                   "Failed to load image.");
+                        }
+                    }
+                }
+            });
+            add(filenameField, BorderLayout.CENTER);
+            add(button, BorderLayout.EAST);
+        }
+
+        public GreyscaleImage getImage() {
+            return image;
+        }
+
+        public void setImage(GreyscaleImage image) {
+            this.image = image;
+        }
+    }
+
 }

@@ -1,13 +1,23 @@
 package z.ui;
 
+import z.StringLiterals;
+import z.frex.Frex;
+import z.ui.dialog.MessageDialog;
+
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.geom.GeneralPath;
+import java.io.File;
+import java.text.MessageFormat;
 
 public class UIUtils {
     public static void centerComponent(Component component) {
@@ -79,4 +89,83 @@ public class UIUtils {
         }
 
     }
+
+    public static File showOpenDialog(Window parent,
+                                        String title,
+                                        String lastDirPropertyName,
+                                        String fileName,
+                                        FileExtensionFileFilter... fileFilters) {
+
+        String lastDir = Frex.getPreferences().get(lastDirPropertyName,
+                                                   System.getProperty("user.home")); // NON-NLS
+        JFileChooser dialog = new JFileChooser(lastDir);
+        dialog.setDialogTitle(title);
+        dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        dialog.setAcceptAllFileFilterUsed(false);
+        for (int i = 0; i < fileFilters.length; i++) {
+            FileFilter fileFilter = fileFilters[i];
+            dialog.addChoosableFileFilter(fileFilter);
+            if (i == 0) {
+                dialog.setFileFilter(fileFilter);
+            }
+        }
+        dialog.setSelectedFile(new File(lastDir, fileName));
+        int resp = dialog.showOpenDialog(parent);
+        Frex.getPreferences().put(lastDirPropertyName,
+                                  dialog.getCurrentDirectory().getPath());
+        if (resp == JFileChooser.APPROVE_OPTION) {
+            return dialog.getSelectedFile();
+        }
+        return null;
+    }
+
+
+    public static File showSafeDialog(Window parent,
+                                        String title,
+                                        String lastDirPropertyName,
+                                        String fileName,
+                                        FileExtensionFileFilter[] selectedFileFilter,
+                                        FileExtensionFileFilter... fileFilters) {
+        String lastDir = Frex.getPreferences().get(lastDirPropertyName,
+                                                   System.getProperty("user.home")); // NON-NLS
+        JFileChooser dialog = new JFileChooser(lastDir);
+        dialog.setDialogTitle(title);
+        dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        dialog.setAcceptAllFileFilterUsed(false);
+        for (int i = 0; i < fileFilters.length; i++) {
+            dialog.addChoosableFileFilter(fileFilters[i]);
+        }
+        if (selectedFileFilter[0] != null) {
+             dialog.setFileFilter(selectedFileFilter[0]);
+        } else if (fileFilters.length > 0) {
+            dialog.setFileFilter(fileFilters[0]);
+        }
+        dialog.setSelectedFile(new File(lastDir, fileName));
+        while (true) {
+            int resp = dialog.showSaveDialog(parent);
+            Frex.getPreferences().put(lastDirPropertyName,
+                                      dialog.getCurrentDirectory().getPath());
+            if (resp == JFileChooser.APPROVE_OPTION) {
+                FileExtensionFileFilter fileFilter = (FileExtensionFileFilter) dialog.getFileFilter();
+                selectedFileFilter[0] = fileFilter;
+                File selectedFile = fileFilter.appendMissingFileExtension(dialog.getSelectedFile());
+                if (selectedFile.exists()) {
+                    resp = MessageDialog.confirmYesNoCancel(parent,
+                                                            title,
+                                                            MessageFormat.format(StringLiterals.getString("gui.msg.errorFileExists"),
+                                                                                 selectedFile.getName()));
+                    if (resp == JOptionPane.YES_OPTION) {
+                        return selectedFile;
+                    } else if (resp == JOptionPane.CANCEL_OPTION) {
+                        return null;
+                    }
+                } else {
+                    return selectedFile;
+                }
+            } else {
+                return null;
+            }
+        }
+    }
+
 }
