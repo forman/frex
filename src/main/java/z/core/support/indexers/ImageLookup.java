@@ -3,7 +3,7 @@ package z.core.support.indexers;
 import z.core.Indexer;
 import z.util.GreyscaleImage;
 
-public final class Image extends Indexer {
+public final class ImageLookup extends Indexer {
     private double scale;
     private GreyscaleImage image;
 
