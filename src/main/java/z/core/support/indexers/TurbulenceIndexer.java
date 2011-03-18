@@ -14,6 +14,7 @@ public final class TurbulenceIndexer extends Indexer {
     private int numOctaves;
 
     public void reset() {
+        super.reset();
         setScale(0.2);
         setNumOctaves(6);
     }

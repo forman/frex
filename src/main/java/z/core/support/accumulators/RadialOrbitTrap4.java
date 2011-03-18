@@ -37,6 +37,7 @@ public final class RadialOrbitTrap4 extends Accumulator {
     }
 
     public void reset() {
+        super.reset();
         setTrapRadius(1);
         setTrapCenterX(1);
         setTrapCenterY(1);
@@ -51,14 +52,20 @@ public final class RadialOrbitTrap4 extends Accumulator {
                         final int maxIter,
                         final boolean trapMode,
                         final double[] result) {
+        final double r = trapRadius;
+        final boolean turbulent = turbulenceUsed;
         double xSum = 0;
         double ySum = 0;
-        double r = trapRadius;
         double rr = r*r;
         double dxx, dyy, dd;
         for (int i = 0; i < iter; i++) {
             dxx = (orbitX[i] - trapCenterX) * (orbitX[i] - trapCenterX);
             dyy = (orbitY[i] - trapCenterY) * (orbitY[i] - trapCenterY);
+            if (turbulent) {
+                double t = computeTurbulence(orbitX[i], orbitY[i]);
+                dxx += t;
+                dyy += t;
+            }
             dd = dxx + dyy;
             if (dd < rr) {
                 double f = (rr - dd)*(rr-dd)/rr;

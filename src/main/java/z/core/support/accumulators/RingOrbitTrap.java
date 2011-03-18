@@ -16,6 +16,7 @@ public class RingOrbitTrap extends Accumulator {
     private double trapRadius2;
 
     public void reset() {
+        super.reset();
         setTrapCenterX(1.0);
         setTrapCenterY(1.0);
         setTrapRadius1(0.9);
@@ -67,11 +68,17 @@ public class RingOrbitTrap extends Accumulator {
         final double y0 = trapCenterY;
         final double r1 = trapRadius1;
         final double r2 = trapRadius2;
+        final boolean turbulent = turbulenceUsed;
         double dx, dy, d;
         double sum = 0;
         for (int i = 0; i < iter; i++) {
             dx = orbitX[i] - x0;
             dy = orbitY[i] - y0;
+            if (turbulent) {
+                double t = computeTurbulence(orbitX[i], orbitY[i]);
+                dx += t;
+                dy += t;
+            }
             d = Math.abs(Math.hypot(dx, dy) - r1);
             if (d < r2) {
                 sum += (r2 - d) / r2;

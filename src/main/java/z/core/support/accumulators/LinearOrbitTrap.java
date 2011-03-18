@@ -10,6 +10,7 @@ public class LinearOrbitTrap extends Accumulator {
     protected double trapRadius;
 
     public void reset() {
+        super.reset();
         setTrapRadius(0.1);
     }
 
@@ -30,12 +31,16 @@ public class LinearOrbitTrap extends Accumulator {
                         final int maxIter,
                         final boolean trapMode,
                         final double[] result) {
+        final double r = trapRadius;
+        final boolean turbulent = turbulenceUsed;
         double xSum = 0;
         double ySum = 0;
         double temp;
-        double r = trapRadius;
         for (int i = 0; i < iter; i++) {
             temp = orbitX[i];
+            if (turbulent) {
+                temp += computeTurbulence(orbitX[i], orbitY[i]);
+            }
             temp = temp < 0 ? -temp : temp;
             if (temp < r) {
                 xSum += r - temp;

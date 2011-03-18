@@ -20,6 +20,8 @@ public class Property {
 
     private String name;
 
+    private String label;
+
     private Class type;
 
     private Method getter;
@@ -28,13 +30,35 @@ public class Property {
 
     public Property(String name, Class type, Method getter, Method setter) {
         this.name = name;
+        this.label = mkLabel(name);
         this.type = type;
         this.getter = getter;
         this.setter = setter;
     }
 
+    private static String mkLabel(String name) {
+        StringBuilder sb = new StringBuilder();
+        char[] chars = name.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (i == 0) {
+                sb.append(Character.toUpperCase(chars[i]));
+            } else if (Character.isUpperCase(chars[i])
+                    && Character.isLowerCase(chars[i - 1])) {
+                sb.append(' ');
+                sb.append(Character.toLowerCase(chars[i]));
+            } else {
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public Class getType() {
@@ -51,7 +75,7 @@ public class Property {
 
     public Object getValue(Object instance) throws IllegalAccessException,
             InvocationTargetException {
-        return getGetter().invoke(instance, new Object[0]);
+        return getGetter().invoke(instance);
     }
 
     public String getValueAsText(Object instance) throws IllegalAccessException,
@@ -62,7 +86,7 @@ public class Property {
 
     public void setValue(Object instance, Object value) throws IllegalAccessException,
             InvocationTargetException {
-        getSetter().invoke(instance, new Object[]{value});
+        getSetter().invoke(instance, value);
     }
 
     public void setValueFromText(Object instance, final String textValue) throws IllegalAccessException,
@@ -79,10 +103,6 @@ public class Property {
 
     private static void collectPropertiesOfClass(final Class cls,
                                                  List<Property> properties) {
-        final Class superClass = cls.getSuperclass();
-        if (superClass != null && !superClass.equals(Object.class)) {
-            collectPropertiesOfClass(superClass, properties);
-        }
         final Method[] methods = cls.getDeclaredMethods();
         for (int i = 0; i < methods.length; i++) {
             final Method method = methods[i];
@@ -113,6 +133,10 @@ public class Property {
                 }
             }
         }
+        final Class superClass = cls.getSuperclass();
+        if (superClass != null && !superClass.equals(Object.class)) {
+            collectPropertiesOfClass(superClass, properties);
+        }
     }
 
     public static Property getProperty(Property[] properties, String name) {
@@ -132,33 +156,23 @@ public class Property {
         for (int j = 0; j < children.size(); j++) {
             Element child = (Element) children.get(j);
             final String name = JDOMHelper.getAttributeString(child, "name");   // NON-NLS
-            final String textValue = JDOMHelper.getAttributeString(child,
-                                                                   "value"); // NON-NLS
+            final String textValue = JDOMHelper.getAttributeString(child, "value"); // NON-NLS
             final Property property = getProperty(properties, name);
             if (property != null) {
                 try {
                     property.setValueFromText(instance, textValue);
                 } catch (IllegalAccessException e) {
-                    throw new JDOMException("Eigenschaft '" + name
-                            + "' konnte für Objekt der Klasse '"
-                            + instance.getClass().getName()
-                            + "' nicht gesetzt werden", e); /* I18N */
+                    throw new JDOMException(MessageFormat.format("Eigenschaft ''{0}'' konnte für Objekt der Klasse ''{1}'' nicht gesetzt werden", name, instance.getClass().getName()), e);
                 } catch (InvocationTargetException e) {
-                    throw new JDOMException("Eigenschaft '" + name
-                            + "' konnte für Objekt der Klasse '"
-                            + instance.getClass().getName()
-                            + "' nicht gesetzt werden", e); /* I18N */
+                    throw new JDOMException(MessageFormat.format("Eigenschaft ''{0}'' konnte für Objekt der Klasse ''{1}'' nicht gesetzt werden", name, instance.getClass().getName()), e);
                 }
             } else {
-                throw new JDOMException("Eigenschaft '" + name
-                        + "' konnte in der Klasse '"
-                        + instance.getClass().getName()
-                        + "' nicht gefunden werden"); /* I18N */
+                throw new JDOMException(MessageFormat.format("Eigenschaft ''{0}'' konnte in der Klasse ''{1}'' nicht gefunden werden", name, instance.getClass().getName()));
             }
         }
     }
 
-    public static Element writePropertiesToElement(final Element element,
+    public static Element writePropertiesToElement(Element element,
                                                    Object instance,
                                                    Property[] properties) throws JDOMException {
         element.setAttribute("class", instance.getClass().getName());  // NON-NLS
@@ -175,11 +189,11 @@ public class Property {
             } catch (IllegalAccessException e) {
                 throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.cannotGetProperty"),
                                                              property.getName(),
-                                                             instance.getClass().getName()), e); /* I18N */
+                                                             instance.getClass().getName()), e);
             } catch (InvocationTargetException e) {
                 throw new JDOMException(MessageFormat.format(StringLiterals.getString("ex.cannotGetProperty"),
                                                              property.getName(),
-                                                             instance.getClass().getName()), e); /* I18N */
+                                                             instance.getClass().getName()), e);
             }
         }
         return element;

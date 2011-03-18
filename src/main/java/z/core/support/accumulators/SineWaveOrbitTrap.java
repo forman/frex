@@ -12,10 +12,10 @@ public class SineWaveOrbitTrap extends Accumulator {
     private double amplitude;
 
     public void reset() {
+        super.reset();
         setTrapSize(0.1);
         setFrequency(1.0);
         setAmplitude(1.0);
-
     }
 
     public void prepare() {
@@ -56,11 +56,18 @@ public class SineWaveOrbitTrap extends Accumulator {
         final double r = trapSize;
         final double f = frequency;
         final double a = amplitude;
+        final boolean turbulent = turbulenceUsed;
         double dy;
         double sum = 0;
         for (int i = 0; i < iter; i++) {
             dy = a * Math.sin(f * orbitX[i]) - orbitY[i];
-            if (dy < 0) dy = -dy;
+            if (dy < 0) {
+                dy = -dy;
+            }
+            if (turbulent) {
+                double t = computeTurbulence(orbitX[i], orbitY[i]);
+                dy += t;
+            }
             if (dy < r) {
                 sum += r - dy;
                 if (trapMode)

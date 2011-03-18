@@ -8,6 +8,7 @@ public final class ImageLookup extends Indexer {
     private GreyscaleImage image;
 
     public void reset() {
+        super.reset();
         setScale(100.0);
         setImage(new GreyscaleImage(null, 2, 2, new float[]{0f, 1f, 1f, 0f}));
     }

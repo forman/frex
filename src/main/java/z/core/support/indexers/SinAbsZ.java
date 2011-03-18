@@ -9,6 +9,7 @@ import z.core.ScaledIndexer;
 public class SinAbsZ extends ScaledIndexer {
 
     public void reset() {
+        super.reset();
         setBias(0.0);
         setFactor(10.0);
     }

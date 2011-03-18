@@ -16,6 +16,7 @@ public final class SquareOrbitTrap extends Accumulator {
     protected double radius;
 
     public void reset() {
+        super.reset();
         setOffsetX(0);
         setOffsetY(0);
         setFactor(0.1);
@@ -64,11 +65,17 @@ public final class SquareOrbitTrap extends Accumulator {
         final double y0 = offsetY;
         final double a = factor;
         final double r = radius;
+        final boolean turbulent = turbulenceUsed;
         double sum = 0;
         double dx, dy, d;
         for (int i = 0; i < iter; i++) {
             dx = orbitX[i] - x0;
             dy = orbitY[i] - y0;
+            if (turbulent) {
+                double t = computeTurbulence(orbitX[i], orbitY[i]);
+                dx += t;
+                dy += t;
+            }
             d = a * dx * dx - dy;
             if (d < 0)
                 d *= -1;

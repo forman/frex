@@ -111,7 +111,7 @@ public class EditAlgorithmDialog extends Dialog {
         }
 
         gbc.gridx = 0;
-        dialogArea.add(new JLabel(property.getName() + ':'), gbc);
+        dialogArea.add(new JLabel(property.getLabel() + ':'), gbc);
 
         gbc.gridx = 1;
         dialogArea.add(component, gbc);

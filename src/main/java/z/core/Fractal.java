@@ -24,6 +24,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
 
     @Override
     public void reset() {
+        super.reset();
         setIterMax(100);
         setBailOut(100.0);
         setJuliaMode(false);

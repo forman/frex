@@ -17,7 +17,6 @@ import z.core.support.accumulators.RingOrbitTrap;
 import z.core.support.accumulators.RingOrbitTrap2;
 import z.core.support.accumulators.SineWaveOrbitTrap;
 import z.core.support.accumulators.SquareOrbitTrap;
-import z.core.support.accumulators.TurbulentLinearOrbitTrap3;
 import z.core.support.fractals.BurningShip;
 import z.core.support.fractals.ExpZ;
 import z.core.support.fractals.Ferromagnetic;
@@ -78,7 +77,6 @@ public class DefaultAlgorithmSpi implements AlgorithmSpi {
         register(accumulators, LinearOrbitTrap.class, StringLiterals.getString("z.core.support.accumulators.LinearOrbitTrap.name"));
         register(accumulators, LinearOrbitTrap2.class, StringLiterals.getString("z.core.support.accumulators.LinearOrbitTrap2.name"));
         register(accumulators, LinearOrbitTrap3.class, "Linear Orbit Trap #3");
-        register(accumulators, TurbulentLinearOrbitTrap3.class, "Linear Orbit Trap #3 (turbulent)");
         register(accumulators, RadialOrbitTrap.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap.name"));
         register(accumulators, RadialOrbitTrap2.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap2.name"));
         register(accumulators, RadialOrbitTrap3.class, StringLiterals.getString("z.core.support.accumulators.RadialOrbitTrap3.name"));

@@ -16,6 +16,7 @@ public final class RadialOrbitTrap extends Accumulator {
     protected double trapRadiusSqr; // dependent on trapRadius
 
     public void reset() {
+        super.reset();
         setTrapCenterX(-1.0);
         setTrapCenterY(1.0);
         setTrapRadius(0.5);
@@ -63,9 +64,15 @@ public final class RadialOrbitTrap extends Accumulator {
         double yDiff;
         double distSqr;
         double sum = 0;
+        boolean turbulent = turbulenceUsed;
         for (int i = 0; i < iter; i++) {
             xDiff = orbitX[i] - cx;
             yDiff = orbitY[i] - cy;
+            if (turbulent) {
+                double t = computeTurbulence(orbitX[i], orbitY[i]);
+                xDiff += t;
+                yDiff += t;
+            }
             distSqr = xDiff * xDiff + yDiff * yDiff;
             if (distSqr < rSqr) {
                 sum += (rSqr - distSqr) / rSqr;

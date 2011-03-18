@@ -101,6 +101,7 @@ public abstract class ColorTable extends Colorizer {
 
     @Override
     public void reset() {
+        super.reset();
         cyclic = true;
         numColors = 256;
         indexMin = 0.0f;
