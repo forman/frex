@@ -74,7 +74,6 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         register(new EditImageSizeAction(window));
         register(new FitImageSizeAction(window));
         register(new EditPlanePropertiesAction(window));
-        // register(new EditIndexRangeAction(window));
         register(new ManageUserFractalsAction(window));
 
         register(new GoBackAction(window));
@@ -113,7 +112,6 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         editMenu.add(getAction(EditPlanePropertiesAction.ID));
         editMenu.add(getAction(EditColorsAction.ID));
         editMenu.add(getAction(EditImageSizeAction.ID));
-//        editMenu.add(getAction(EditIndexRangeAction.ID));
         editMenu.addSeparator();
         editMenu.add(getAction(ManageUserFractalsAction.ID));
         menuBar.add(editMenu);

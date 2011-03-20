@@ -28,7 +28,11 @@ public abstract class ColorTable extends Colorizer {
     }
 
     public final void setCyclic(boolean cyclic) {
+        boolean oldValue = this.cyclic;
         this.cyclic = cyclic;
+        firePropertyChange("cyclic", // NON-NLS
+                           oldValue,
+                           this.cyclic);
     }
 
     public final int getNumColors() {
@@ -36,7 +40,11 @@ public abstract class ColorTable extends Colorizer {
     }
 
     public final void setNumColors(int numColors) {
+        int oldValue = this.numColors;
         this.numColors = numColors;
+        firePropertyChange("numColors", // NON-NLS
+                           oldValue,
+                           this.numColors);
     }
 
     public float getIndexMin() {
@@ -44,7 +52,11 @@ public abstract class ColorTable extends Colorizer {
     }
 
     public void setIndexMin(float indexMin) {
+        float oldValue = this.indexMin;
         this.indexMin = indexMin;
+        firePropertyChange("indexMin", // NON-NLS
+                           oldValue,
+                           this.indexMin);
     }
 
     public float getIndexMax() {
@@ -52,7 +64,11 @@ public abstract class ColorTable extends Colorizer {
     }
 
     public void setIndexMax(float indexMax) {
+        float oldValue = this.indexMax;
         this.indexMax = indexMax;
+        firePropertyChange("indexMax", // NON-NLS
+                           oldValue,
+                           this.indexMax);
     }
 
     public final int getRgba(int index) {
@@ -60,7 +76,12 @@ public abstract class ColorTable extends Colorizer {
     }
 
     public final void setRgba(int index, int rgba) {
+        int oldValue = rgbaArray[index];
         rgbaArray[index] = rgba;
+        fireIndexedPropertyChange("rgbaArray", // NON-NLS
+                                  index,
+                                  oldValue,
+                                  rgba);
     }
 
     public int getRgba(float index) {

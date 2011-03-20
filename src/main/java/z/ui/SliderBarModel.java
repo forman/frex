@@ -10,9 +10,9 @@ public interface SliderBarModel {
 
     int getColorPointCount();
 
-    Collection<ColorPoint> getColorPoints();
+    ColorPoint[] getColorPoints();
 
-    void setColorPoints(Collection<ColorPoint> colorPoints);
+    void setColorPoints(ColorPoint[] colorPoints);
 
     void addColorPoint(float position, RGBA color);
 

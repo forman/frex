@@ -144,6 +144,14 @@ public class Plane extends RenderableNode {
     public void setColorizer(IColorizer colorizer) {
         this.colorizer = colorizer;
     }
+    // todo
+    public IColorizer getColorizer(int index) {
+        return colorizer;
+    }
+    // todo
+    public void setColorizer(int index, IColorizer colorizer) {
+        this.colorizer = colorizer;
+    }
 
     public PlaneRaster getRaster() {
         return raster;

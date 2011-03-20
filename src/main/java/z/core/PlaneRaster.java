@@ -114,34 +114,36 @@ public class PlaneRaster {
         float outerSum = 0.0F;
         float outerMin = +Float.MAX_VALUE;
         float outerMax = -Float.MAX_VALUE;
-        int totalCount = n;
+        int totalCount = 0;
         float totalSum = 0.0F;
         float totalMin = +Float.MAX_VALUE;
         float totalMax = -Float.MAX_VALUE;
         float v;
         for (int i = 0; i < n; i++) {
             v = rawData[i];
-            if (!Float.isNaN(v) && !Float.isInfinite(v)) {
+            if (isValidRawValue(v)) {
                 if (v < 0.0F) {
                     v = -1.0f - v;
                     innerCount++;
+                    innerSum += v;
                     if (v < innerMin) {
                         innerMin = v;
                     }
                     if (v > innerMax) {
                         innerMax = v;
                     }
-                    innerSum += v;
                 } else {
                     outerCount++;
+                    outerSum += v;
                     if (v < outerMin) {
                         outerMin = v;
                     }
                     if (v > outerMax) {
                         outerMax = v;
                     }
-                    outerSum += v;
                 }
+                totalCount++;
+                totalSum += v;
                 if (v < totalMin) {
                     totalMin = v;
                 }
@@ -150,7 +152,6 @@ public class PlaneRaster {
                 }
             }
         }
-        totalSum = innerSum + outerSum;
         final int histSize = 512;
         int[] innerHist = new int[histSize];
         int[] outerHist = new int[histSize];
@@ -160,14 +161,15 @@ public class PlaneRaster {
         float totalScale = totalMax > totalMin ? (float) histSize / (totalMax - totalMin) : 0.0f;
         for (int i = 0; i < n; i++) {
             v = rawData[i];
-            if (v < 0.0f) {
-                v = -1.0f - v;
-                innerHist[getHistogramIndex(innerMin, innerScale, v, histSize)]++;
-            } else {
-                outerHist[getHistogramIndex(outerMin, outerScale, v, histSize)]++;
+            if (isValidRawValue(v)) {
+                if (v < 0.0f) {
+                    v = -1.0f - v;
+                    innerHist[getHistogramIndex(innerMin, innerScale, v, histSize)]++;
+                } else {
+                    outerHist[getHistogramIndex(outerMin, outerScale, v, histSize)]++;
+                }
+                totalHist[getHistogramIndex(totalMin, totalScale, v, histSize)]++;
             }
-
-            totalHist[getHistogramIndex(totalMin, totalScale, v, histSize)]++;
         }
 
         innerStatistics = new Statistics(innerCount,
@@ -185,6 +187,10 @@ public class PlaneRaster {
                                          totalMax,
                                          totalSum,
                                          totalHist);
+    }
+
+    private static boolean isValidRawValue(float v) {
+        return !Float.isNaN(v) && !Float.isInfinite(v);
     }
 
     private static int histMin(int[] histogram) {
@@ -209,7 +215,7 @@ public class PlaneRaster {
 
     private static int getHistogramIndex(float min, float scale, float value, int size) {
         int index = (int) (scale * (value - min));
-        if (index < 0) {
+        if (index <= 0) {
             return 0;
         } else if (index >= size) {
             return size - 1;

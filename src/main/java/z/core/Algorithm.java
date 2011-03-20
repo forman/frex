@@ -4,6 +4,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import z.util.Property;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public abstract class Algorithm implements IAlgorithm {
@@ -41,5 +42,21 @@ public abstract class Algorithm implements IAlgorithm {
 
     public void readExternal(Element element) throws JDOMException {
         Property.readPropertiesFromElement(element, this, properties);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
+    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    }
+
+    protected void fireIndexedPropertyChange(String propertyName, int index, Object oldValue, Object newValue) {
+        propertyChangeSupport.fireIndexedPropertyChange(propertyName, index, oldValue, newValue);
     }
 }

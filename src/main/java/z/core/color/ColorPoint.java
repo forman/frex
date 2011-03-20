@@ -36,4 +36,32 @@ public class ColorPoint {
         Assert.notNull(color, "color"); // NON-NLS
         this.color = color;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ColorPoint that = (ColorPoint) o;
+
+        if (!samePosition(that.position)) {
+            return false;
+        }
+        if (!color.equals(that.color)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean samePosition(float position) {
+        return Math.abs(position - this.position) < 1e-3;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (position != +0.0f ? Float.floatToIntBits(position) : 0);
+        result = 31 * result + color.hashCode();
+        return result;
+    }
 }

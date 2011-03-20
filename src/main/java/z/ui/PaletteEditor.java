@@ -86,10 +86,7 @@ public class PaletteEditor extends AbstractSliderBar {
             Graphics2D paletteGC = paletteImage.createGraphics();
             try {
                 for (int i = 0; i < colors.length; i++) {
-                    Color color = new Color(
-                            colors[i].getR(),
-                            colors[i].getG(),
-                            colors[i].getB());
+                    Color color = new Color(colors[i].getR(), colors[i].getG(), colors[i].getB());
                     paletteGC.setColor(color);
                     paletteGC.drawLine(i, 0, i, paletteImage.getHeight());
                 }

@@ -39,7 +39,7 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setIterMax(int iterMax) {
         int oldValue = this.iterMax;
         this.iterMax = iterMax;
-        propertyChangeSupport.firePropertyChange("iterMax", oldValue, iterMax); // NON-NLS
+        firePropertyChange("iterMax", oldValue, iterMax); // NON-NLS
     }
 
     public double getBailOut() {
@@ -50,9 +50,9 @@ public abstract class Fractal extends Algorithm implements IFractal {
         double oldValue = this.bailOut;
         this.bailOut = bailOut;
         bailOutSqr = this.bailOut * this.bailOut;
-        propertyChangeSupport.firePropertyChange("bailOut", // NON-NLS
-                                                 oldValue,
-                                                 this.bailOut);
+        firePropertyChange("bailOut", // NON-NLS
+                           oldValue,
+                           this.bailOut);
     }
 
     public boolean isJuliaMode() {
@@ -62,9 +62,9 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setJuliaMode(boolean juliaMode) {
         boolean oldValue = this.juliaMode;
         this.juliaMode = juliaMode;
-        propertyChangeSupport.firePropertyChange("juliaMode", // NON-NLS
-                                                 oldValue,
-                                                 this.juliaMode);
+        firePropertyChange("juliaMode", // NON-NLS
+                           oldValue,
+                           this.juliaMode);
     }
 
     public double getJuliaCX() {
@@ -74,9 +74,9 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setJuliaCX(double juliaCX) {
         double oldValue = this.juliaCX;
         this.juliaCX = juliaCX;
-        propertyChangeSupport.firePropertyChange("juliaCX", // NON-NLS
-                                                 oldValue,
-                                                 this.juliaCX);
+        firePropertyChange("juliaCX", // NON-NLS
+                           oldValue,
+                           this.juliaCX);
     }
 
     public double getJuliaCY() {
@@ -86,9 +86,9 @@ public abstract class Fractal extends Algorithm implements IFractal {
     public void setJuliaCY(double juliaCY) {
         double oldValue = this.juliaCY;
         this.juliaCY = juliaCY;
-        propertyChangeSupport.firePropertyChange("juliaCY", // NON-NLS
-                                                 oldValue,
-                                                 this.juliaCY);
+        firePropertyChange("juliaCY", // NON-NLS
+                           oldValue,
+                           this.juliaCY);
     }
 
 }

@@ -9,13 +9,12 @@ import z.core.color.RGBA;
 import z.util.JDOMHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class PaletteColorTable extends ColorTable {
 
-    private List<ColorPoint> tiePointList;
+    private List<ColorPoint> colorPointList;
 
     public PaletteColorTable() {
     }
@@ -23,43 +22,50 @@ public class PaletteColorTable extends ColorTable {
     @Override
     public Object clone() {
         PaletteColorTable c = (PaletteColorTable) super.clone();
-        c.tiePointList = new ArrayList<ColorPoint>(getColorPointCount());
+        c.colorPointList = new ArrayList<ColorPoint>(getColorPointCount());
         c.setColorPoints(getColorPoints());
         return c;
     }
 
-    public List<ColorPoint> getColorPoints() {
-        return Collections.unmodifiableList(tiePointList);
+    public ColorPoint[] getColorPoints() {
+        return colorPointList.toArray(new ColorPoint[colorPointList.size()]);
     }
 
-    public void setColorPoints(Collection<ColorPoint> points) {
-        tiePointList.clear();
-        for (ColorPoint tiePoint : points) {
-            tiePointList.add(new ColorPoint(tiePoint.getPosition(),
-                                            tiePoint.getColor()));
+    public void setColorPoints(ColorPoint[] colorPoints) {
+        if (!Arrays.equals(colorPointList.toArray(new ColorPoint[colorPointList.size()]), colorPoints)) {
+            colorPointList.clear();
+            for (ColorPoint colorPoint : colorPoints) {
+                colorPointList.add(new ColorPoint(colorPoint.getPosition(), colorPoint.getColor()));
+            }
+            firePropertyChange("colorPointList", // NON-NLS
+                               null, colorPointList);
         }
     }
 
     public int getColorPointCount() {
-        return tiePointList.size();
+        return colorPointList.size();
     }
 
     public ColorPoint getColorPoint(int index) {
-        return tiePointList.get(index);
+        return colorPointList.get(index);
     }
 
     public void addColorPoint(ColorPoint point) {
-        tiePointList.add(point);
+        colorPointList.add(point);
+        firePropertyChange("colorPointList", // NON-NLS
+                           null, colorPointList);
     }
 
     public void removeColorPoint(int index) {
-        tiePointList.remove(index);
+        colorPointList.remove(index);
+        firePropertyChange("colorPointList", // NON-NLS
+                           null, colorPointList);
     }
 
     @Override
     public void reset() {
         super.reset();
-        tiePointList = new ArrayList<ColorPoint>(4);
+        colorPointList = new ArrayList<ColorPoint>(4);
         addColorPoint(new ColorPoint(0.0f, RGBA.BLACK));
         addColorPoint(new ColorPoint(0.33f, RGBA.BLUE));
         addColorPoint(new ColorPoint(0.66f, RGBA.WHITE));
@@ -68,7 +74,7 @@ public class PaletteColorTable extends ColorTable {
 
     @Override
     protected void fillRgbaArray(int[] rgbaArray) {
-        RGBA[] colors = ColorInterpolator.createColors(tiePointList, getNumColors(), null);
+        RGBA[] colors = ColorInterpolator.createColors(colorPointList, getNumColors(), null);
         for (int i = 0; i < rgbaArray.length; i++) {
             rgbaArray[i] = colors[i].getValue();
         }
@@ -93,7 +99,7 @@ public class PaletteColorTable extends ColorTable {
     @Override
     public void readExternal(Element element) throws JDOMException {
         super.readExternal(element);
-        tiePointList.clear();
+        colorPointList.clear();
         readOldFormat(element);
         final List children = element.getChildren("colorPoint");   // NON-NLS
         for (Object aChildren : children) {

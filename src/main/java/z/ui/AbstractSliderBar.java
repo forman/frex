@@ -134,7 +134,8 @@ public abstract class AbstractSliderBar extends Control {
 
         paintSlideArea(gc, slideArea);
 
-        gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
 
         SliderBarModel model = getModel();
         for (int i = 0; i < model.getColorPointCount(); i++) {

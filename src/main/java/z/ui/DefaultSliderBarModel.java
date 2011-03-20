@@ -8,12 +8,11 @@ import z.util.ChangeListenerList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class DefaultSliderBarModel implements SliderBarModel {
     private ChangeListenerList changeListenerList = new ChangeListenerList();
-    private List<ColorPoint> pointList;
+    private List<ColorPoint> colorPointList;
     private int selectedIndex;
 
     public DefaultSliderBarModel() {
@@ -25,56 +24,59 @@ public class DefaultSliderBarModel implements SliderBarModel {
     }
 
     public DefaultSliderBarModel(Collection<ColorPoint> colorPoints) {
-        pointList = new ArrayList<ColorPoint>(colorPoints);
+        colorPointList = new ArrayList<ColorPoint>(colorPoints);
         selectedIndex = -1;
     }
 
     public int getColorPointCount() {
-        return pointList.size();
+        return colorPointList.size();
     }
 
-    public Collection<ColorPoint> getColorPoints() {
-        return Collections.unmodifiableList(pointList);
+    public ColorPoint[] getColorPoints() {
+        return colorPointList.toArray(new ColorPoint[colorPointList.size()]);
     }
 
-    public void setColorPoints(Collection<ColorPoint> tiePoints) {
-        pointList.clear();
-        for (ColorPoint tiePoint : tiePoints) {
-            pointList.add(new ColorPoint(tiePoint.getPosition(), tiePoint.getColor()));
+    public void setColorPoints(ColorPoint[] colorPoints) {
+        if (!Arrays.equals(colorPointList.toArray(new ColorPoint[colorPointList.size()]), colorPoints)) {
+            colorPointList.clear();
+            for (ColorPoint colorPoint : colorPoints) {
+                colorPointList.add(new ColorPoint(colorPoint.getPosition(), colorPoint.getColor()));
+            }
+            fireStateChange();
         }
-        fireStateChange();
     }
 
     public void addColorPoint(float position, RGBA color) {
-        pointList.add(new ColorPoint(position, color));
+        colorPointList.add(new ColorPoint(position, color));
         fireStateChange();
     }
 
     public void removeColorPoint(int index) {
-        pointList.remove(index);
+        colorPointList.remove(index);
         fireStateChange();
     }
 
     public float getPosition(int index) {
-        return pointList.get(index).getPosition();
+        return colorPointList.get(index).getPosition();
     }
 
     public void setPosition(int index, float position) {
-        ColorPoint point = pointList.get(index);
-        if (point.getPosition() != position) {
+        ColorPoint point = colorPointList.get(index);
+        if (!point.samePosition(position)) {
             point.setPosition(position);
+            colorPointList.set(index, new ColorPoint(position, point.getColor()));
             fireStateChange();
         }
     }
 
     public RGBA getColor(int index) {
-        return pointList.get(index).getColor();
+        return colorPointList.get(index).getColor();
     }
 
     public void setColor(int index, RGBA color) {
-        ColorPoint point = pointList.get(index);
-        if (point.getColor() != color) {
-            point.setColor(color);
+        ColorPoint point = colorPointList.get(index);
+        if (!point.getColor().equals(color)) {
+            colorPointList.set(index, new ColorPoint(point.getPosition(), color));
             fireStateChange();
         }
     }

@@ -38,11 +38,11 @@ public abstract class Action extends AbstractAction {
     }
 
     public void setSelected(boolean selected) {
-        putValue(AbstractAction.SELECTED_KEY, selected);
+        putValue(SELECTED_KEY, selected);
     }
 
     public void setToolTipText(String s) {
-        putValue(AbstractAction.SHORT_DESCRIPTION, s);
+        putValue(SHORT_DESCRIPTION, s);
     }
 
     public void setText(String s) {
@@ -54,7 +54,7 @@ public abstract class Action extends AbstractAction {
     }
 
     public void setSmallIcon(ImageIcon icon) {
-        putValue(AbstractAction.SMALL_ICON, icon);
+        putValue(SMALL_ICON, icon);
     }
 
     public final void actionPerformed(ActionEvent e) {
@@ -72,7 +72,7 @@ public abstract class Action extends AbstractAction {
         } else {
             b = new JButton();
         }
-        if (getValue(Action.SMALL_ICON) != null || getValue(Action.LARGE_ICON_KEY) != null) {
+        if (getValue(SMALL_ICON) != null || getValue(LARGE_ICON_KEY) != null) {
             b.setHideActionText(true);
         }
         b.setHorizontalTextPosition(SwingConstants.CENTER);
