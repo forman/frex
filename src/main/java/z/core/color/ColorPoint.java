@@ -9,32 +9,32 @@ package z.core.color;
 import z.util.Assert;
 
 public class ColorPoint {
-    private float position;
+    private final float position;
 
-    private RGBA color;
+    private final RGBA color;
 
-    public ColorPoint(float position, RGBA color) {
-        setPosition(position);
-        setColor(color);
+    public ColorPoint(float pos, RGBA color) {
+        Assert.argument(pos >= 0.0F, "position >= 0.0"); // NON-NLS
+        Assert.argument(pos <= 1.0F, "position <= 1.0"); // NON-NLS
+        Assert.notNull(color, "color"); // NON-NLS
+        this.position = roundPosition(pos);
+        this.color = color;
     }
 
     public float getPosition() {
         return position;
     }
 
-    public void setPosition(float position) {
-        Assert.argument(position >= 0.0f, "position >= 0.0f"); // NON-NLS
-        Assert.argument(position <= 1.0f, "position <= 1.0f"); // NON-NLS
-        this.position = position;
-    }
-
     public RGBA getColor() {
         return color;
     }
 
-    public void setColor(RGBA color) {
-        Assert.notNull(color, "color"); // NON-NLS
-        this.color = color;
+    public boolean samePosition(float pos) {
+        return position == roundPosition(pos);
+    }
+
+    public static float roundPosition(float pos) {
+        return ((int) (pos * 1000.0F)) / 1000.0F;
     }
 
     @Override
@@ -54,14 +54,18 @@ public class ColorPoint {
         return true;
     }
 
-    public boolean samePosition(float position) {
-        return Math.abs(position - this.position) < 1e-3;
+    @Override
+    public int hashCode() {
+        int result = Float.floatToIntBits(position);
+        result = 31 * result + color.hashCode();
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        int result = (position != +0.0f ? Float.floatToIntBits(position) : 0);
-        result = 31 * result + color.hashCode();
-        return result;
+    public String toString() {
+        return "ColorPoint{" +
+                "color=" + color +
+                ", position=" + position +
+                '}';
     }
 }

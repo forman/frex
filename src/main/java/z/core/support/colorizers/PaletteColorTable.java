@@ -32,7 +32,7 @@ public class PaletteColorTable extends ColorTable {
     }
 
     public void setColorPoints(ColorPoint[] colorPoints) {
-        if (!Arrays.equals(colorPointList.toArray(new ColorPoint[colorPointList.size()]), colorPoints)) {
+        if (!Arrays.equals(getColorPoints(), colorPoints)) {
             colorPointList.clear();
             for (ColorPoint colorPoint : colorPoints) {
                 colorPointList.add(new ColorPoint(colorPoint.getPosition(), colorPoint.getColor()));
@@ -104,10 +104,10 @@ public class PaletteColorTable extends ColorTable {
         final List children = element.getChildren("colorPoint");   // NON-NLS
         for (Object aChildren : children) {
             Element child = (Element) aChildren;
-            final float position = (float) JDOMHelper.getAttributeDouble(child,
-                                                                         "pos");  // NON-NLS
+            final float pos = (float) JDOMHelper.getAttributeDouble(child,
+                                                                    "pos");  // NON-NLS
             final RGBA color = JDOMHelper.getAttributeColor(child, "color");  // NON-NLS
-            addColorPoint(new ColorPoint(position, color));
+            addColorPoint(new ColorPoint(pos, color));
         }
     }
 

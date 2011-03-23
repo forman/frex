@@ -73,9 +73,9 @@ public class ProjectTest extends TestCase {
         assertEquals(-0.75, region1.getCenterX(), 1e-10);
         assertEquals(0.25, region1.getCenterY(), 1e-10);
         assertEquals(2.0, region1.getRadius(), 1e-10);
-        assertNotNull(plane1.getColorizer());
-        assertTrue(plane1.getColorizer() instanceof PaletteColorTable);
-        paletteColorTable = (PaletteColorTable) plane1.getColorizer();
+        assertNotNull(plane1.getOuterColorizer());
+        assertTrue(plane1.getOuterColorizer() instanceof PaletteColorTable);
+        paletteColorTable = (PaletteColorTable) plane1.getOuterColorizer();
         assertEquals(512, paletteColorTable.getNumColors());
         assertEquals(5, paletteColorTable.getColorPointCount());
         assertEquals(0.0, paletteColorTable.getColorPoint(0).getPosition(), 1e-10);

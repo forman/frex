@@ -37,7 +37,7 @@ public class DefaultSliderBarModel implements SliderBarModel {
     }
 
     public void setColorPoints(ColorPoint[] colorPoints) {
-        if (!Arrays.equals(colorPointList.toArray(new ColorPoint[colorPointList.size()]), colorPoints)) {
+        if (!Arrays.equals(getColorPoints(), colorPoints)) {
             colorPointList.clear();
             for (ColorPoint colorPoint : colorPoints) {
                 colorPointList.add(new ColorPoint(colorPoint.getPosition(), colorPoint.getColor()));
@@ -63,7 +63,6 @@ public class DefaultSliderBarModel implements SliderBarModel {
     public void setPosition(int index, float position) {
         ColorPoint point = colorPointList.get(index);
         if (!point.samePosition(position)) {
-            point.setPosition(position);
             colorPointList.set(index, new ColorPoint(position, point.getColor()));
             fireStateChange();
         }
@@ -88,7 +87,6 @@ public class DefaultSliderBarModel implements SliderBarModel {
     public void setSelectedIndex(int index) {
         if (index != selectedIndex) {
             selectedIndex = index;
-            // fireStateChange();
         }
     }
 

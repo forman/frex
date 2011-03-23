@@ -86,20 +86,6 @@ public class PlaneRenderer {
         }
         raster.clearStatistics();
 
-        final IFractal fractal = plane.getFractal();
-        final IAccumulator accumulator = plane.getAccumulator();
-        final IIndexer indexer = plane.getIndexer();
-        final IColorizer colorizer = plane.getColorizer();
-
-        fractal.prepare();
-        if (accumulator != null) {
-            accumulator.prepare();
-            if (indexer != null) {
-                indexer.prepare();
-            }
-        }
-        colorizer.prepare();
-
         int numProcessors = Runtime.getRuntime().availableProcessors();
         if (numProcessors == 1) {
             renderPlane(plane,
@@ -148,7 +134,15 @@ public class PlaneRenderer {
         final IFractal fractal = plane.getFractal();
         final IAccumulator accumulator = plane.getAccumulator();
         IIndexer indexer = plane.getIndexer();
-        final IColorizer colorizer = plane.getColorizer();
+        final IColorizer innerColorizer;
+        final IColorizer outerColorizer;
+        if (plane.isInnerOuterDisjoined()) {
+            innerColorizer = plane.getInnerColorizer();
+            outerColorizer = plane.getOuterColorizer();
+        } else {
+            innerColorizer = plane.getOuterColorizer();
+            outerColorizer = plane.getOuterColorizer();
+        }
         final boolean trapMode = plane.getTrapMode();
         final boolean decompositionMode = plane.getDecompositionMode();
 
@@ -168,7 +162,8 @@ public class PlaneRenderer {
                 indexer.prepare();
             }
         }
-        colorizer.prepare();
+        innerColorizer.prepare();
+        outerColorizer.prepare();
 
         double zx, zy;
         int i, k, iy, ix, color, iter;
@@ -189,8 +184,6 @@ public class PlaneRenderer {
                 if (computeFractal) {
                     iter = fractal.compute(zx, zy, orbitX, orbitY);
 
-                    // todo: use different accumulators/indexers/colorizers for inside (iter == iterMax) and outside (iter < iterMax)
-
                     if (accumulator != null) {
                         accumulator.compute(orbitX,
                                             orbitY,
@@ -207,13 +200,13 @@ public class PlaneRenderer {
                     } else if (iter < iterMax) {
                         index = (float) iter;
                     } else {
-                        index = 0.0f;
+                        index = 0.0F;
                     }
                     if (iter == iterMax) {
-                        index = -1.0f - index;
+                        index = -1.0F - index;
                     }
                     if (decompositionMode && iter > 0 && orbitY[iter - 1] < 0.0) {
-                        index *= 2.0f;
+                        index *= 2.0F;
                     }
 
                     rawData[k++] = index;
@@ -221,10 +214,10 @@ public class PlaneRenderer {
                     index = rawData[k++];
                 }
 
-                if (index != -1.0f) {
-                    color = colorizer.getRgba(index < 0.0f ? -1.0f - index : index);
+                if (index < 0.0F) {
+                    color = innerColorizer.getRgba(-1.0F - index);
                 } else {
-                    color = background;
+                    color = outerColorizer.getRgba(index);
                 }
 
                 pixelDataBuffer[i++] = color;

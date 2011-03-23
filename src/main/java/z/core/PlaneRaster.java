@@ -35,9 +35,15 @@ public class PlaneRaster {
 
         public Statistics(int count, float min, float max, float sum, int[] histogram) {
             this.count = count;
-            this.min = count > 0 ? min : Float.NaN;
-            this.max = count > 0 ? max : Float.NaN;
-            this.mean = count > 0 ? sum / (float) count : Float.NaN;
+            if (count == 0) {
+                this.min = 0.0F;
+                this.max = 0.0F;
+                this.mean = 0.0F;
+            } else {
+                this.min = isValidFloat(min) ? min : 0.0F;
+                this.max = isValidFloat(max) ? max : 0.0F;
+                this.mean = (isValidFloat(sum) ? sum : 0.0F) / (float) count;
+            }
             this.histogram = histogram;
             this.histogramMin = histMin(histogram);
             this.histogramMax = histMax(histogram);
@@ -121,7 +127,7 @@ public class PlaneRaster {
         float v;
         for (int i = 0; i < n; i++) {
             v = rawData[i];
-            if (isValidRawValue(v)) {
+            if (isValidFloat(v)) {
                 if (v < 0.0F) {
                     v = -1.0f - v;
                     innerCount++;
@@ -156,14 +162,14 @@ public class PlaneRaster {
         int[] innerHist = new int[histSize];
         int[] outerHist = new int[histSize];
         int[] totalHist = new int[histSize];
-        float innerScale = innerMax > innerMin ? (float) histSize / (innerMax - innerMin) : 0.0f;
-        float outerScale = outerMax > outerMin ? (float) histSize / (outerMax - outerMin) : 0.0f;
-        float totalScale = totalMax > totalMin ? (float) histSize / (totalMax - totalMin) : 0.0f;
+        float innerScale = innerMax > innerMin ? (float) histSize / (innerMax - innerMin) : 0.0F;
+        float outerScale = outerMax > outerMin ? (float) histSize / (outerMax - outerMin) : 0.0F;
+        float totalScale = totalMax > totalMin ? (float) histSize / (totalMax - totalMin) : 0.0F;
         for (int i = 0; i < n; i++) {
             v = rawData[i];
-            if (isValidRawValue(v)) {
-                if (v < 0.0f) {
-                    v = -1.0f - v;
+            if (isValidFloat(v)) {
+                if (v < 0.0F) {
+                    v = -1.0F - v;
                     innerHist[getHistogramIndex(innerMin, innerScale, v, histSize)]++;
                 } else {
                     outerHist[getHistogramIndex(outerMin, outerScale, v, histSize)]++;
@@ -189,7 +195,7 @@ public class PlaneRaster {
                                          totalHist);
     }
 
-    private static boolean isValidRawValue(float v) {
+    private static boolean isValidFloat(float v) {
         return !Float.isNaN(v) && !Float.isInfinite(v);
     }
 

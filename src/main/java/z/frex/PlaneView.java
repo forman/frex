@@ -118,22 +118,29 @@ public class PlaneView extends AbstractPageComponent {
     public synchronized void adjustColorTableIndexRange() {
         final Plane[] planes = getPlanes(); // todo:  extend for multiple planes
         for (Plane plane : planes) {
-            IColorizer colorizer = plane.getColorizer();
-            if (colorizer instanceof PaletteColorTable) {
-                PaletteColorTable paletteColorTable = (PaletteColorTable) colorizer;
-                PlaneRaster.Statistics totalStatistics = plane.getRaster().getTotalStatistics();
-                float minRasterIndex = totalStatistics.min;
-                float maxRasterIndex = totalStatistics.max;
-                System.out.println("minRasterIndex = " + minRasterIndex); // NON-NLS
-                System.out.println("maxRasterIndex = " + maxRasterIndex); // NON-NLS
-                paletteColorTable.setIndexMin(minRasterIndex);
-                paletteColorTable.setIndexMax(maxRasterIndex);
+            if (plane.isInnerOuterDisjoined()) {
+                adjustColorizerMinMax(plane.getInnerColorizer(), plane.getRaster().getInnerStatistics());
+                adjustColorizerMinMax(plane.getOuterColorizer(), plane.getRaster().getOuterStatistics());
+            } else {
+                adjustColorizerMinMax(plane.getOuterColorizer(), plane.getRaster().getTotalStatistics());
             }
         }
         // todo: use real UI progress monitor
         ProgressMonitor progressMonitor = new NullProgressMonitor();
         GenerateImageJob job = new GenerateImageJob(getPlane().getImageInfo(), false, true, planes, new ImageUpdater(progressMonitor));
         job.execute();
+    }
+
+    private void adjustColorizerMinMax(IColorizer colorizer, PlaneRaster.Statistics totalStatistics) {
+        if (colorizer instanceof PaletteColorTable) {
+            PaletteColorTable paletteColorTable = (PaletteColorTable) colorizer;
+            float minRasterIndex = totalStatistics.min;
+            float maxRasterIndex = totalStatistics.max;
+            System.out.println("minRasterIndex = " + minRasterIndex); // NON-NLS
+            System.out.println("maxRasterIndex = " + maxRasterIndex); // NON-NLS
+            paletteColorTable.setIndexMin(minRasterIndex);
+            paletteColorTable.setIndexMax(maxRasterIndex);
+        }
     }
 
     private static BufferedImage createImage(int width, int height) {

@@ -78,38 +78,36 @@ public class EditColorsDialog extends Dialog {
         toolBar.addSeparator();
         toolBar.add(new SwitchHistogramViewAction(editColorsModel.getView().getPage().getWindow()).createToolBarButton());
 
-        if (editColorsModel.getView().getPlane().getAccumulator() != null) {
-            final JRadioButton rb1 = new JRadioButton(StringLiterals.getString("gui.action.allRegions.text"), true);
-            final JRadioButton rb2 = new JRadioButton(StringLiterals.getString("gui.action.innerRegions.text"), false);
-            final JRadioButton rb3 = new JRadioButton(StringLiterals.getString("gui.action.outerRegions.text"), false);
-            ActionListener rbListener = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    EditColorsModel.EditedRegion editedRegion;
-                    if (rb1.isSelected()) {
-                        editedRegion = EditColorsModel.EditedRegion.ALL;
-                    } else if (rb2.isSelected()) {
-                        editedRegion = EditColorsModel.EditedRegion.INNER;
-                    } else {
-                        editedRegion = EditColorsModel.EditedRegion.OUTER;
-                    }
-                    editColorsModel.setEditedRegion(editedRegion);
+        final JRadioButton rb1 = new JRadioButton(StringLiterals.getString("gui.action.allRegions.text"), true);
+        final JRadioButton rb2 = new JRadioButton(StringLiterals.getString("gui.action.innerRegions.text"), false);
+        final JRadioButton rb3 = new JRadioButton(StringLiterals.getString("gui.action.outerRegions.text"), false);
+        ActionListener rbListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EditColorsModel.EditedRegion editedRegion;
+                if (rb1.isSelected()) {
+                    editedRegion = EditColorsModel.EditedRegion.ALL;
+                } else if (rb2.isSelected()) {
+                    editedRegion = EditColorsModel.EditedRegion.INNER;
+                } else {
+                    editedRegion = EditColorsModel.EditedRegion.OUTER;
                 }
-            };
-            rb1.addActionListener(rbListener);
-            rb2.addActionListener(rbListener);
-            rb3.addActionListener(rbListener);
+                editColorsModel.setEditedRegion(editedRegion);
+            }
+        };
+        rb1.addActionListener(rbListener);
+        rb2.addActionListener(rbListener);
+        rb3.addActionListener(rbListener);
 
-            ButtonGroup buttonGroup = new ButtonGroup();
-            buttonGroup.add(rb1);
-            buttonGroup.add(rb2);
-            buttonGroup.add(rb3);
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(rb1);
+        buttonGroup.add(rb2);
+        buttonGroup.add(rb3);
 
-            toolBar.addSeparator();
-            toolBar.add(rb1);
-            toolBar.add(rb2);
-            toolBar.add(rb3);
-        }
+        toolBar.addSeparator();
+        toolBar.add(rb1);
+        toolBar.add(rb2);
+        toolBar.add(rb3);
 
         dialogArea = new JPanel(new BorderLayout(4, 4));
         dialogArea.add(toolBar, BorderLayout.NORTH);
@@ -169,7 +167,7 @@ public class EditColorsDialog extends Dialog {
                 editColorsModel.setCurrentPaletteColorTable(colorTable);
             } else {
                 Plane plane = view.getPlane();
-                plane.setColorizer(colorizer);
+                plane.setOuterColorizer(colorizer);
                 view.generateImage(true);
             }
         }

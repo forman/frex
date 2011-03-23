@@ -15,6 +15,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -39,7 +41,7 @@ public class HistogramForm {
         final PlaneView view = model.getView();
 
         histogramCanvas = new HistogramCanvas();
-        histogramCanvas.setBackground(Color.LIGHT_GRAY);
+        histogramCanvas.setBackground(Color.GRAY);
         histogramCanvas.setForeground(Color.DARK_GRAY);
         histogramCanvas.setStatistics(view.getPlane().getRaster().getTotalStatistics());
 
@@ -70,39 +72,43 @@ public class HistogramForm {
 
     public void updateUI() {
         PlaneRaster.Statistics statistics = model.getCurrentStatistics();
-        float position1 = (model.getCurrentPaletteColorTable().getIndexMin() - statistics.min) / (statistics.max - statistics.min);
-        float position2 = (model.getCurrentPaletteColorTable().getIndexMax() - statistics.min) / (statistics.max - statistics.min);
-        System.out.println("position1 = " + position1);  // NON-NLS
-        System.out.println("position2 = " + position2);  // NON-NLS
-        position1 = Double.isNaN(position1) ? 0 : cropPosition(position1);
-        position2 = Double.isNaN(position2) ? 1 : cropPosition(position2);
+        float pos1 = (model.getCurrentPaletteColorTable().getIndexMin() - statistics.min) / (statistics.max - statistics.min);
+        float pos2 = (model.getCurrentPaletteColorTable().getIndexMax() - statistics.min) / (statistics.max - statistics.min);
+        pos1 = isInvalidPos(pos1) ? 0.0F : cropPos(pos1);
+        pos2 = isInvalidPos(pos2) ? 1.0F : cropPos(pos2);
         ColorPoint[] colorPoints = {
-                new ColorPoint(position1, RGBA.WHITE),
-                new ColorPoint(position2, RGBA.WHITE),
+                new ColorPoint(pos1, RGBA.ORANGE),
+                new ColorPoint(pos2, RGBA.ORANGE),
         };
         sliderBar.getModel().setColorPoints(colorPoints);
         histogramCanvas.setStatistics(statistics);
     }
 
-    private void updateModel() {
-        PlaneRaster.Statistics statistics = model.getCurrentStatistics();
-        float position1 = statistics.min + sliderBar.getModel().getPosition(0) * (statistics.max - statistics.min);
-        float position2 = statistics.min + sliderBar.getModel().getPosition(1) * (statistics.max - statistics.min);
-        model.getCurrentPaletteColorTable().setIndexMin(Math.min(position1, position2));
-        model.getCurrentPaletteColorTable().setIndexMax(Math.max(position1, position2));
+    private static boolean isInvalidPos(float pos) {
+        return Float.isNaN(pos) || Float.isInfinite(pos);
     }
 
-    private float cropPosition(float position) {
-        if (position < 0) {
-            position = 0;
+
+    private static float cropPos(float pos) {
+        if (pos < 0.0F) {
+            return 0.0F;
         }
-        if (position > 1) {
-            position = 1;
+        if (pos > 1.0F) {
+            return 1.0F;
         }
-        return position;
+        return pos;
+    }
+
+    private void updateModel() {
+        PlaneRaster.Statistics statistics = model.getCurrentStatistics();
+        float index1 = statistics.min + sliderBar.getModel().getPosition(0) * (statistics.max - statistics.min);
+        float index2 = statistics.min + sliderBar.getModel().getPosition(1) * (statistics.max - statistics.min);
+        model.getCurrentPaletteColorTable().setIndexMin(Math.min(index1, index2));
+        model.getCurrentPaletteColorTable().setIndexMax(Math.max(index1, index2));
     }
 
     private static class HistogramCanvas extends Control {
+        public static final Font FONT = new Font("Courier", Font.PLAIN, 10);
         PlaneRaster.Statistics statistics;
 
         public HistogramCanvas() {
@@ -125,6 +131,8 @@ public class HistogramForm {
 
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                  RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             Rectangle clientArea = getClientArea();
             clientArea.grow(-4, -4);
@@ -144,6 +152,23 @@ public class HistogramForm {
 //                g2d.fillRect(x-1, y2, 3, h);
                 g2d.drawLine(x, y1, x, y2);
             }
+
+            g2d.setFont(FONT);
+            g2d.setColor(Color.WHITE);
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+
+            if (statistics.count == 0) {
+                String msg = "No samples.";
+                g2d.drawString(msg,
+                               clientArea.x + (clientArea.width - fontMetrics.stringWidth(msg)) / 2,
+                               clientArea.y + (clientArea.height - fontMetrics.getHeight()) / 2);
+            } else {
+                g2d.drawString("Count: " + statistics.count, 4, 1 * fontMetrics.getHeight() + 4);
+                g2d.drawString("Min:   " + statistics.min, 4, 2 * fontMetrics.getHeight() + 4);
+                g2d.drawString("Max:   " + statistics.max, 4, 3 * fontMetrics.getHeight() + 4);
+                g2d.drawString("Mean:  " + statistics.mean, 4, 4 * fontMetrics.getHeight() + 4);
+            }
+
         }
     }
 }

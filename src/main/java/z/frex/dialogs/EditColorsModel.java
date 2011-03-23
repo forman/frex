@@ -31,7 +31,9 @@ public class EditColorsModel {
 
     private final PlaneView view;
     private EditedRegion editedRegion;
-    private final IColorizer[] originalColorizers;
+    private final boolean originalInnerOuterDisjoined;
+    private final IColorizer originalInnerColorizer;
+    private final IColorizer originalOuterColorizer;
     private final PaletteColorTable[] paletteColorTables;
     private final PlaneRaster.Statistics[] statistics;
     private final PropertyChangeSupport propertyChangeSupport;
@@ -40,32 +42,37 @@ public class EditColorsModel {
         this.view = view;
         propertyChangeSupport = new PropertyChangeSupport(this);
         editedRegion = EditedRegion.ALL;
-        originalColorizers = new IColorizer[3];
         paletteColorTables = new PaletteColorTable[3];
-        for (int i = 0; i < 3; i++) {
-            originalColorizers[i] = view.getPlane().getColorizer(i);
-            if (originalColorizers[i] instanceof PaletteColorTable) {
-                paletteColorTables[i] = (PaletteColorTable) originalColorizers[i].clone();
-            } else {
-                paletteColorTables[i] = new PaletteColorTable();
-                paletteColorTables[i].reset();
-            }
-            paletteColorTables[i].prepare();
-            final int index = i;
-            paletteColorTables[i].addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    propertyChangeSupport.fireIndexedPropertyChange("paletteColorTables", // NON-NLS
-                                                                    index,
-                                                                    evt.getOldValue(),
-                                                                    evt.getNewValue());
-                }
-            });
-        }
+        originalInnerOuterDisjoined = view.getPlane().isInnerOuterDisjoined();
+        originalInnerColorizer = view.getPlane().getInnerColorizer();
+        originalOuterColorizer = view.getPlane().getOuterColorizer();
+        setCopyOfColorPaletteTable(0, originalOuterColorizer);
+        setCopyOfColorPaletteTable(1, originalInnerColorizer);
+        setCopyOfColorPaletteTable(2, originalOuterColorizer);
         statistics = new PlaneRaster.Statistics[3];
         statistics[0] = view.getPlane().getRaster().getTotalStatistics();
         statistics[1] = view.getPlane().getRaster().getInnerStatistics();
         statistics[2] = view.getPlane().getRaster().getOuterStatistics();
+    }
+
+    private void setCopyOfColorPaletteTable(int i, IColorizer colorizer) {
+        if (colorizer instanceof PaletteColorTable) {
+            paletteColorTables[i] = (PaletteColorTable) colorizer.clone();
+        } else {
+            paletteColorTables[i] = new PaletteColorTable();
+            paletteColorTables[i].reset();
+        }
+        paletteColorTables[i].prepare();
+        final int index = i;
+        paletteColorTables[i].addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                propertyChangeSupport.fireIndexedPropertyChange("paletteColorTables", // NON-NLS
+                                                                index,
+                                                                evt.getOldValue(),
+                                                                evt.getNewValue());
+            }
+        });
     }
 
     public PlaneView getView() {
@@ -84,10 +91,6 @@ public class EditColorsModel {
                                                  this.editedRegion);
     }
 
-    public IColorizer getCurrentOriginalColorizer() {
-        return originalColorizers[editedRegion.ordinal()];
-    }
-
     public PaletteColorTable getCurrentPaletteColorTable() {
         return paletteColorTables[editedRegion.ordinal()];
     }
@@ -99,25 +102,25 @@ public class EditColorsModel {
                                                  oldValue, colorTable);
     }
 
-
-    public void apply(boolean modify) {
-        apply();
-        if (modify) {
+    public void apply(boolean confirmed) {
+        getView().getPlane().setInnerOuterDisjoined(editedRegion != EditedRegion.ALL);
+        if (editedRegion == EditedRegion.INNER) {
+            getView().getPlane().setInnerColorizer(getCurrentPaletteColorTable());
+        } else {
+            getView().getPlane().setOuterColorizer(getCurrentPaletteColorTable());
+        }
+        getView().generateImage(true);
+        if (confirmed) {
             getView().getPlane().setModified(true);
             getView().getPlane().fireStateChange();
         }
     }
 
-    public void apply() {
-        getView().getPlane().setColorizer(getCurrentPaletteColorTable());
-        getView().generateImage(true);
-    }
-
     public void restore() {
-        if (getView().getPlane().getColorizer() != getCurrentOriginalColorizer()) {
-            getView().getPlane().setColorizer(getCurrentOriginalColorizer());
-            getView().generateImage(true);
-        }
+        getView().getPlane().setInnerOuterDisjoined(originalInnerOuterDisjoined);
+        getView().getPlane().setInnerColorizer(originalInnerColorizer);
+        getView().getPlane().setOuterColorizer(originalOuterColorizer);
+        getView().generateImage(true);
     }
 
     public PlaneRaster.Statistics getCurrentStatistics() {

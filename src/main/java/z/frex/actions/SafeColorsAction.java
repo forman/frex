@@ -15,8 +15,6 @@ import z.ui.UIUtils;
 import z.ui.application.ApplicationWindow;
 import z.ui.dialog.MessageDialog;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
@@ -39,7 +37,7 @@ public class SafeColorsAction extends PlaneViewAction {
         PlaneView planeView = getPlaneView();
         if (planeView != null) {
             final Plane plane = planeView.getPlane();
-            IColorizer colorizer = plane.getColorizer();
+            IColorizer colorizer = plane.getOuterColorizer();
             setEnabled(colorizer instanceof PaletteColorTable);
         } else {
             setEnabled(false);
@@ -53,7 +51,7 @@ public class SafeColorsAction extends PlaneViewAction {
     }
 
     public boolean save(Plane plane) {
-        IColorizer colorizer = plane.getColorizer();
+        IColorizer colorizer = plane.getOuterColorizer();
         if (!(colorizer instanceof PaletteColorTable)) {
             return false;
         }

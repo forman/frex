@@ -75,15 +75,6 @@ public abstract class ColorTable extends Colorizer {
         return rgbaArray[index % numColors];
     }
 
-    public final void setRgba(int index, int rgba) {
-        int oldValue = rgbaArray[index];
-        rgbaArray[index] = rgba;
-        fireIndexedPropertyChange("rgbaArray", // NON-NLS
-                                  index,
-                                  oldValue,
-                                  rgba);
-    }
-
     public int getRgba(float index) {
         final int n = numColors;
         int i = (int) ((index - indexMin) * indexFactor);

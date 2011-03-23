@@ -38,7 +38,11 @@ public class Plane extends RenderableNode {
 
     private boolean decompositionMode;
 
-    private IColorizer colorizer; // not null
+    private boolean innerOuterDisjoined;
+
+    private IColorizer innerColorizer; // not null
+
+    private IColorizer outerColorizer; // not null
 
     private PlaneRaster raster;
 
@@ -46,7 +50,8 @@ public class Plane extends RenderableNode {
         super(file);
         visible = true;
         fractal = new Mandelbrot();
-        colorizer = new PaletteColorTable();
+        innerColorizer = new PaletteColorTable();
+        outerColorizer = new PaletteColorTable();
         region = new Region(fractal.getStartRegion());
         accumulator = null;
         indexer = null;
@@ -137,20 +142,28 @@ public class Plane extends RenderableNode {
         this.accumulator = accumulator;
     }
 
-    public IColorizer getColorizer() {
-        return colorizer;
+    public boolean isInnerOuterDisjoined() {
+        return innerOuterDisjoined;
     }
 
-    public void setColorizer(IColorizer colorizer) {
-        this.colorizer = colorizer;
+    public void setInnerOuterDisjoined(boolean innerOuterDisjoined) {
+        this.innerOuterDisjoined = innerOuterDisjoined;
     }
-    // todo
-    public IColorizer getColorizer(int index) {
-        return colorizer;
+
+    public IColorizer getOuterColorizer() {
+        return this.outerColorizer;
     }
-    // todo
-    public void setColorizer(int index, IColorizer colorizer) {
-        this.colorizer = colorizer;
+
+    public void setOuterColorizer(IColorizer outerColorizer) {
+        this.outerColorizer = outerColorizer;
+    }
+
+    public IColorizer getInnerColorizer() {
+        return innerColorizer;
+    }
+
+    public void setInnerColorizer(IColorizer innerColorizer) {
+        this.innerColorizer = innerColorizer;
     }
 
     public PlaneRaster getRaster() {
@@ -208,10 +221,15 @@ public class Plane extends RenderableNode {
                                                                                    IAccumulator.ELEMENT_NAME);
         IIndexer indexer = (IIndexer) JDOMObjectIO.readObjectFromChild(element,
                                                                        IIndexer.ELEMENT_NAME);
-        IColorizer colorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
-                                                                              IColorizer.ELEMENT_NAME,
-                                                                              PaletteColorTable.class);
-
+        final boolean innerOuterDisjoined = JDOMHelper.getAttributeBoolean(element,
+                                                                           "innerOuterDisjoined",  // NON-NLS
+                                                                           false);
+        IColorizer outerColorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
+                                                                                   IColorizer.ELEMENT_NAME,
+                                                                                   PaletteColorTable.class);
+        IColorizer innerColorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
+                                                                                   IColorizer.ELEMENT_NAME_INNER,
+                                                                                   PaletteColorTable.class);
         if (fractal == null) {
             fractal = new Mandelbrot();
         }
@@ -227,7 +245,9 @@ public class Plane extends RenderableNode {
         setRegion(region);
         setAccumulator(accumulator);
         setIndexer(indexer);
-        setColorizer(colorTable);
+        setInnerOuterDisjoined(innerOuterDisjoined);
+        setInnerColorizer(innerColorTable);
+        setOuterColorizer(outerColorTable);
     }
 
     @Override
@@ -262,9 +282,19 @@ public class Plane extends RenderableNode {
                                         IIndexer.ELEMENT_NAME,
                                         getIndexer(),
                                         null);
+
+        JDOMHelper.setAttributeBoolean(element,
+                                       "innerOuterDisjoined",   // NON-NLS
+                                       isInnerOuterDisjoined(),
+                                       false);
+
         JDOMObjectIO.writeObjectToChild(element,
                                         IColorizer.ELEMENT_NAME,
-                                        getColorizer(),
+                                        getOuterColorizer(),
+                                        PaletteColorTable.class);
+        JDOMObjectIO.writeObjectToChild(element,
+                                        IColorizer.ELEMENT_NAME_INNER,
+                                        getInnerColorizer(),
                                         PaletteColorTable.class);
     }
 }

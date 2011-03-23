@@ -12,6 +12,7 @@ package z.core;
  */
 public interface IColorizer extends IAlgorithm {
     String ELEMENT_NAME = "colorizer"; //$NON-NLS-1$
+    String ELEMENT_NAME_INNER = "innerColorizer"; //$NON-NLS-1$
 
     /**
      * Computes an RGBA value from the given real index value.

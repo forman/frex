@@ -14,7 +14,7 @@ public class PlaneTest extends TestCase {
         assertTrue(plane.isVisible());
         assertNotNull(plane.getFractal());
         assertNotNull(plane.getRegion());
-        assertNotNull(plane.getColorizer());
+        assertNotNull(plane.getOuterColorizer());
         assertNotNull(plane.getImageInfo());
         assertEquals("PNG", plane.getImageInfo().getImageFormat());
         assertEquals(false, plane.getImageInfo().isUsingWindowSize());
