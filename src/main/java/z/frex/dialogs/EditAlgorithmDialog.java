@@ -184,7 +184,7 @@ public class EditAlgorithmDialog extends Dialog {
                 public void actionPerformed(ActionEvent e) {
                     String lastDir = Frex.getPreferences().get("lastImageDir", "."); // NON-NLS
                     JFileChooser dialog = new JFileChooser(lastDir);
-                    dialog.setDialogTitle(StringLiterals.getString("gui.title.open"));
+                    dialog.setDialogTitle(StringLiterals.getString("gui.title.openImage"));
                     dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
                     dialog.setAcceptAllFileFilterUsed(true);
                     FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files",

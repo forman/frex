@@ -78,8 +78,8 @@ public class EditColorsDialog extends Dialog {
         toolBar.addSeparator();
         toolBar.add(new SwitchHistogramViewAction(editColorsModel.getView().getPage().getWindow()).createToolBarButton());
 
-        final JRadioButton rb1 = new JRadioButton(StringLiterals.getString("gui.action.allRegions.text"), true);
-        final JRadioButton rb2 = new JRadioButton(StringLiterals.getString("gui.action.innerRegions.text"), false);
+        final JRadioButton rb1 = new JRadioButton(StringLiterals.getString("gui.action.allRegions.text"), !editColorsModel.getView().getPlane().isInnerOuterDisjoined());
+        final JRadioButton rb2 = new JRadioButton(StringLiterals.getString("gui.action.innerRegions.text"), editColorsModel.getView().getPlane().isInnerOuterDisjoined());
         final JRadioButton rb3 = new JRadioButton(StringLiterals.getString("gui.action.outerRegions.text"), false);
         ActionListener rbListener = new ActionListener() {
             @Override

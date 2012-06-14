@@ -23,7 +23,7 @@ public class PaletteColorTable extends ColorTable {
     public Object clone() {
         PaletteColorTable c = (PaletteColorTable) super.clone();
         c.colorPointList = new ArrayList<ColorPoint>(getColorPointCount());
-        c.setColorPoints(getColorPoints());
+        c.colorPointList.addAll(Arrays.asList(getColorPoints()));
         return c;
     }
 

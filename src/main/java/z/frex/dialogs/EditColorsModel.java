@@ -41,8 +41,8 @@ public class EditColorsModel {
     public EditColorsModel(PlaneView view) {
         this.view = view;
         propertyChangeSupport = new PropertyChangeSupport(this);
-        editedRegion = EditedRegion.ALL;
         paletteColorTables = new PaletteColorTable[3];
+        editedRegion = view.getPlane().isInnerOuterDisjoined() ? EditedRegion.INNER : EditColorsModel.EditedRegion.ALL;
         originalInnerOuterDisjoined = view.getPlane().isInnerOuterDisjoined();
         originalInnerColorizer = view.getPlane().getInnerColorizer();
         originalOuterColorizer = view.getPlane().getOuterColorizer();

@@ -81,7 +81,7 @@ public class Application {
             applicationLifecycleAdvisor.fillCoolBar(coolBar);
         }
 
-        if (applicationWindowConfigurer.isShowStatusLine()) {
+        if (applicationWindowConfigurer.getShowStatusLine()) {
             final JPanel statusBar = new JPanel(new FlowLayout());
             shell.getContentPane().add(statusBar, BorderLayout.SOUTH);
             applicationLifecycleAdvisor.fillStatusBar(statusBar);

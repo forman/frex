@@ -26,7 +26,7 @@ public interface ApplicationWindowConfigurer {
 
     void setShowCoolBar(boolean b);
 
-    boolean isShowStatusLine();
+    boolean getShowStatusLine();
 
     void setShowStatusLine(boolean b);
 

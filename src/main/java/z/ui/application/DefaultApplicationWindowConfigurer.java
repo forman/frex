@@ -67,7 +67,7 @@ class DefaultApplicationWindowConfigurer implements ApplicationWindowConfigurer 
         this.showCoolBar = showCoolBar;
     }
 
-    public boolean isShowStatusLine() {
+    public boolean getShowStatusLine() {
         return showStatusLine;
     }
 

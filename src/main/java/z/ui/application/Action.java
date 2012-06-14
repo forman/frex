@@ -57,8 +57,11 @@ public abstract class Action extends AbstractAction {
         putValue(SMALL_ICON, icon);
     }
 
-    public final void actionPerformed(ActionEvent e) {
-        System.out.printf("%s: selected = %s%n", this, isSelected());  // NON-NLS
+    /**
+     * Simply calls {@link #run()}.
+     * @param e the action event.
+     */
+    public void actionPerformed(ActionEvent e) {
         run();
     }
 

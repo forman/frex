@@ -1,7 +1,7 @@
 package z.frex;
 
 import z.StringLiterals;
-import z.core.IColorizer;
+import z.frex.actions.ApplicationWindowAction;
 import z.frex.actions.CloseAction;
 import z.frex.actions.EditColorsAction;
 import z.frex.actions.EditImageSizeAction;
@@ -10,7 +10,6 @@ import z.frex.actions.FitImageSizeAction;
 import z.frex.actions.GoBackAction;
 import z.frex.actions.GoHomeAction;
 import z.frex.actions.GoNextAction;
-import z.frex.actions.OpenColorsAction;
 import z.frex.actions.ManageUserFractalsAction;
 import z.frex.actions.NewPlaneAction;
 import z.frex.actions.OpenAction;
@@ -18,7 +17,6 @@ import z.frex.actions.PanInteraction;
 import z.frex.actions.SaveAction;
 import z.frex.actions.SaveAsAction;
 import z.frex.actions.SaveImageAction;
-import z.frex.actions.SafeColorsAction;
 import z.frex.actions.ZoomInteraction;
 import z.ui.UIUtils;
 import z.ui.application.Action;
@@ -34,9 +32,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.text.MessageFormat;
 import java.util.prefs.BackingStoreException;
 
@@ -55,12 +56,17 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
                     "<html>Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem</html>\n" +
                     "<html>Programm erhalten haben. Falls nicht, siehe <a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses/</a>.</html>\n";
 
+    private final boolean IS_ON_MAC = System.getProperty("os.name").startsWith("Mac OS");// NON-NLS
+    private final boolean HAS_MENU_BAR = IS_ON_MAC;
+
     public FrexLifecycleAdvisor() {
     }
 
     @Override
     protected void registerActions(ApplicationWindow window) {
         assert SwingUtilities.isEventDispatchThread();
+
+        register(new ShowMenuAction(window));
 
         register(new NewPlaneAction(window));
         register(new OpenAction(window));
@@ -126,6 +132,13 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         assert SwingUtilities.isEventDispatchThread();
 
         JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
+
+        if (!HAS_MENU_BAR) {
+            toolBar.add(getAction(ShowMenuAction.ID));
+            toolBar.addSeparator();
+        }
+
         toolBar.add(getAction(NewPlaneAction.ID));
         toolBar.add(getAction(OpenAction.ID));
         toolBar.add(getAction(SaveAction.ID));
@@ -155,7 +168,7 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         assert SwingUtilities.isEventDispatchThread();
         ApplicationWindowConfigurer configurer = getWindowConfigurer();
         configurer.setInitialSize(new Dimension(600, 680));
-        configurer.setShowMenuBar(true);
+        configurer.setShowMenuBar(HAS_MENU_BAR);
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
         configurer.setShowProgressIndicator(false);
@@ -212,4 +225,44 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
         }
     }
 
+    public class ShowMenuAction extends ApplicationWindowAction {
+        public static final String ID = "z.frex.actions.showMenu";// NON-NLS
+
+
+        public ShowMenuAction(ApplicationWindow window) {
+            super(window, ID);
+            setText(StringLiterals.getString("gui.action.text.showMenu"));
+            setToolTipText(StringLiterals.getString("gui.action.tooltip.showMenu"));
+            //putValue(javax.swing.Action.SMALL_ICON, Frex.getIcon("/icons/16x16/frex/triangle_down.gif"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Component source = (Component) e.getSource();
+
+            JMenu editMenu = UIUtils.createMenu(StringLiterals.getString("gui.menu.edit"));
+            editMenu.add(getAction(EditPlanePropertiesAction.ID));
+            editMenu.add(getAction(EditColorsAction.ID));
+            editMenu.add(getAction(EditImageSizeAction.ID));
+            editMenu.addSeparator();
+            editMenu.add(getAction(ManageUserFractalsAction.ID));
+
+            JPopupMenu mainMenu = new JPopupMenu();
+            mainMenu.add(getAction(NewPlaneAction.ID));
+            mainMenu.add(getAction(OpenAction.ID));
+            mainMenu.add(editMenu);
+            mainMenu.addSeparator();
+            mainMenu.add(getAction(CloseAction.ID));
+            mainMenu.addSeparator();
+            mainMenu.add(getAction(SaveAction.ID));
+            mainMenu.add(getAction(SaveAsAction.ID));
+            mainMenu.add(getAction(SaveImageAction.ID));
+            mainMenu.addSeparator();
+            mainMenu.add(getAction(ActionFactory.ABOUT.getId()));
+            mainMenu.addSeparator();
+            mainMenu.add(getAction(ActionFactory.QUIT.getId()));
+
+            mainMenu.show(source, source.getX(), source.getY() + source.getHeight());
+        }
+    }
 }
