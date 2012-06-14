@@ -1,0 +1,35 @@
+<plane name="Goldsworthy_1" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="1024" height="1024" usingWindowSize="false" background="0,0,0" />
+  <fractal class="z.core.support.fractals.InvMandelbrot1">
+    <property name="juliaMode" value="false" />
+    <property name="iterMax" value="750" />
+    <property name="bailOut" value="10.0" />
+    <property name="juliaCX" value="0.0" />
+    <property name="juliaCY" value="0.0" />
+  </fractal>
+  <region centerX="-1.1150025983343017" centerY="0.030836687572988825" radius="4.7053468385959904E-4" />
+  <accumulator class="z.core.support.accumulators.SquareOrbitTrap">
+    <property name="offsetY" value="0.0" />
+    <property name="factor" value="0.1" />
+    <property name="offsetX" value="0.0" />
+    <property name="radius" value="0.2" />
+    <property name="turbulenceUsed" value="false" />
+    <property name="turbulenceIntensity" value="0.5" />
+    <property name="turbulenceScale" value="0.2" />
+    <property name="turbulenceOctaveCount" value="5" />
+  </accumulator>
+  <indexer class="z.core.support.indexers.AngleZ" />
+  <colorizer numColors="8192" cyclic="false" indexMin="0.31808114" indexMax="1.4843571">
+    <colorPoint pos="0.0" color="255,255,255" />
+    <colorPoint pos="0.8790000081062317" color="115,59,36" />
+    <colorPoint pos="1.0" color="0,0,0" />
+    <colorPoint pos="0.44600000977516174" color="181,140,79" />
+    <colorPoint pos="0.1679999977350235" color="254,209,148" />
+  </colorizer>
+  <innerColorizer numColors="8192" indexMin="47.3445" indexMax="50.634716">
+    <colorPoint pos="0.0" color="0,0,0" />
+    <colorPoint pos="0.33000001311302185" color="0,255,0" />
+    <colorPoint pos="0.7490000128746033" color="255,255,255" />
+    <colorPoint pos="1.0" color="0,0,0" />
+  </innerColorizer>
+</plane>
