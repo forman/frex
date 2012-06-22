@@ -111,7 +111,6 @@ public class PlaneRaster {
 
     public void updateStatistics() {
         final float[] rawData = this.rawData;
-        final int n = rawData.length;
         int innerCount = 0;
         float innerSum = 0.0F;
         float innerMin = +Float.MAX_VALUE;
@@ -124,9 +123,7 @@ public class PlaneRaster {
         float totalSum = 0.0F;
         float totalMin = +Float.MAX_VALUE;
         float totalMax = -Float.MAX_VALUE;
-        float v;
-        for (int i = 0; i < n; i++) {
-            v = rawData[i];
+        for (float v : rawData) {
             if (isValidFloat(v)) {
                 if (v < 0.0F) {
                     v = -1.0f - v;
@@ -165,8 +162,7 @@ public class PlaneRaster {
         float innerScale = innerMax > innerMin ? (float) histSize / (innerMax - innerMin) : 0.0F;
         float outerScale = outerMax > outerMin ? (float) histSize / (outerMax - outerMin) : 0.0F;
         float totalScale = totalMax > totalMin ? (float) histSize / (totalMax - totalMin) : 0.0F;
-        for (int i = 0; i < n; i++) {
-            v = rawData[i];
+        for (float v : rawData) {
             if (isValidFloat(v)) {
                 if (v < 0.0F) {
                     v = -1.0F - v;

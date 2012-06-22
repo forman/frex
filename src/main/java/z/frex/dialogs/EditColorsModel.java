@@ -19,19 +19,19 @@ public class EditColorsModel {
 
         public static EditedRegion get(int ordinal) {
             EditedRegion[] values = EditedRegion.values();
-            for (int i = 0; i < values.length; i++) {
-                EditedRegion value = values[i];
+            for (EditedRegion value : values) {
                 if (value.ordinal() == ordinal) {
                     return value;
                 }
             }
-            throw new IllegalStateException();
+            throw new IllegalArgumentException("ordinal=" + ordinal);
         }
     }
 
     private final PlaneView view;
     private EditedRegion editedRegion;
     private final boolean originalInnerOuterDisjoined;
+    private final IColorizer originalColorizer;
     private final IColorizer originalInnerColorizer;
     private final IColorizer originalOuterColorizer;
     private final PaletteColorTable[] paletteColorTables;
@@ -44,9 +44,10 @@ public class EditColorsModel {
         paletteColorTables = new PaletteColorTable[3];
         editedRegion = view.getPlane().isInnerOuterDisjoined() ? EditedRegion.INNER : EditColorsModel.EditedRegion.ALL;
         originalInnerOuterDisjoined = view.getPlane().isInnerOuterDisjoined();
+        originalColorizer = view.getPlane().getColorizer();
         originalInnerColorizer = view.getPlane().getInnerColorizer();
         originalOuterColorizer = view.getPlane().getOuterColorizer();
-        setCopyOfColorPaletteTable(0, originalOuterColorizer);
+        setCopyOfColorPaletteTable(0, originalColorizer);
         setCopyOfColorPaletteTable(1, originalInnerColorizer);
         setCopyOfColorPaletteTable(2, originalOuterColorizer);
         statistics = new PlaneRaster.Statistics[3];
@@ -104,11 +105,9 @@ public class EditColorsModel {
 
     public void apply(boolean confirmed) {
         getView().getPlane().setInnerOuterDisjoined(editedRegion != EditedRegion.ALL);
-        if (editedRegion == EditedRegion.INNER) {
-            getView().getPlane().setInnerColorizer(getCurrentPaletteColorTable());
-        } else {
-            getView().getPlane().setOuterColorizer(getCurrentPaletteColorTable());
-        }
+        getView().getPlane().setColorizer(paletteColorTables[EditedRegion.ALL.ordinal()]);
+        getView().getPlane().setInnerColorizer(paletteColorTables[EditedRegion.INNER.ordinal()]);
+        getView().getPlane().setOuterColorizer(paletteColorTables[EditedRegion.OUTER.ordinal()]);
         getView().generateImage(true);
         if (confirmed) {
             getView().getPlane().setModified(true);
@@ -118,6 +117,7 @@ public class EditColorsModel {
 
     public void restore() {
         getView().getPlane().setInnerOuterDisjoined(originalInnerOuterDisjoined);
+        getView().getPlane().setColorizer(originalColorizer);
         getView().getPlane().setInnerColorizer(originalInnerColorizer);
         getView().getPlane().setOuterColorizer(originalOuterColorizer);
         getView().generateImage(true);

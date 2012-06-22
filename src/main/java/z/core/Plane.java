@@ -40,6 +40,8 @@ public class Plane extends RenderableNode {
 
     private boolean innerOuterDisjoined;
 
+    private IColorizer colorizer; // not null
+
     private IColorizer innerColorizer; // not null
 
     private IColorizer outerColorizer; // not null
@@ -50,6 +52,7 @@ public class Plane extends RenderableNode {
         super(file);
         visible = true;
         fractal = new Mandelbrot();
+        colorizer = new PaletteColorTable();
         innerColorizer = new PaletteColorTable();
         outerColorizer = new PaletteColorTable();
         region = new Region(fractal.getStartRegion());
@@ -150,6 +153,14 @@ public class Plane extends RenderableNode {
         this.innerOuterDisjoined = innerOuterDisjoined;
     }
 
+    public IColorizer getColorizer() {
+        return colorizer;
+    }
+
+    public void setColorizer(IColorizer colorizer) {
+        this.colorizer = colorizer;
+    }
+
     public IColorizer getOuterColorizer() {
         return this.outerColorizer;
     }
@@ -224,12 +235,24 @@ public class Plane extends RenderableNode {
         final boolean innerOuterDisjoined = JDOMHelper.getAttributeBoolean(element,
                                                                            "innerOuterDisjoined",  // NON-NLS
                                                                            false);
-        IColorizer outerColorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
-                                                                                   IColorizer.ELEMENT_NAME,
-                                                                                   PaletteColorTable.class);
+        IColorizer colorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
+                                                                              IColorizer.ELEMENT_NAME,
+                                                                              PaletteColorTable.class);
         IColorizer innerColorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
                                                                                    IColorizer.ELEMENT_NAME_INNER,
                                                                                    PaletteColorTable.class);
+        IColorizer outerColorTable = (IColorizer) JDOMObjectIO.readObjectFromChild(element,
+                                                                                   IColorizer.ELEMENT_NAME_OUTER,
+                                                                                   PaletteColorTable.class);
+        if (colorTable == null) {
+            colorTable = new PaletteColorTable();
+        }
+        if (innerColorTable == null) {
+            innerColorTable = (IColorizer) colorTable.clone();
+        }
+        if (outerColorTable == null) {
+            outerColorTable = (IColorizer) colorTable.clone();
+        }
         if (fractal == null) {
             fractal = new Mandelbrot();
         }
@@ -246,6 +269,7 @@ public class Plane extends RenderableNode {
         setAccumulator(accumulator);
         setIndexer(indexer);
         setInnerOuterDisjoined(innerOuterDisjoined);
+        setColorizer(colorTable);
         setInnerColorizer(innerColorTable);
         setOuterColorizer(outerColorTable);
     }
@@ -290,11 +314,15 @@ public class Plane extends RenderableNode {
 
         JDOMObjectIO.writeObjectToChild(element,
                                         IColorizer.ELEMENT_NAME,
-                                        getOuterColorizer(),
+                                        getColorizer(),
                                         PaletteColorTable.class);
         JDOMObjectIO.writeObjectToChild(element,
                                         IColorizer.ELEMENT_NAME_INNER,
                                         getInnerColorizer(),
+                                        PaletteColorTable.class);
+        JDOMObjectIO.writeObjectToChild(element,
+                                        IColorizer.ELEMENT_NAME_OUTER,
+                                        getOuterColorizer(),
                                         PaletteColorTable.class);
     }
 }

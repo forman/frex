@@ -20,7 +20,7 @@ public class PaletteColorTable extends ColorTable {
     }
 
     @Override
-    public Object clone() {
+    public PaletteColorTable clone() {
         PaletteColorTable c = (PaletteColorTable) super.clone();
         c.colorPointList = new ArrayList<ColorPoint>(getColorPointCount());
         c.colorPointList.addAll(Arrays.asList(getColorPoints()));

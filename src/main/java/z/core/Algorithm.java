@@ -28,9 +28,9 @@ public abstract class Algorithm implements IAlgorithm {
     }
 
     @Override
-    public Object clone() {
+    public Algorithm clone() {
         try {
-            return super.clone();
+            return (Algorithm) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e.getMessage());
         }

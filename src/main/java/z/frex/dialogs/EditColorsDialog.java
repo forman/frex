@@ -1,9 +1,6 @@
 package z.frex.dialogs;
 
 import z.StringLiterals;
-import z.core.IColorizer;
-import z.core.Plane;
-import z.core.support.colorizers.PaletteColorTable;
 import z.frex.Frex;
 import z.frex.PlaneView;
 import z.frex.actions.OpenColorsAction;
@@ -12,13 +9,8 @@ import z.frex.actions.SafeColorsAction;
 import z.ui.application.ApplicationWindow;
 import z.ui.dialog.Dialog;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JToolBar;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -38,6 +30,14 @@ public class EditColorsDialog extends Dialog {
         editColorsModel = new EditColorsModel(view);
         editColorsForm = new EditColorsForm(editColorsModel);
         histogramForm = new HistogramForm(editColorsModel);
+    }
+
+    public EditColorsForm getEditColorsForm() {
+        return editColorsForm;
+    }
+
+    public EditColorsModel getEditColorsModel() {
+        return editColorsModel;
     }
 
     @Override
@@ -67,19 +67,22 @@ public class EditColorsDialog extends Dialog {
         editColorsModel.restore();
     }
 
+    public PlaneView getView() {
+        return view;
+    }
 
     @Override
     protected JComponent createDialogArea() {
 
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
-        toolBar.add(new OpenColorsAction(editColorsModel.getView().getPage().getWindow(), new OpenColorsCallback()));
-        toolBar.add(new SafeColorsAction(editColorsModel.getView().getPage().getWindow()));
+        toolBar.add(new OpenColorsAction(view, this));
+        toolBar.add(new SafeColorsAction(view, this));
         toolBar.addSeparator();
-        toolBar.add(new SwitchHistogramViewAction(editColorsModel.getView().getPage().getWindow()).createToolBarButton());
+        toolBar.add(new SwitchHistogramViewAction(view.getPage().getWindow()).createToolBarButton());
 
-        final JRadioButton rb1 = new JRadioButton(StringLiterals.getString("gui.action.allRegions.text"), !editColorsModel.getView().getPlane().isInnerOuterDisjoined());
-        final JRadioButton rb2 = new JRadioButton(StringLiterals.getString("gui.action.innerRegions.text"), editColorsModel.getView().getPlane().isInnerOuterDisjoined());
+        final JRadioButton rb1 = new JRadioButton(StringLiterals.getString("gui.action.allRegions.text"), !view.getPlane().isInnerOuterDisjoined());
+        final JRadioButton rb2 = new JRadioButton(StringLiterals.getString("gui.action.innerRegions.text"), view.getPlane().isInnerOuterDisjoined());
         final JRadioButton rb3 = new JRadioButton(StringLiterals.getString("gui.action.outerRegions.text"), false);
         ActionListener rbListener = new ActionListener() {
             @Override
@@ -104,10 +107,13 @@ public class EditColorsDialog extends Dialog {
         buttonGroup.add(rb2);
         buttonGroup.add(rb3);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
+        buttonPanel.add(rb1);
+        buttonPanel.add(rb2);
+        buttonPanel.add(rb3);
+
         toolBar.addSeparator();
-        toolBar.add(rb1);
-        toolBar.add(rb2);
-        toolBar.add(rb3);
+        toolBar.add(buttonPanel);
 
         dialogArea = new JPanel(new BorderLayout(4, 4));
         dialogArea.add(toolBar, BorderLayout.NORTH);
@@ -159,17 +165,4 @@ public class EditColorsDialog extends Dialog {
         }
     }
 
-    private class OpenColorsCallback implements OpenColorsAction.Callback {
-        @Override
-        public void apply(IColorizer colorizer) {
-            if (colorizer instanceof PaletteColorTable) {
-                PaletteColorTable colorTable = (PaletteColorTable) colorizer;
-                editColorsModel.setCurrentPaletteColorTable(colorTable);
-            } else {
-                Plane plane = view.getPlane();
-                plane.setOuterColorizer(colorizer);
-                view.generateImage(true);
-            }
-        }
-    }
 }

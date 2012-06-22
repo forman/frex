@@ -18,7 +18,8 @@ public class SineColorTable extends ColorTable {
         this.functions[i] = functions;
     }
 
-    public Object clone() {
+    @Override
+    public SineColorTable clone() {
         SineColorTable c = (SineColorTable) super.clone();
         c.functions = new Function[functions.length];
         for (int i = 0; i < 4; i++) {
@@ -128,7 +129,7 @@ public class SineColorTable extends ColorTable {
                     + (int) (0.5 + (x2 - x1)
                     * 0.5
                     * (1.0 + Math.sin(2.0 * Math.PI
-                    * ((1.0 + a) * index + (0.75 + b)))));
+                                              * ((1.0 + a) * index + (0.75 + b)))));
         }
     }
 

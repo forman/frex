@@ -6,62 +6,43 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import z.StringLiterals;
 import z.core.IColorizer;
-import z.core.Plane;
 import z.core.support.colorizers.PaletteColorTable;
 import z.frex.Frex;
 import z.frex.PlaneView;
+import z.frex.dialogs.EditColorsDialog;
 import z.ui.FileExtensionFileFilter;
 import z.ui.UIUtils;
-import z.ui.application.ApplicationWindow;
 import z.ui.dialog.MessageDialog;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-public class SafeColorsAction extends PlaneViewAction {
+public class SafeColorsAction extends ApplicationWindowAction {
     public static final String ID = "z.frex.actions.storeColors"; // NON-NLS
+    private final PlaneView view;
+    private final EditColorsDialog editColorsDialog;
 
-    public SafeColorsAction(ApplicationWindow window) {
-        super(window, ID);
+    public SafeColorsAction(PlaneView view, EditColorsDialog editColorsDialog) {
+        super(view.getPage().getWindow(), ID);
+        this.view = view;
+        this.editColorsDialog = editColorsDialog;
         setText(StringLiterals.getString("gui.action.text.storeColors"));
         setToolTipText(StringLiterals.getString("gui.action.tooltip.storeColors"));
         setSmallIcon(Frex.getIcon(StringLiterals.getString("gui.action.icon.save")));
     }
 
     @Override
-    public void updateState() {
-        super.updateState();
-        PlaneView planeView = getPlaneView();
-        if (planeView != null) {
-            final Plane plane = planeView.getPlane();
-            IColorizer colorizer = plane.getOuterColorizer();
-            setEnabled(colorizer instanceof PaletteColorTable);
-        } else {
-            setEnabled(false);
-        }
-    }
-
-    @Override
     public void run() {
-        final Plane plane = getPlaneView().getPlane();
-        save(plane);
-    }
-
-    public boolean save(Plane plane) {
-        IColorizer colorizer = plane.getOuterColorizer();
-        if (!(colorizer instanceof PaletteColorTable)) {
-            return false;
-        }
+        PaletteColorTable paletteColorTable = editColorsDialog.getEditColorsModel().getCurrentPaletteColorTable();
 
         File file = promptForFile();
         if (file == null) {
-            return false;
+            return;
         }
 
-        PaletteColorTable paletteColorTable = (PaletteColorTable) colorizer;
         Element element = new Element(IColorizer.ELEMENT_NAME);
         try {
             paletteColorTable.writeExternal(element);
@@ -110,14 +91,13 @@ public class SafeColorsAction extends PlaneViewAction {
             return false;
         }
 */
-        return true;
     }
 
     private File promptForFile() {
         return UIUtils.showSafeDialog(getWindow().getShell(),
                                       StringLiterals.getString("gui.title.storeColors"),
                                       OpenColorsAction.LAST_COLORS_DIR_PROPERTY,
-                                      getPlaneView().getPlane().getName(),
+                                      view.getPlane().getName(),
                                       new FileExtensionFileFilter[1],
                                       OpenColorsAction.FILE_FILTER);
     }
@@ -131,4 +111,5 @@ public class SafeColorsAction extends PlaneViewAction {
                                                      e.getClass().getName(),
                                                      e.getLocalizedMessage()));
     }
+
 }

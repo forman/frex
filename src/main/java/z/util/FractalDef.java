@@ -9,25 +9,15 @@ import org.jdom.output.XMLOutputter;
 import z.compiler.Code;
 import z.compiler.CodeCompiler;
 import z.compiler.CompiledCode;
+import z.compiler.CompilerException;
 import z.core.AlgorithmDescriptor;
 import z.core.AlgorithmRegistry;
 import z.core.AlgorithmSubRegistry;
-import z.math.Complex;
-import z.math.Namespace;
-import z.math.Optimize;
-import z.math.ParseException;
-import z.math.Parser;
-import z.math.ParserImpl;
-import z.math.Symbol;
+import z.math.*;
 import z.math.term.Functor;
 import z.math.term.Term;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -191,13 +181,13 @@ public class FractalDef implements Cloneable {
                 } finally {
                     writer.close();
                 }
+            } catch (CompilerException e) {
+                // todo
+                getLogger().log(Level.SEVERE, e.getMessage(), e);
             } catch (IOException e) {
                 // todo
                 getLogger().log(Level.SEVERE, e.getMessage(), e);
             } catch (ParseException e) {
-                // todo
-                getLogger().log(Level.SEVERE, e.getMessage(), e);
-            } catch (ClassNotFoundException e) {
                 // todo
                 getLogger().log(Level.SEVERE, e.getMessage(), e);
             }

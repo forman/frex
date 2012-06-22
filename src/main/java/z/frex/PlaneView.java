@@ -1,11 +1,7 @@
 package z.frex;
 
 import z.StringLiterals;
-import z.core.IColorizer;
-import z.core.ImageInfo;
-import z.core.Plane;
-import z.core.PlaneRaster;
-import z.core.PlaneRenderer;
+import z.core.*;
 import z.core.progress.NullProgressMonitor;
 import z.core.progress.ProgressMonitor;
 import z.core.progress.ProgressMonitorWrapper;
@@ -17,9 +13,8 @@ import z.ui.application.PageComponent;
 import z.ui.application.PageComponentListenerAdapter;
 import z.ui.dialog.MessageDialog;
 
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
@@ -122,7 +117,7 @@ public class PlaneView extends AbstractPageComponent {
                 adjustColorizerMinMax(plane.getInnerColorizer(), plane.getRaster().getInnerStatistics());
                 adjustColorizerMinMax(plane.getOuterColorizer(), plane.getRaster().getOuterStatistics());
             } else {
-                adjustColorizerMinMax(plane.getOuterColorizer(), plane.getRaster().getTotalStatistics());
+                adjustColorizerMinMax(plane.getColorizer(), plane.getRaster().getTotalStatistics());
             }
         }
         // todo: use real UI progress monitor

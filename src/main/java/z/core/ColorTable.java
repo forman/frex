@@ -5,8 +5,6 @@ import org.jdom.JDOMException;
 import z.StringLiterals;
 import z.util.JDOMHelper;
 
-import java.util.Arrays;
-
 public abstract class ColorTable extends Colorizer {
 
     private boolean cyclic;
@@ -26,9 +24,9 @@ public abstract class ColorTable extends Colorizer {
     }
 
     @Override
-    public Object clone() {
+    public ColorTable clone() {
         ColorTable c = (ColorTable) super.clone();
-        c.rgbaArray = rgbaArray != null ? Arrays.copyOf(rgbaArray, 0) : null;
+        c.rgbaArray = rgbaArray != null ? rgbaArray.clone() : null;
         return c;
     }
 

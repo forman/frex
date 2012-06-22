@@ -31,9 +31,9 @@ public class PlaneRenderer {
     /**
      * Renders multiple planes.
      *
-     * @param planes     the planes
+     * @param planes           the planes
      * @param pixelDataBuffers the pixel data buffers in ABGR order
-     * @param pm         a progress monitor
+     * @param pm               a progress monitor
      */
     public void renderPlanes(Plane[] planes, int[][] pixelDataBuffers, ProgressMonitor pm) {
         Assert.notNull(planes, "planes"); // NON-NLS
@@ -140,8 +140,8 @@ public class PlaneRenderer {
             innerColorizer = plane.getInnerColorizer();
             outerColorizer = plane.getOuterColorizer();
         } else {
-            innerColorizer = plane.getOuterColorizer();
-            outerColorizer = plane.getOuterColorizer();
+            innerColorizer = plane.getColorizer();
+            outerColorizer = plane.getColorizer();
         }
         final boolean trapMode = plane.getTrapMode();
         final boolean decompositionMode = plane.getDecompositionMode();
