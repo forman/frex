@@ -1,5 +1,5 @@
 <plane name="Goldsworthy_1" version="1.0" innerOuterDisjoined="true">
-  <imageInfo path="z-out.png" format="PNG" width="8192" height="8192" usingWindowSize="false" background="0,0,0" />
+  <imageInfo path="z-out.png" format="PNG" width="512" height="512" usingWindowSize="false" background="0,0,0" />
   <fractal class="z.core.support.fractals.InvMandelbrot1">
     <property name="juliaMode" value="false" />
     <property name="iterMax" value="750" />
@@ -29,4 +29,11 @@
   <innerColorizer numColors="8192" indexMin="47.3445" indexMax="50.634716">
     <colorPoint pos="0.8970000147819519" color="251,245,234" />
   </innerColorizer>
+  <outerColorizer numColors="8192" cyclic="false" indexMin="0.31808114" indexMax="1.4843571">
+    <colorPoint pos="0.0" color="255,255,255" />
+    <colorPoint pos="0.2770000100135803" color="240,214,171" />
+    <colorPoint pos="0.6980000138282776" color="163,140,122" />
+    <colorPoint pos="0.9629999995231628" color="64,46,33" />
+    <colorPoint pos="1.0" color="0,0,0" />
+  </outerColorizer>
 </plane>
