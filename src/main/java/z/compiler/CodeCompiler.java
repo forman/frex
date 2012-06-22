@@ -1,11 +1,10 @@
 package z.compiler;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
-import java.io.*;
+import javax.tools.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -87,10 +86,10 @@ public class CodeCompiler {
                                                                  null,
                                                                  Arrays.asList(source));
             if (!task.call()) {
-                throw new CompilerException("Compilation error:\n" + compilerOutput); // I18N
+                throw new CompilerException("Compilation error", compilerOutput.toString()); // I18N
             }
         } catch (Exception e) {
-            throw new CompilerException("Compilation error: " + e.getMessage() + ":\n" + compilerOutput, e); // I18N
+            throw new CompilerException("Compilation error: " + e.getMessage(), compilerOutput.toString(), e); // I18N
         }
     }
 }

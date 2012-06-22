@@ -7,8 +7,7 @@ import z.ui.application.ApplicationWindow;
 import z.util.FractalDef;
 import z.util.RegionHistory;
 
-import javax.swing.ImageIcon;
-import javax.swing.UIManager;
+import javax.swing.*;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class Frex {
         }
 
         try {
-            FractalDef.buildAll();
+            FractalDef.buildAll(false);
         } catch (Exception e) {
             logger.log(Level.SEVERE, MessageFormat.format("Failed to compile ''{0}''.",
                                                           FractalDef.MY_FRACTALS_FILE), e);

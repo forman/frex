@@ -2,6 +2,7 @@ package z.frex.dialogs;
 
 import org.jdom.JDOMException;
 import z.StringLiterals;
+import z.compiler.CompilerException;
 import z.math.ParseException;
 import z.ui.dialog.Dialog;
 import z.util.FractalDef;
@@ -61,11 +62,16 @@ public class ManageUserFractalsDialog extends Dialog {
             if (parseAllDefs()) {
                 save(getShell(), getFractals());
                 try {
-                    FractalDef.buildAll();
-                } catch (JDOMException e) {
-                    showError("JDOMException", e.getMessage());  // TODO i18n
-                } catch (IOException e) {
-                    showError("IOException", e.getMessage());    // TODO i18n
+                    FractalDef.buildAll(true);
+                } catch (CompilerException e) {
+                    if (e.getCompilerOutput() != null) {
+                        showError("Compiler Error", e.getMessage(), e.getCompilerOutput());  // TODO i18n
+                    } else {
+                        showError("Compiler Error", e.getMessage());  // TODO i18n
+                    }
+                } catch (Exception e) {
+                    showError("Error", e.getMessage());  // TODO i18n
+                    return;
                 }
             }
         }

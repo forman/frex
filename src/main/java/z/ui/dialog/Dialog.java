@@ -3,16 +3,9 @@ package z.ui.dialog;
 import z.StringLiterals;
 import z.ui.UIUtils;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Rectangle;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -191,6 +184,14 @@ public abstract class Dialog {
                                       JOptionPane.ERROR_MESSAGE);
     }
 
+    protected void showError(String title, String message, String extendedMessage) {
+        JTextArea view = new JTextArea(extendedMessage);
+        view.setRows(8);
+        JOptionPane.showMessageDialog(getShell(),
+                                      new JComponent[]{new JLabel(message), new JScrollPane(view)},
+                                      title,
+                                      JOptionPane.ERROR_MESSAGE);
+    }
 
     private class ButtonActionListener implements ActionListener {
         private final int buttonId;
