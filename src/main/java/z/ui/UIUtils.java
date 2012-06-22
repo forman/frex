@@ -4,17 +4,9 @@ import z.StringLiterals;
 import z.frex.Frex;
 import z.ui.dialog.MessageDialog;
 
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Shape;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.text.MessageFormat;
@@ -91,10 +83,10 @@ public class UIUtils {
     }
 
     public static File showOpenDialog(Window parent,
-                                        String title,
-                                        String lastDirPropertyName,
-                                        String fileName,
-                                        FileExtensionFileFilter... fileFilters) {
+                                      String title,
+                                      String lastDirPropertyName,
+                                      String fileName,
+                                      FileExtensionFileFilter... fileFilters) {
 
         String lastDir = Frex.getPreferences().get(lastDirPropertyName,
                                                    System.getProperty("user.home")); // NON-NLS
@@ -109,10 +101,16 @@ public class UIUtils {
                 dialog.setFileFilter(fileFilter);
             }
         }
-        dialog.setSelectedFile(new File(lastDir, fileName));
+        if (fileName != null && !fileName.isEmpty()) {
+            File file = new File(lastDir, fileName);
+            if (file.exists()) {
+                dialog.setSelectedFile(file);
+            }
+        }
         int resp = dialog.showOpenDialog(parent);
+        File currentDirectory = dialog.getCurrentDirectory();
         Frex.getPreferences().put(lastDirPropertyName,
-                                  dialog.getCurrentDirectory().getPath());
+                                  currentDirectory.getPath());
         if (resp == JFileChooser.APPROVE_OPTION) {
             return dialog.getSelectedFile();
         }
@@ -121,26 +119,33 @@ public class UIUtils {
 
 
     public static File showSafeDialog(Window parent,
-                                        String title,
-                                        String lastDirPropertyName,
-                                        String fileName,
-                                        FileExtensionFileFilter[] selectedFileFilter,
-                                        FileExtensionFileFilter... fileFilters) {
+                                      String title,
+                                      String lastDirPropertyName,
+                                      String fileName,
+                                      FileExtensionFileFilter[] selectedFileFilter,
+                                      FileExtensionFileFilter... fileFilters) {
         String lastDir = Frex.getPreferences().get(lastDirPropertyName,
                                                    System.getProperty("user.home")); // NON-NLS
         JFileChooser dialog = new JFileChooser(lastDir);
         dialog.setDialogTitle(title);
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
         dialog.setAcceptAllFileFilterUsed(false);
-        for (int i = 0; i < fileFilters.length; i++) {
-            dialog.addChoosableFileFilter(fileFilters[i]);
+        for (FileExtensionFileFilter fileFilter : fileFilters) {
+            dialog.addChoosableFileFilter(fileFilter);
         }
         if (selectedFileFilter[0] != null) {
-             dialog.setFileFilter(selectedFileFilter[0]);
+            dialog.setFileFilter(selectedFileFilter[0]);
         } else if (fileFilters.length > 0) {
             dialog.setFileFilter(fileFilters[0]);
         }
-        dialog.setSelectedFile(new File(lastDir, fileName));
+
+        if (fileName != null && !fileName.isEmpty()) {
+            File file = new File(lastDir, fileName);
+            if (file.exists()) {
+                dialog.setSelectedFile(file);
+            }
+        }
+
         while (true) {
             int resp = dialog.showSaveDialog(parent);
             Frex.getPreferences().put(lastDirPropertyName,

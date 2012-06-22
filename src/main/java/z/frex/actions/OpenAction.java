@@ -15,7 +15,7 @@ import z.util.ChangeEvent;
 import z.util.ChangeListener;
 import z.util.RegionHistory;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.io.File;
 import java.text.MessageFormat;
 
@@ -67,7 +67,7 @@ public class OpenAction extends ApplicationWindowAction {
         return UIUtils.showOpenDialog(getWindow().getShell(),
                                       StringLiterals.getString("gui.title.openFile"),
                                       "lastDir",  // NON-NLS
-                                      "",    // NON-NLS
+                                      null,    // NON-NLS
                                       PLANE_FILTER, PROJECT_FILTER);
     }
 
