@@ -3,12 +3,8 @@ package z.ui.application;
 import z.ui.UIUtils;
 import z.util.Assert;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -114,7 +110,14 @@ public class Application {
         });
 
         shell.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        UIUtils.centerComponent(shell);
+
+        Point initialLocation = applicationWindowConfigurer.getInitialLocation();
+        if (initialLocation != null) {
+            shell.setLocation(initialLocation);
+        } else {
+            UIUtils.centerComponent(shell);
+        }
+
         shell.setVisible(true);
     }
 

@@ -1,10 +1,13 @@
 package z.ui.application;
 
-import java.awt.Dimension;
-import java.awt.Image;
+import java.awt.*;
 
 public interface ApplicationWindowConfigurer {
     ApplicationWindow getWindow();
+
+    Point getInitialLocation();
+
+    void setInitialLocation(Point location);
 
     Dimension getInitialSize();
 

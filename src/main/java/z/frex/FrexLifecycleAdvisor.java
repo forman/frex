@@ -1,42 +1,14 @@
 package z.frex;
 
 import z.StringLiterals;
-import z.frex.actions.ApplicationWindowAction;
-import z.frex.actions.CloseAction;
-import z.frex.actions.EditColorsAction;
-import z.frex.actions.EditImageSizeAction;
-import z.frex.actions.EditPlanePropertiesAction;
-import z.frex.actions.FitImageSizeAction;
-import z.frex.actions.GoBackAction;
-import z.frex.actions.GoHomeAction;
-import z.frex.actions.GoNextAction;
-import z.frex.actions.ManageUserFractalsAction;
-import z.frex.actions.NewPlaneAction;
-import z.frex.actions.OpenAction;
-import z.frex.actions.PanInteraction;
-import z.frex.actions.SaveAction;
-import z.frex.actions.SaveAsAction;
-import z.frex.actions.SaveImageAction;
-import z.frex.actions.ZoomInteraction;
+import z.frex.actions.*;
 import z.ui.UIUtils;
 import z.ui.application.Action;
-import z.ui.application.ActionFactory;
-import z.ui.application.Application;
-import z.ui.application.ApplicationLifecycleAdvisor;
-import z.ui.application.ApplicationWindow;
-import z.ui.application.ApplicationWindowConfigurer;
-import z.ui.application.PageComponent;
+import z.ui.application.*;
 import z.ui.dialog.MessageDialog;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import java.awt.Component;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.MessageFormat;
 import java.util.prefs.BackingStoreException;
@@ -167,13 +139,36 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
     public void preWindowOpen(ApplicationWindow window) {
         assert SwingUtilities.isEventDispatchThread();
         ApplicationWindowConfigurer configurer = getWindowConfigurer();
-        configurer.setInitialSize(new Dimension(600, 680));
+
+        try {
+            int frameX = Integer.parseInt(Frex.getPreferences().get("frameX", "-1"));
+            int frameY = Integer.parseInt(Frex.getPreferences().get("frameY", "-1"));
+            if (frameX >= 0 && frameY >= 0) {
+                configurer.setInitialLocation(new Point(frameX, frameY));
+            }
+        } catch (NumberFormatException e) {
+            // ?
+        }
+
+        Dimension size = new Dimension(600, 680);
+        try {
+            int frameWidth = Integer.parseInt(Frex.getPreferences().get("frameWidth", "-1"));
+            int frameHeight = Integer.parseInt(Frex.getPreferences().get("frameHeight", "-1"));
+            if (frameWidth > 0 && frameHeight > 0) {
+                size = new Dimension(frameWidth, frameHeight);
+            }
+        } catch (NumberFormatException e) {
+            // ?
+        }
+        configurer.setInitialSize(size);
+
         configurer.setShowMenuBar(HAS_MENU_BAR);
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
         configurer.setShowProgressIndicator(false);
         configurer.setTitle(StringLiterals.getString("gui.frame.title"));
         configurer.setIconImage(Frex.getIcon(StringLiterals.getString("gui.frame.icon")).getImage());
+
     }
 
     @Override
@@ -211,6 +206,11 @@ public class FrexLifecycleAdvisor extends ApplicationLifecycleAdvisor {
                 }
             }
         }
+        Rectangle frameBounds = window.getShell().getBounds();
+        Frex.getPreferences().put("frameX", frameBounds.x + "");
+        Frex.getPreferences().put("frameY", frameBounds.y + "");
+        Frex.getPreferences().put("frameWidth", frameBounds.width + "");
+        Frex.getPreferences().put("frameHeight", frameBounds.height + "");
         return true;
     }
 
