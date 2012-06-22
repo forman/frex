@@ -5,10 +5,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -45,19 +42,19 @@ public class CodeCompiler {
 
     }
 
-    public Class<?> compile(String packageName, String className, String code) throws IOException, ClassNotFoundException {
+    public Class<?> compile(String packageName, String className, String code) throws IOException, ClassNotFoundException, CompilerException {
         return compile(new Code(packageName + '.' + className, code));
     }
 
-    public Class<?> compile(JavaFileObject file) throws IOException, ClassNotFoundException {
-        final boolean status = performCompilerTask(file);
-        if (!status) {
-            // todo - include compiler error info (nf, 01.10.2008)
-            throw new RuntimeException("Code compilation failed.");
-        }
+    public Class<?> compile(JavaFileObject file) throws CompilerException {
+        performCompilerTask(file);
         String s = file.getName();
         String className = getClassName(s);
-        return loader.loadClass(className);
+        try {
+            return loader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new CompilerException("Failed to load compiled code: " + className); // I18N
+        }
     }
 
     static String getClassName(String path) {
@@ -72,17 +69,28 @@ public class CodeCompiler {
         return path;
     }
 
-    private boolean performCompilerTask(JavaFileObject... source) throws IOException {
+    private void performCompilerTask(JavaFileObject... source) throws CompilerException {
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
         outputDir.mkdirs();
-        fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(outputDir));
-        fileManager.setLocation(StandardLocation.CLASS_PATH, Arrays.asList(classPath));
-        JavaCompiler.CompilationTask task = compiler.getTask(new PrintWriter(new OutputStreamWriter(System.err), true), 
-                                                             fileManager,
-                                                             null,
-                                                             null,
-                                                             null,
-                                                             Arrays.asList(source));
-        return task.call();
+        try {
+            fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(outputDir));
+            fileManager.setLocation(StandardLocation.CLASS_PATH, Arrays.asList(classPath));
+        } catch (IOException e) {
+            throw new CompilerException("Failed to initialise Java compiler.", e); // I18N
+        }
+        StringWriter compilerOutput = new StringWriter();
+        try {
+            JavaCompiler.CompilationTask task = compiler.getTask(new PrintWriter(compilerOutput, true),
+                                                                 fileManager,
+                                                                 null,
+                                                                 null,
+                                                                 null,
+                                                                 Arrays.asList(source));
+            if (!task.call()) {
+                throw new CompilerException("Compilation error:\n" + compilerOutput); // I18N
+            }
+        } catch (Exception e) {
+            throw new CompilerException("Compilation error: " + e.getMessage() + ":\n" + compilerOutput, e); // I18N
+        }
     }
 }
