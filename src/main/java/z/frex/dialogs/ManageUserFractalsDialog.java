@@ -6,25 +6,13 @@ import z.math.ParseException;
 import z.ui.dialog.Dialog;
 import z.util.FractalDef;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -69,11 +57,22 @@ public class ManageUserFractalsDialog extends Dialog {
 
     @Override
     protected void okPressed() {
-        if (!tableModel.isModified()) {
-            return;
+        if (tableModel.isModified()) {
+            if (parseAllDefs()) {
+                save(getShell(), getFractals());
+                try {
+                    FractalDef.buildAll();
+                } catch (JDOMException e) {
+                    showError("JDOMException", e.getMessage());  // TODO i18n
+                } catch (IOException e) {
+                    showError("IOException", e.getMessage());    // TODO i18n
+                }
+            }
         }
+        super.okPressed();
+    }
 
-        // todo - compile in separate thread
+    private boolean parseAllDefs() {
         for (int i = 0; i < fractals.size(); i++) {
             FractalDef fractalDef = fractals.get(i);
             try {
@@ -85,21 +84,10 @@ public class ManageUserFractalsDialog extends Dialog {
                                                fractalDef.getCode(),
                                                e.getLocalizedMessage())
                 );
-                return;
+                return false;
             }
         }
-
-        save(getShell(), getFractals());
-
-        try {
-            FractalDef.buildAll();
-        } catch (JDOMException e) {
-            showError("JDOMException", e.getMessage());  // TODO i18n
-        } catch (IOException e) {
-            showError("IOException", e.getMessage());    // TODO i18n
-        }
-
-        super.okPressed();
+        return true;
     }
 
     private static FractalDef[] load(Component parentComponent) {
