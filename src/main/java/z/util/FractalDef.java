@@ -112,28 +112,12 @@ public class FractalDef implements Cloneable {
         return new File(MY_FRACTALS_DIR, getClassName() + ".class"); // NON-NLS
     }
 
-    public static boolean buildAll() throws JDOMException, IOException {
+    public static boolean buildAll(boolean failFast) throws JDOMException, IOException, CompilerException, ParseException {
 
         final FractalDef[] fractalDefs = loadMyFractals();
         if (fractalDefs.length == 0) {
             return false;
         }
-
-        /*
-        boolean mustCompile = false;
-        if (!mustCompile) {
-            for (FractalDef fractalDef : fractalDefs) {
-                File javaFile = fractalDef.getJavaFile();
-                if (!javaFile.exists() || javaFile.lastModified() < MY_FRACTALS_FILE.lastModified()) {
-                    mustCompile = true;
-                }
-                File classFile = fractalDef.getClassFile();
-                if (!classFile.exists() || classFile.lastModified() < javaFile.lastModified()) {
-                    mustCompile = true;
-                }
-            }
-        }
-        */
 
         MY_FRACTALS_DIR.mkdirs();
         File[] files = MY_FRACTALS_DIR.listFiles();
@@ -141,7 +125,7 @@ public class FractalDef implements Cloneable {
             file.delete();
         }
 
-        AlgorithmDescriptor[] algorithmDescriptors = compileAll(fractalDefs);
+        AlgorithmDescriptor[] algorithmDescriptors = compileAll(fractalDefs, failFast);
         if (algorithmDescriptors.length == 0) {
             return false;
         }
@@ -163,7 +147,7 @@ public class FractalDef implements Cloneable {
         return true;
     }
 
-    private static AlgorithmDescriptor[] compileAll(FractalDef[] fractalDefs) {
+    private static AlgorithmDescriptor[] compileAll(FractalDef[] fractalDefs, boolean failFast) throws ParseException, IOException, CompilerException {
         CodeCompiler compiler = new CodeCompiler(MY_FRACTALS_DIR, getClasspathFiles());
         List<AlgorithmDescriptor> algorithmDescriptors = new ArrayList<AlgorithmDescriptor>();
         for (FractalDef fractalDef : fractalDefs) {
@@ -182,13 +166,19 @@ public class FractalDef implements Cloneable {
                     writer.close();
                 }
             } catch (CompilerException e) {
-                // todo
+                if (failFast) {
+                    throw e;
+                }
                 getLogger().log(Level.SEVERE, e.getMessage(), e);
             } catch (IOException e) {
-                // todo
+                if (failFast) {
+                    throw e;
+                }
                 getLogger().log(Level.SEVERE, e.getMessage(), e);
             } catch (ParseException e) {
-                // todo
+                if (failFast) {
+                    throw e;
+                }
                 getLogger().log(Level.SEVERE, e.getMessage(), e);
             }
         }
@@ -228,10 +218,14 @@ public class FractalDef implements Cloneable {
         Term zy = Optimize.expandPowByIntExp(z.getY().simplify());
 
         List<Symbol> varList = new ArrayList<Symbol>(32);
-        Symbol szx = complexNamespace.getSymbol("zx"); // NON-NLS
-        Symbol szy = complexNamespace.getSymbol("zy"); // NON-NLS
-        varList.add(Symbol.createVariable("zxx", Functor.mul(Functor.ref(szx), Functor.ref(szx)))); // NON-NLS
-        varList.add(Symbol.createVariable("zyy", Functor.mul(Functor.ref(szy), Functor.ref(szy)))); // NON-NLS
+        if (complexNamespace.isSymbolDefined("zx")) {
+            Symbol szx = complexNamespace.getSymbol("zx"); // NON-NLS
+            varList.add(Symbol.createVariable("zxx", Functor.mul(Functor.ref(szx), Functor.ref(szx)))); // NON-NLS
+        }
+        if (complexNamespace.isSymbolDefined("zx")) {
+            Symbol szy = complexNamespace.getSymbol("zy"); // NON-NLS
+            varList.add(Symbol.createVariable("zyy", Functor.mul(Functor.ref(szy), Functor.ref(szy)))); // NON-NLS
+        }
         varList.add(Symbol.createVariable("_zx", zx)); // NON-NLS
         varList.add(Symbol.createVariable("_zy", zy)); // NON-NLS
 
