@@ -69,6 +69,7 @@ public class ManageUserFractalsDialog extends Dialog {
                     } else {
                         showError("Compiler Error", e.getMessage());  // TODO i18n
                     }
+                    return;
                 } catch (Exception e) {
                     showError("Error", e.getMessage());  // TODO i18n
                     return;
