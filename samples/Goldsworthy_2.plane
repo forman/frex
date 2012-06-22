@@ -1,13 +1,13 @@
-<plane name="Goldsworthy_2" version="1.0" innerOuterDisjoined="true">
-  <imageInfo path="z-out.png" format="PNG" width="1024" height="1024" usingWindowSize="false" background="0,0,0" />
-  <fractal class="z.core.support.fractals.InvMandelbrot1">
+<plane name="Goldsworthy_2" version="1.0">
+  <imageInfo path="z-out.png" format="PNG" width="580" height="604" usingWindowSize="true" background="0,0,0" />
+  <fractal class="z.core.support.fractals.NormansError4">
     <property name="juliaMode" value="false" />
-    <property name="iterMax" value="750" />
-    <property name="bailOut" value="10.0" />
-    <property name="juliaCX" value="0.0" />
-    <property name="juliaCY" value="0.0" />
+    <property name="iterMax" value="100" />
+    <property name="bailOut" value="1000.0" />
+    <property name="juliaCX" value="0.6042775179020933" />
+    <property name="juliaCY" value="0.48335903258856927" />
   </fractal>
-  <region centerX="-1.1150025983343017" centerY="0.030836687572988825" radius="4.7053468385959904E-4" />
+  <region centerX="0.6027126983476159" centerY="0.48136218787158147" radius="0.003564885809176269" />
   <accumulator class="z.core.support.accumulators.SquareOrbitTrap">
     <property name="offsetY" value="0.0" />
     <property name="factor" value="0.1" />
@@ -18,18 +18,18 @@
     <property name="turbulenceScale" value="0.2" />
     <property name="turbulenceOctaveCount" value="5" />
   </accumulator>
-  <indexer class="z.core.support.indexers.AngleZ" />
-  <colorizer numColors="8192" cyclic="false" indexMin="0.31808114" indexMax="1.4843571">
+  <indexer class="z.core.support.indexers.AbsX" />
+  <colorizer numColors="8192" cyclic="false" indexMin="5.64094" indexMax="5.914184">
     <colorPoint pos="0.0" color="255,255,255" />
     <colorPoint pos="0.8790000081062317" color="115,59,36" />
     <colorPoint pos="1.0" color="0,0,0" />
-    <colorPoint pos="0.18400000035762787" color="0,255,0" />
-    <colorPoint pos="0.4399999976158142" color="74,110,51" />
+    <colorPoint pos="0.44600000977516174" color="181,140,79" />
+    <colorPoint pos="0.1679999977350235" color="254,209,148" />
   </colorizer>
-  <innerColorizer numColors="8192" indexMin="47.3445" indexMax="50.634716">
+  <innerColorizer numColors="256" indexMax="100.0">
     <colorPoint pos="0.0" color="0,0,0" />
-    <colorPoint pos="0.5009999871253967" color="13,59,46" />
-    <colorPoint pos="0.24500000476837158" color="255,255,255" />
+    <colorPoint pos="0.33000001311302185" color="0,0,255" />
+    <colorPoint pos="0.6600000262260437" color="255,255,255" />
     <colorPoint pos="1.0" color="0,0,0" />
   </innerColorizer>
 </plane>
